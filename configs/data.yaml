@@ -1,0 +1,43 @@
+# Data mixture config for Mimir-Decide. See docs/design/dataset-selection.md for the rationale.
+seed: 0
+output_dir: ~/mimir-decide-data/mixture-v0
+cache_dir: ~/mimir-decide-data/cache   # shared download cache (MASSIVE archive)
+
+max_state_chars: 12000        # longer states are dropped (keeps sequences within ~2-3k tokens)
+max_options: 26               # letters A-Z for the baseline; larger option sets are subsampled (gold kept)
+per_source_cap: 2000          # train decisions kept per source (reservoir sample)
+read_limit_per_source: 20000  # stop reading a source after this many train decisions (bounds I/O)
+max_total_train: 1000000      # global cap, allocated with temperature sampling
+sampling_alpha: 0.5           # quota_s = min(n_s, c * n_s^alpha)
+ngram_boilerplate_df: 3       # eval n-grams present in more than this many eval states are treated as template text
+
+eval_caps:                    # per source
+  validation_per_source: 100  # half of validation goes to calibration (by group), so ~50+50
+  test_per_source: 300
+  heldout_per_source: 300
+
+# Whole tasks removed from training; their validation/test rows go to heldout_tasks/ (fnmatch on source name).
+# Chosen before any model was trained; edit only before the first training run, and log the change.
+held_out_sources:
+  - "massive/nb-NO"
+
+sources:
+  tasksource:
+    enabled: true
+    revision: d2ab1d12be4463fb7ac1f877ed2193b3bb59642a
+    streaming: true
+  bekko:
+    enabled: true
+    revision: 5f67e4e2fd2542e2fc3f82d86d7c3be705bda7b9
+    accept_qualified: false   # only licence reviews marked "verified"; "qualified" ones are excluded
+    write_test: false         # bekko test rows are hashed for the leakage guard but not written out
+  localllama:
+    enabled: true
+    revision: d0e2f0c42fef86cc15d1688d25a19f5ba7c85b18
+  massive:
+    enabled: true
+    locales: [da-DK, en-US, sv-SE, nb-NO, de-DE]
+    n_options: 8
+  helpsteer2:
+    enabled: true
+    revision: 990b2711a36180dd19d9c94b8627844866f8982a
