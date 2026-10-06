@@ -8,14 +8,14 @@ timestamp: 2026-10-03T00:00:00Z
 
 # RLCD and calibration training
 
-| Method | Optimises | Calibration |
-|---|---|---|
-| RLHF | human preference | no guarantee, overconfident |
-| RLAIF | AI-generated preference | inherits labeler miscalibration |
-| RLVR | verifiable correctness (binary) | tends to hurt calibration |
-| **RLCD** (TypeSafe/[Jev](/research/jev.md)) | proper scoring rule on decision tasks | by construction (details undisclosed) |
-| **RLCR** (arXiv 2507.16806) | binary correctness + Brier score on stated confidence | ECE 0.37 to 0.03, accuracy steady |
-| RLHV (proposed in pentest paper) | verdicts validated by deterministic checkers | closed-loop self-improvement |
+| Method                                      | Optimises                                             | Calibration                           |
+| ------------------------------------------- | ----------------------------------------------------- | ------------------------------------- |
+| RLHF                                        | human preference                                      | no guarantee, overconfident           |
+| RLAIF                                       | AI-generated preference                               | inherits labeler miscalibration       |
+| RLVR                                        | verifiable correctness (binary)                       | tends to hurt calibration             |
+| **RLCD** (TypeSafe/[Jev](/research/jev.md)) | proper scoring rule on decision tasks                 | by construction (details undisclosed) |
+| **RLCR** (arXiv 2507.16806)                 | binary correctness + Brier score on stated confidence | ECE 0.37 to 0.03, accuracy steady     |
+| RLHV (proposed in pentest paper)            | verdicts validated by deterministic checkers          | closed-loop self-improvement          |
 
 ## Key facts
 
