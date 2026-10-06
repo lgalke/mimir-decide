@@ -2,14 +2,13 @@
 # End-to-end pilot: build mixture -> overlap audit -> train slot model + letter baseline -> calibrate -> evaluate.
 # Validation / heldout only. The test split is NOT touched here (use evaluate --split test --final, once, deliberately).
 #
-#   scripts/run_pilot.sh                 # full run on a single GPU node
+#   scripts/run_pilot.sh                 # full run on a single GPU node; run from any folder, with the project environment active
 #   LIMIT=300 scripts/run_pilot.sh       # smoke build (limits every source/split)
 #   SKIP_BUILD=1 scripts/run_pilot.sh    # reuse an existing mixture
 set -euo pipefail
 cd "$(dirname "$0")/.."
-export UV_PROJECT_ENVIRONMENT="${UV_PROJECT_ENVIRONMENT:-$HOME/.venvs/mimir-decide}"   # keep the venv out of OneDrive
 export TOKENIZERS_PARALLELISM=false
-PY="${PY:-$UV_PROJECT_ENVIRONMENT/bin/python}"
+PY="${PY:-python}"   # Python of the active environment (uv .venv or conda); override with PY=/path/to/python
 DATA="${DATA:-$HOME/mimir-decide-data/mixture-v0}"
 RUNS="${RUNS:-$HOME/mimir-decide-data/runs}"
 

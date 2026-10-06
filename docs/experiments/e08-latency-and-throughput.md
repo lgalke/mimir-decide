@@ -20,9 +20,9 @@ E02 or E03 run
 ## Setup
 
 ```bash
-export UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide
+# Run from the repository root with the project environment active (uv .venv or conda).
 export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
-PY=$UV_PROJECT_ENVIRONMENT/bin/python
+PY=python
 ```
 ```bash
 $PY -m mimir_decide.bench --run_dir $RUNS/slot-v0 --data_dir $DATA --batch_sizes 1 8 32 --n 256

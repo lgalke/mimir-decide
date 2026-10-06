@@ -25,15 +25,17 @@ Verified only on a **tiny random HRM** (real tokenizer, CPU) plus unit tests: bu
 ```bash
 git clone git@github.com:lgalke/mimir-decide.git && cd mimir-decide   # or cd into the existing checkout
 git switch -c cluster/<short-topic>                                    # never work directly on main (section 9)
-export UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide      # keep the venv on fast local storage
-uv sync --extra dev
-PY=$UV_PROJECT_ENVIRONMENT/bin/python
-$PY -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
-$PY -m pytest tests -q -m "not network"        # ~1 min; add network tests if the cluster has internet
-$PY -m mimir_decide.okf --check                # docs must be valid before you start
+# Environment: use ONE option. Do not create a second environment if one exists already.
+uv sync --extra dev && source .venv/bin/activate    # option A: uv environment in the project root (.venv)
+# conda activate <env> && pip install -e ".[dev]"   # option B: an activated conda environment
+python -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+python -m pytest tests -q -m "not network"          # ~1 min; add network tests if the cluster has internet
+python -m mimir_decide.okf --check                  # docs must be valid before you start
 ```
 
-- `uv.lock` is tracked and was resolved on macOS. If torch on the cluster is not a CUDA build, install the right wheel in your environment and **record it** in `docs/log.md`; do not commit a cluster-specific `uv.lock` change without the owner's agreement (section 9).
+In this file, `python` means the Python of the active environment. Run all commands from the repository root. If a `.venv` exists in the root and no environment is active, activate it or prefix commands with `uv run` ([D23](docs/design/d23-active-python-environment.md)).
+
+- `uv.lock` is tracked and was resolved on macOS. If torch on the cluster is not a CUDA build, install the right wheel in your environment (uv `.venv` or conda) and **record it** in `docs/log.md`; do not commit a cluster-specific `uv.lock` change without the owner's agreement (section 9).
 - If the clone fails for lack of SSH access from the cluster, ask the owner for a deploy key or another way in. Never put tokens or keys in files, commits or logs.
 - Data, caches, runs default to `~/mimir-decide-data` (override: `output_dir`, `cache_dir` in `configs/data.yaml`; `DATA`, `RUNS` for `scripts/run_pilot.sh`; `--set run_dir=...`). Put them on fast scratch, never in a synced folder.
 - Hugging Face access: all sources used are public. Pinned revisions are in `configs/*.yaml` (Mimir v1.5 `521b40b36a79918014544b970d4c2669ff1530eb`). If the compute nodes have no internet, pre-download on a login node (`huggingface_hub`, `datasets`) and set `HF_HOME` / `HF_HUB_OFFLINE=1`. The MASSIVE archive is fetched with `urllib` from S3 into `cache_dir`.
@@ -107,11 +109,11 @@ Run directories contain `config.yaml`, `resolved_config.json`, `mixture_manifest
 
 Useful commands:
 ```bash
-$PY -m mimir_decide.train --config configs/train_slot.yaml --set data_dir=$DATA run_dir=$RUNS/x max_steps=50   # overrides are YAML; quote lists: 'L_bp_cycles=[0,3]'
-$PY -m mimir_decide.calibrate --run_dir $RUNS/x --data_dir $DATA
-$PY -m mimir_decide.evaluate  --run_dir $RUNS/x --data_dir $DATA --split validation|heldout [--order_seed 1] [--no_calibration]
-$PY -m mimir_decide.compare   $RUNS/a $RUNS/b --file validation.json
-$PY -m mimir_decide.bench     --run_dir $RUNS/x --data_dir $DATA
+python -m mimir_decide.train --config configs/train_slot.yaml --set data_dir=$DATA run_dir=$RUNS/x max_steps=50   # overrides are YAML; quote lists: 'L_bp_cycles=[0,3]'
+python -m mimir_decide.calibrate --run_dir $RUNS/x --data_dir $DATA
+python -m mimir_decide.evaluate  --run_dir $RUNS/x --data_dir $DATA --split validation|heldout [--order_seed 1] [--no_calibration]
+python -m mimir_decide.compare   $RUNS/a $RUNS/b --file validation.json
+python -m mimir_decide.bench     --run_dir $RUNS/x --data_dir $DATA
 ```
 Out-of-memory ladder for E02: `batch_size=4 grad_accum=8` → `max_len=1024` → `L_bp_cycles=[0,3]` → `param_dtype=bfloat16`. Log which rung worked.
 
@@ -135,7 +137,7 @@ Baseline: `main` @ `ad89493`. The owner reviews and merges; you do not.
 
 - **Branch.** Work on `cluster/<short-topic>` (for example `cluster/e02-real-model-smoke`), created from an up-to-date `main`. Never commit directly on `main`.
 - **Commit often, in coherent steps.** One commit per logical change that includes its tests and its docs (decision page or observation, log line, regenerated indexes). Record each finished experiment in its own commit. Commit messages: imperative subject of at most 72 characters, a body that says *why* and quotes the key numbers, and the experiment or decision id (`E02`, `D09`). Use `git commit -m ...`; do not rely on an editor.
-- **Before every commit:** `$PY -m pytest tests -q -m "not network"`, `$PY -m mimir_decide.okf --check`, and `git status` to confirm that only intended files are staged.
+- **Before every commit:** `python -m pytest tests -q -m "not network"`, `python -m mimir_decide.okf --check`, and `git status` to confirm that only intended files are staged.
 - **Never commit** data, mixtures, caches, checkpoints, run directories, virtual environments, Hugging Face tokens, SSH keys, or anything larger than about 5 MB. `.gitignore` already covers `.venv/`, `runs/`, `data/`, `__pycache__/`, `.pytest_cache/` and `.ruff_cache/`; mixtures and runs live under `~/mimir-decide-data`, outside the repository. Put results into the experiment table and an observation page as short numbers and file paths rather than committing raw run output.
 - **Pushing needs the owner's permission.** Local commits are expected and need no permission. Ask once at the start whether you may push your own `cluster/*` branch to `origin`; until told yes, do not push. Even when allowed, never push to `main`, force-push, rewrite published history, delete branches, create tags or releases, or open pull requests unless asked.
 - **Generated and shared files.** On a merge or rebase conflict in any `index.md`, do not hand-merge: resolve the page files, then run `python -m mimir_decide.okf --write`. In `docs/log.md` keep both sides' bullets, newest date first. IDs (`D`, `Q`, `E`, `O`) must stay unique and sequential (a test checks this): if two branches took the same next id, the later one renumbers.

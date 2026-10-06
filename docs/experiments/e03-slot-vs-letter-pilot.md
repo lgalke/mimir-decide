@@ -20,9 +20,9 @@ E01, E02
 ## Setup
 
 ```bash
-export UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide
+# Run from the repository root with the project environment active (uv .venv or conda).
 export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
-PY=$UV_PROJECT_ENVIRONMENT/bin/python
+PY=python
 ```
 ```bash
 SKIP_BUILD=1 DATA=$DATA RUNS=$RUNS scripts/run_pilot.sh      # slot-v0 then baseline-v0; epochs: 1 by default

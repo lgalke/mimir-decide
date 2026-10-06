@@ -20,9 +20,9 @@ none (network, disk, hours)
 ## Setup
 
 ```bash
-export UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide
+# Run from the repository root with the project environment active (uv .venv or conda).
 export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
-PY=$UV_PROJECT_ENVIRONMENT/bin/python
+PY=python
 ```
 ```bash
 $PY -m mimir_decide.build_mixture --config configs/data.yaml --output_dir $DATA 2>&1 | tee $DATA.build.log

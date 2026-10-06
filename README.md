@@ -43,7 +43,7 @@ Mimir is built on HRM-Text (Hierarchical Reasoning Model for text). HRM-Text is 
 ## Requirements
 
 - Python 3.11 or later.
-- The `uv` package manager.
+- A Python environment. Use a `uv` environment in the project root (`.venv`) or an active conda environment.
 - Internet access to download the model and the data from Hugging Face.
 - One GPU to train the real model. The plan assumes 40 GB of GPU memory. This value is not measured.
 
@@ -53,10 +53,14 @@ A computer with no GPU can run the tests and the checks with the small model.
 
 1. Clone the repository: `git clone git@github.com:lgalke/mimir-decide.git`
 2. Go to the folder: `cd mimir-decide`
-3. Put the Python environment outside any synced folder: `export UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide`
-4. Install the packages: `uv sync --extra dev`
-5. Run the tests: `$UV_PROJECT_ENVIRONMENT/bin/python -m pytest tests -q -m "not network"`
-6. Check the documentation: `$UV_PROJECT_ENVIRONMENT/bin/python -m mimir_decide.okf --check`
+3. Set up the environment. Use option A or option B.
+   - Option A (uv): run `uv sync --extra dev`. This makes the folder `.venv` in the project root. Then run `source .venv/bin/activate`.
+   - Option B (conda): run `conda activate <your-environment>`. Then run `pip install -e ".[dev]"`.
+4. Check the GPU: `python -c "import torch; print(torch.cuda.is_available())"`
+5. Run the tests: `python -m pytest tests -q -m "not network"`
+6. Check the documentation: `python -m mimir_decide.okf --check`
+
+In this README, `python` means the Python of the active environment. Run all commands from the project root. If a `.venv` folder exists and no environment is active, activate the `.venv` or put `uv run` before the command.
 
 The tests take about 1 minute. The 3 tests that need the internet are not in this run. Remove `-m "not network"` to include them.
 
@@ -65,13 +69,13 @@ The tests take about 1 minute. The 3 tests that need the internet are not in thi
 Do a small build first. It takes about 1 minute:
 
 ```bash
-$UV_PROJECT_ENVIRONMENT/bin/python -m mimir_decide.build_mixture --limit 300 --output_dir ~/mimir-decide-data/smoke
+python -m mimir_decide.build_mixture --limit 300 --output_dir ~/mimir-decide-data/smoke
 ```
 
 Do the full build when the small build is correct. The full build needs time, disk space and a network connection:
 
 ```bash
-$UV_PROJECT_ENVIRONMENT/bin/python -m mimir_decide.build_mixture --config configs/data.yaml
+python -m mimir_decide.build_mixture --config configs/data.yaml
 ```
 
 The build writes the data to `~/mimir-decide-data` by default. Change `output_dir` and `cache_dir` in `configs/data.yaml` to use other places.

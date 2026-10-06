@@ -1,7 +1,7 @@
 ---
 type: Decision
 title: 'D20: Environment and data live outside OneDrive'
-description: Venv in ~/.venvs/mimir-decide; data, caches, runs in ~/mimir-decide-data.
+description: Data, caches and runs live in ~/mimir-decide-data, outside the synced folder. The venv-location part is superseded by D23.
 status: accepted
 date: '2026-10-04'
 decided_by: agent
@@ -20,6 +20,10 @@ The project folder is synced by OneDrive; a venv or checkpoints there would sync
 ## Consequences
 
 On the GPU cluster, set these to fast local storage; paths in `configs/*.yaml` use `~` and can be overridden with `--set`.
+
+## Update 2026-10-06
+
+The venv location (`~/.venvs/mimir-decide`, `UV_PROJECT_ENVIRONMENT`) is superseded by [D23](/design/d23-active-python-environment.md): documents and scripts now use the active Python environment. The data, cache and run locations in this decision are unchanged.
 
 ## Revisit when
 

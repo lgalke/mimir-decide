@@ -20,9 +20,9 @@ E03 runs
 ## Setup
 
 ```bash
-export UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide
+# Run from the repository root with the project environment active (uv .venv or conda).
 export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
-PY=$UV_PROJECT_ENVIRONMENT/bin/python
+PY=python
 ```
 ```bash
 for R in slot-v0 baseline-v0; do for SEED in 1 2 3; do

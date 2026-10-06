@@ -22,9 +22,9 @@ E02
 ## Setup
 
 ```bash
-export UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide
+# Run from the repository root with the project environment active (uv .venv or conda).
 export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
-PY=$UV_PROJECT_ENVIRONMENT/bin/python
+PY=python
 ```
 ```bash
 $PY -m mimir_decide.train --config configs/train_slot.yaml --set data_dir=$DATA run_dir=$RUNS/slot-lbp03 'L_bp_cycles=[0,3]'

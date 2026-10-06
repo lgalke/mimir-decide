@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-10-06
+* **Decision**: The Python environment is the active one: a uv `.venv` in the project root, or an activated conda environment ([D23](/design/d23-active-python-environment.md), requested by the owner). `README.md`, `AGENTS.md`, `scripts/run_pilot.sh`, the experiment pages and `training-setup` no longer use `UV_PROJECT_ENVIRONMENT`. D20 notes that its venv part is superseded. The conda route was checked only by a dry-run dependency resolution.
 * **Create**: `README.md` in the repository root: an overview for human readers, written in ASD-STE100 (Simplified Technical English) style. It states the project status as it is: code tested on a small random model, real model not tested, no experiment run.
 
 ## 2026-10-04

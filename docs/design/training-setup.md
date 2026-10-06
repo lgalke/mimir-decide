@@ -8,12 +8,12 @@ timestamp: 2026-10-04T00:00:00Z
 
 # Training setup
 
-Code lives in the project root next to this bundle (`mimir_decide/`, `configs/`, `scripts/`, `tests/`). Large data, caches and checkpoints go to `~/mimir-decide-data` and the Python environment to `~/.venvs/mimir-decide`, both deliberately outside OneDrive.
+Code lives in the project root next to this bundle (`mimir_decide/`, `configs/`, `scripts/`, `tests/`). Large data, caches and checkpoints go to `~/mimir-decide-data`, deliberately outside OneDrive. The Python environment is the active one ([D23](/design/d23-active-python-environment.md)); commands below use `python` from it.
 
 ## Run order
 
 ```
-uv sync --extra dev                       # with UV_PROJECT_ENVIRONMENT=$HOME/.venvs/mimir-decide
+uv sync --extra dev                       # uv: creates .venv in the project root; or, in an active conda env: pip install -e ".[dev]"
 python -m mimir_decide.build_mixture --config configs/data.yaml [--limit N]
 python -m mimir_decide.audit_mimir_overlap --data_dir <mixture>
 python -m mimir_decide.train      --config configs/train_slot.yaml      # slot model
