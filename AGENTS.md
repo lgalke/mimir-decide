@@ -86,6 +86,7 @@ Workflow:
 
 ```
 AGENTS.md                   this file
+README.md                   overview for humans, written in ASD-STE100 style (keep that style when you edit it)
 configs/data.yaml           sources, caps, held-out tasks, pinned dataset revisions
 configs/train_slot.yaml     slot readout (main model)       configs/train_baseline.yaml   letter-logit baseline
 mimir_decide/
