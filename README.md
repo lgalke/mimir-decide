@@ -90,7 +90,7 @@ The script `scripts/run_pilot.sh` does these steps for both models:
 4. Calibrate each model.
 5. Evaluate each model on the validation data and on the held-out tasks.
 
-The script does not use the test split.
+The script does not use the test split. It writes each run to the folder `runs/` in the project. Git tracks only the small result files there.
 
 Use `python -m mimir_decide.compare` to compare two runs side by side. The experiment pages in `docs/experiments/` give the exact commands and the decision rules.
 

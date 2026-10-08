@@ -35,6 +35,8 @@ Section 9 of `AGENTS.md` is the operative text. In short:
 
 The owner decided that small evaluation result files are tracked: `runs/<run>/eval/*.json`, about 100 KB each (the four pilot files were committed in `a12853f`). Large files stay out. `.gitignore` now allows exactly `runs/*/eval/*.json` and ignores every other file under `runs/` (checkpoints, training logs, `calibration.json`, the test-access log). The 'never commit run directories' rule in this record means these exceptions only. A test result file such as `eval/test.json` would also match the pattern; commit it only when the owner agrees.
 
+The owner extended this on the same day to the training log: `runs/<run>/train_log.jsonl` (about 240 KB per pilot run) is also tracked, because it holds the validation curves. The server commit `1443eb0` had already added the two pilot logs. `.gitignore` now allows exactly `runs/*/eval/*.json` and `runs/*/train_log.jsonl`.
+
 ## Revisit when
 
 The owner prefers a pull-request flow, a different branch naming, or allows agents to push by default; or the repository starts to need large-file tooling (for example Git LFS for small reference artifacts).

@@ -21,7 +21,7 @@ In the first pilot the baseline had a frozen language-model head ([D06](/design/
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
+export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=runs
 PY=python
 
 $PY -m mimir_decide.train --config configs/train_baseline.yaml --set data_dir=$DATA run_dir=$RUNS/baseline-lmhead train_lm_head=true
@@ -30,7 +30,7 @@ for S in validation heldout; do $PY -m mimir_decide.evaluate --run_dir $RUNS/bas
 $PY -m mimir_decide.compare $RUNS/baseline-lmhead $RUNS/baseline-v0 $RUNS/slot-v0 --file validation.json
 ```
 
-Do not change any other setting: same seed, same data, same schedule as `baseline-v0`. If the pilot used overrides (`EXTRA_SET`), pass the same ones.
+The run goes to `runs/baseline-lmhead/`. Do not change any other setting: same seed, same data, same schedule as `baseline-v0`. If the pilot used overrides (`EXTRA_SET`), pass the same ones.
 
 Cost notes: the LM head has about 0.40B parameters (262,144 x 1,536), so gradients and AdamW state add roughly 5 GB to the 33.6 GB peak of the pilot ([O15](/observations/o15-pilot-training-memory-and-speed.md)). Only the 26 letter rows receive gradient, but weight decay touches all rows (a negligible shrink). Expect a run time similar to the pilot (about 17 hours).
 

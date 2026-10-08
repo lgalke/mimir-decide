@@ -8,7 +8,7 @@ timestamp: 2026-10-04T00:00:00Z
 
 # Training setup
 
-Code lives in the project root next to this bundle (`mimir_decide/`, `configs/`, `scripts/`, `tests/`). Large data, caches and checkpoints go to `~/mimir-decide-data`, deliberately outside OneDrive. The Python environment is the active one ([D23](/design/d23-active-python-environment.md)); commands below use `python` from it.
+Code lives in the project root next to this bundle (`mimir_decide/`, `configs/`, `scripts/`, `tests/`). Large data and caches go to `~/mimir-decide-data`, deliberately outside OneDrive. Runs go to `runs/` in the repository ([D24](/design/d24-run-directories-in-the-repository.md)). The Python environment is the active one ([D23](/design/d23-active-python-environment.md)); commands below use `python` from it.
 
 ## Run order
 

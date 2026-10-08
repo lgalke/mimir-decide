@@ -9,8 +9,9 @@ docs/.obsidian/
 *.swp
 *.swo
 
-# Run directories: only the small evaluation result files are tracked. Checkpoints, logs and caches stay out.
+# Run directories: only the small result files are tracked (eval JSON files and the training log). Checkpoints and caches stay out.
 runs/**
 !runs/*/
 !runs/*/eval/
 !runs/*/eval/*.json
+!runs/*/train_log.jsonl

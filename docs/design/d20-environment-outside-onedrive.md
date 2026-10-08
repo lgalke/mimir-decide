@@ -23,7 +23,7 @@ On the GPU cluster, set these to fast local storage; paths in `configs/*.yaml` u
 
 ## Update 2026-10-06
 
-The venv location (`~/.venvs/mimir-decide`, `UV_PROJECT_ENVIRONMENT`) is superseded by [D23](/design/d23-active-python-environment.md): documents and scripts now use the active Python environment. The data, cache and run locations in this decision are unchanged.
+The venv location (`~/.venvs/mimir-decide`, `UV_PROJECT_ENVIRONMENT`) is superseded by [D23](/design/d23-active-python-environment.md): documents and scripts now use the active Python environment. The data and cache locations in this decision are unchanged. The run location (`~/mimir-decide-data/runs`) is superseded by [D24](/design/d24-run-directories-in-the-repository.md).
 
 ## Revisit when
 

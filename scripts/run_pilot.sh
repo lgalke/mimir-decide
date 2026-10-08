@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.."
 export TOKENIZERS_PARALLELISM=false
 PY="${PY:-python}"   # Python of the active environment (uv .venv or conda); override with PY=/path/to/python
 DATA="${DATA:-$HOME/mimir-decide-data/mixture-v0}"
-RUNS="${RUNS:-$HOME/mimir-decide-data/runs}"
+RUNS="${RUNS:-$PWD/runs}"   # the script runs from the repository root; default: runs/ in the repository (D24)
 
 if [[ -z "${SKIP_BUILD:-}" ]]; then
   $PY -m mimir_decide.build_mixture --config configs/data.yaml --output_dir "$DATA" ${LIMIT:+--limit $LIMIT}

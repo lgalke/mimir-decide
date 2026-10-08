@@ -21,7 +21,7 @@ E03 runs and `reports/mimir_overlap.json`
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
+export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=runs
 PY=python
 ```
 ```bash

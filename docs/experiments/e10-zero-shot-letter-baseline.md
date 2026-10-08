@@ -21,7 +21,7 @@ The mixture from [E01](/experiments/e01-full-mixture-build.md) (`calib.parquet`,
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=$HOME/mimir-decide-data/runs
+export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=runs
 PY=python
 
 # 1. Zero-shot checkpoint: no weights are copied; they are loaded from the hub at the pinned revision.
@@ -41,7 +41,7 @@ $PY -m mimir_decide.compare $RUNS/letter-zeroshot $RUNS/baseline-v0 $RUNS/slot-v
 $PY -m mimir_decide.compare $RUNS/letter-zeroshot --file validation_uncal.json
 ```
 
-Copy the small result files `$RUNS/letter-zeroshot/eval/*.json` into `runs/letter-zeroshot/eval/` in the repository to track them. Use `--limit N` on `calibrate` and `evaluate` only for smoke tests, never for reported numbers.
+The run goes to `runs/letter-zeroshot/` in the repository ([D24](/design/d24-run-directories-in-the-repository.md)). Git tracks only its small eval files. The comparison in step 4 needs only the eval JSON files of the pilot runs, which are in the repository. Use `--limit N` on `calibrate` and `evaluate` only for smoke tests, never for reported numbers.
 
 ## Metrics to record
 

@@ -3,7 +3,7 @@ model_type: letter
 base_model: danish-foundation-models/DFM-Mimir-v1.5
 revision: 521b40b36a79918014544b970d4c2669ff1530eb
 data_dir: ~/mimir-decide-data/mixture-v0
-run_dir: ~/mimir-decide-data/runs/letter-v0
+run_dir: runs/baseline-v0   # relative to the repository root; git tracks only the small result files (see .gitignore)
 
 max_len: 2048
 batch_size: 8
