@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import sys
 import time
 from pathlib import Path
@@ -31,6 +32,9 @@ def main(argv=None):
     ap.add_argument("--no_calibration", action="store_true")
     ap.add_argument("--order_seed", type=int, default=None,
                     help="present options in a seeded random order (robustness to option position)")
+    ap.add_argument("--tag", default=None, help="suffix for the output file name, e.g. 'uncal' -> validation_uncal.json")
+    ap.add_argument("--limit", type=int, default=None,
+                    help="evaluate a seeded random sample of N records (smoke tests only, not for reported results)")
     a = ap.parse_args(argv)
     if a.split == "test" and not a.final:
         sys.exit("refusing to evaluate on the test split without --final (test access is logged and meant to be rare)")
@@ -40,20 +44,23 @@ def main(argv=None):
     recs = read_parquet(data / PATHS[a.split])
     if a.split != "test":
         assert all(d.split in ("validation", "test") for d in recs)
+    if a.limit is not None and a.limit < len(recs):
+        recs = random.Random(0).sample(recs, a.limit)
     lg, kept = predict_logits(model, tok, meta, recs, a.batch_size, device, autocast=device == "cuda",
                               perm_seed=a.order_seed)
     cal = run / "calibration.json"
     temps = None if a.no_calibration or not cal.exists() else json.loads(cal.read_text())["temperatures"]
     res = evaluate(lg, kept, temps)
     overlap = data / "reports" / "mimir_overlap.json"
-    out = {"split": a.split, "order_seed": a.order_seed, "checkpoint": a.checkpoint, "calibrated": temps is not None, "temperatures": temps,
+    out = {"split": a.split, "order_seed": a.order_seed, "limit": a.limit, "checkpoint": a.checkpoint, "calibrated": temps is not None, "temperatures": temps,
            "n_records": len(recs), "n_evaluated": len(kept), "n_skipped_too_long": len(recs) - len(kept),
            "results": res}
     if overlap.exists():
         seen = set(json.loads(overlap.read_text()).get("sources_seen_by_mimir", []))
         out["sources_seen_by_mimir"] = sorted(seen & {k.split(":", 1)[1] for k in res if k.startswith("source:")})
     (run / "eval").mkdir(exist_ok=True)
-    (run / "eval" / (f"{a.split}.json" if a.order_seed is None else f"{a.split}_order{a.order_seed}.json")).write_text(json.dumps(out, indent=1))
+    name = a.split + ("" if a.order_seed is None else f"_order{a.order_seed}") + (f"_{a.tag}" if a.tag else "")
+    (run / "eval" / f"{name}.json").write_text(json.dumps(out, indent=1))
     if a.split == "test":
         with open(run / "eval" / "test_access_log.jsonl", "a") as f:
             f.write(json.dumps({"time": int(time.time()), "checkpoint": a.checkpoint,

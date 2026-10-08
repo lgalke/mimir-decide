@@ -154,7 +154,12 @@ def load_model(path, device: str, dtype: torch.dtype = torch.bfloat16):
     path = Path(path)
     meta = json.loads((path / "decision_meta.json").read_text())
     tok = AutoTokenizer.from_pretrained(path / "tokenizer")
-    lm = HrmTextForCausalLM.from_pretrained(path / "lm", attn_implementation="sdpa", dtype=dtype)
+    if (path / "lm").exists():
+        lm = HrmTextForCausalLM.from_pretrained(path / "lm", attn_implementation="sdpa", dtype=dtype)
+    else:  # zero-shot checkpoint (see zeroshot.py): no weights stored, load the untrained base model
+        assert meta.get("zero_shot"), f"{path} has no lm/ weights and is not a zero-shot checkpoint"
+        lm = HrmTextForCausalLM.from_pretrained(meta["base_model"], revision=meta.get("revision"),
+                                                attn_implementation="sdpa", dtype=dtype)
     if meta["model_type"] == "slot":
         m = SlotDecisionModel(lm)
     else:
