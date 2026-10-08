@@ -17,6 +17,7 @@ Dated, evidence-backed things seen so far; add new ones with the template.
 * [O11: Segment-wise tokenization changed '\n\n' into two tokens](/observations/o11-letter-prompt-tokenization-boundary.md) - The letter prompt differed from the tokenizer's own encoding until boundaries were fixed.
 * [O12: Smoke-run metrics on the random tiny model are meaningless](/observations/o12-uncalibrated-tiny-model-smoke-numbers.md) - Do not read the tiny-model accuracy, NLL or temperatures as results.
 * [O13: L_bp_cycles [0,3] shrinks L-stack gradients about 230x](/observations/o13-l-bp-cycles-changes-gradient-scale.md) - Single-batch probe on the tiny model: the L stack gets far smaller gradients with [0,3] than with the checkpoint's [3,3].
+* [O14: First pilot results: slot readout and letter baseline are tied](/observations/o14-first-pilot-results-slot-and-baseline-tie.md) - One seed, validation n=6127. Slot and letter baseline differ by at most 0.004 in accuracy-level metrics; 96% of validation comes from sources Mimir saw.
 
 ## Template
 

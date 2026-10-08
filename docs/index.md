@@ -8,7 +8,7 @@ Turning DFM Mimir (HRM-Text) into a Jev-like decision model. Managed as an Open 
 * [Design](/design/index.md) - Decision records (one page per decision, with context and consequences) and how-to references. (28 pages)
 * [Open questions](/questions/index.md) - One page per open question: why it matters, how to resolve it, linked experiments. (14 pages)
 * [Experiments](/experiments/index.md) - Prefilled experiment plans: hypothesis, exact commands, metrics, decision rule, results. (10 pages)
-* [Observations](/observations/index.md) - Dated, evidence-backed things seen so far; add new ones with the template. (14 pages)
+* [Observations](/observations/index.md) - Dated, evidence-backed things seen so far; add new ones with the template. (15 pages)
 
 ## Log
 

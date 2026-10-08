@@ -6,3 +6,11 @@ data/
 .ruff_cache/
 .DS_Store
 docs/.obsidian/
+*.swp
+*.swo
+
+# Run directories: only the small evaluation result files are tracked. Checkpoints, logs and caches stay out.
+runs/**
+!runs/*/
+!runs/*/eval/
+!runs/*/eval/*.json

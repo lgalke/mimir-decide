@@ -1,5 +1,10 @@
 # Update Log
 
+## 2026-10-09
+* **Decision**: The owner allows small evaluation result files in git (`runs/<run>/eval/*.json`, about 100 KB each) and no large files. `.gitignore` whitelists exactly these files under `runs/`; `AGENTS.md` section 9 and [D22](/design/d22-git-workflow.md) are updated. The owner's commit `a12853f` ("Add pilot results") had removed `runs/` from `.gitignore` and added the four pilot eval files.
+* **Note**: Five stale untracked copies of pre-restructure pages appeared in `docs/research/` (dated 4 Oct, old links; cause unknown, possibly a OneDrive sync) and were deleted at the owner's request. They were `dataset-selection`, `heads-and-baseline`, `log`, `mimir-to-decision-model-plan` and `training-setup`; the current versions are in `docs/design/` and `docs/log.md`.
+* **Finding**: First pilot results (validation n=6127, one seed): slot and letter baseline are effectively tied (accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456; held-out nb-NO accuracy 0.960 vs 0.952); 96% of validation comes from sources Mimir saw. Both models are fine-tuned identically; only the readout differs. See [O14](/observations/o14-first-pilot-results-slot-and-baseline-tie.md) for what this does and does not show.
+
 ## 2026-10-06
 * **Decision**: The Python environment is the active one: a uv `.venv` in the project root, or an activated conda environment ([D23](/design/d23-active-python-environment.md), requested by the owner). `README.md`, `AGENTS.md`, `scripts/run_pilot.sh`, the experiment pages and `training-setup` no longer use `UV_PROJECT_ENVIRONMENT`. D20 notes that its venv part is superseded. The conda route was checked only by a dry-run dependency resolution.
 * **Create**: `README.md` in the repository root: an overview for human readers, written in ASD-STE100 (Simplified Technical English) style. It states the project status as it is: code tested on a small random model, real model not tested, no experiment run.
