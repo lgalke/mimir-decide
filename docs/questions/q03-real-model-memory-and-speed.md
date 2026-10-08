@@ -2,7 +2,7 @@
 type: Question
 title: 'Q03: Does the real 1.8B model train on one GPU?'
 description: Memory, step time and throughput of Mimir v1.5 under our setup are unmeasured.
-status: open
+status: answered
 priority: high
 resolved_by: [e02, e06]
 tags: []
@@ -20,6 +20,10 @@ Estimate only: fp32 weights ~7 GB, gradients and AdamW state for ~1B trainable p
 ## How to resolve
 
 Run [E02](/experiments/e02-smoke-run-real-model.md), then [E06](/experiments/e06-l-bp-cycles-ablation.md). Fallbacks: smaller `max_len`, `L_bp_cycles [0,3]`, 8-bit optimizer, bf16 weights.
+
+## Answer
+
+Yes, for one NVIDIA RTX PRO 6000 Blackwell Server Edition. With the defaults (`L_bp_cycles [3,3]`, batch 8 x 4 accumulation, `max_len` 2048, fp32 weights with bf16 autocast, gradient checkpointing) the peak was 33.6 GB at 6.15 examples per second, about 5.2 s per optimizer step ([O15](/observations/o15-pilot-training-memory-and-speed.md)). Other GPUs and the cheaper `[0,3]` setting are not measured ([E06](/experiments/e06-l-bp-cycles-ablation.md)).
 
 ## Decision impact
 

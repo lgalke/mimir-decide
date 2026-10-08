@@ -29,8 +29,11 @@ Tools added for the planned experiments ([experiments](/experiments/index.md)):
 python -m mimir_decide.evaluate --run_dir <run> --data_dir <mixture> --split validation --order_seed 1   # option-order robustness
 python -m mimir_decide.compare <run_a> <run_b> --file validation.json                                    # side by side, seen vs not flagged
 python -m mimir_decide.bench   --run_dir <run> --data_dir <mixture>                                      # latency / throughput
+python -m mimir_decide.zeroshot --config configs/train_baseline.yaml --run_dir <run>                        # untrained base model, letter prompt (E10); use --checkpoint zero-shot below
 python -m mimir_decide.okf --check | --write                                                              # docs indexes
 ```
+
+`calibrate` and `evaluate` accept `--limit N` (seeded random sample, smoke tests only); `evaluate` accepts `--tag NAME` to keep raw and calibrated results in separate files.
 
 `train_log.jsonl` records `peak_mem_gb` (CUDA) and `ex_per_s`.
 

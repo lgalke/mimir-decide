@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E03: Slot readout vs letter baseline (pilot)'
 description: 'The central comparison: same data, backbone, loss and calibration; only the readout differs.'
-status: planned
+status: done
 answers: [q04, q01]
 depends_on: [e01, e02]
 tags: []
@@ -41,10 +41,10 @@ Slot 'wins' if its NLL is lower than the baseline's on validation and on heldout
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **done** (one seed). The owner decided on 2026-10-09 that one seed is enough, so the 'spread between seeds' part of the decision rule cannot be applied. A fixed margin is proposed (a validation NLL gap below 0.01 is a tie, and a tie goes to the simpler baseline) and waits for the owner's confirmation. By any such margin the first result is a tie.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-09 | `runs/slot-v0`, `runs/baseline-v0` | defaults, seed 0, via `scripts/run_pilot.sh` | tie: validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456 | [O14](/observations/o14-first-pilot-results-slot-and-baseline-tie.md) |
 
 When run: fill this table, create an observation page (copy the template) with the numbers, set `status` in the frontmatter, add a line to the update log, and regenerate the indexes.

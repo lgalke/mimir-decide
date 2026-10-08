@@ -21,6 +21,10 @@ Pure bf16 weights lose updates at a learning rate of 1e-5.
 
 About 7 GB of weights plus gradients and AdamW state for ~1B trainable parameters. Not measured on a GPU ([Q03](/questions/q03-real-model-memory-and-speed.md)).
 
+## Update 2026-10-09
+
+Measured: fp32 weights with bf16 autocast, gradient checkpointing, batch 8 x 4: peak 33.6 GB ([O15](/observations/o15-pilot-training-memory-and-speed.md)). The decision stands.
+
 ## Revisit when
 
 Memory forces bf16 weights (then consider a Kahan-style or 8-bit optimizer).

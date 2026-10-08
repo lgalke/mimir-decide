@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E02: Smoke run on the real model'
 description: Load Mimir v1.5, train 50 steps, measure memory and throughput, confirm loss decreases and checkpoints reload.
-status: planned
+status: done
 answers: [q03]
 depends_on: [e01]
 tags: []
@@ -41,10 +41,10 @@ Pass: no OOM at the config used, loss lower at step 50 than at step 1, evaluate 
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **done**. The owner ran the smoke run and then the pilot; the smoke run's own numbers were not reported, but the pilot's training log gives memory and speed.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-08 | owner's smoke run, then `slot-v0` | defaults | smoke run passed; pilot slot run: 33.6 GB peak, 6.15 ex/s on RTX PRO 6000 Blackwell | [O15](/observations/o15-pilot-training-memory-and-speed.md) |
 
 When run: fill this table, create an observation page (copy the template) with the numbers, set `status` in the frontmatter, add a line to the update log, and regenerate the indexes.

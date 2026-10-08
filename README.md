@@ -23,11 +23,11 @@ The model supports 3 types of question:
 
 ## Status
 
-The code is complete. It is tested on a small random model and with unit tests.
+The code runs on a GPU server. The first pilot is complete. It used one seed.
 
-The real model is not tested. No result about the quality of decisions is available.
+The slot model and the letter baseline give the same quality. On validation data they differ by less than 0.005 in accuracy. Mimir already knows most of this data. The result does not show that the model generalizes.
 
-The first job is to run the planned experiments on a GPU. The experiment pages in `docs/experiments/` list the steps.
+The next steps are a zero-shot reference and a stronger baseline. The zero-shot reference is the untrained model with the letter prompt. The experiment pages in `docs/experiments/` list the steps.
 
 ## How it works
 
@@ -62,7 +62,7 @@ A computer with no GPU can run the tests and the checks with the small model.
 
 In this README, `python` means the Python of the active environment. Run all commands from the project root. If a `.venv` folder exists and no environment is active, activate the `.venv` or put `uv run` before the command.
 
-The tests take about 1 minute. The 3 tests that need the internet are not in this run. Remove `-m "not network"` to include them.
+The tests take about 1 minute. The 4 tests that need the internet are not in this run. Remove `-m "not network"` to include them.
 
 ## Build the data
 
@@ -120,7 +120,7 @@ Start with `docs/index.md`. The documentation uses the Open Knowledge Format (OK
 
 - `docs/design/` has 1 page for each design decision. Each page gives the context, the decision and the consequences.
 - `docs/questions/` has 1 page for each open question.
-- `docs/experiments/` has the planned experiments. The status of each experiment is "planned".
+- `docs/experiments/` has the experiment plans. Each page shows its status and its results.
 - `docs/observations/` has the findings so far, with the evidence.
 - `docs/log.md` is the dated record of all changes.
 

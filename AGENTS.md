@@ -1,22 +1,23 @@
 # AGENTS.md — Mimir-Decide handoff
 
-You are continuing a project that turns **DFM Mimir v1.5** (an open 1B-class HRM-Text language model) into a **Jev-like decision model**: text state + typed questions in, calibrated probabilities out, no generated text. Work so far was done on a Mac without a GPU. **You are on the GPU cluster: the real model has never been run yet.** Your first job is to run the planned experiments in order and record what happens.
+You are continuing a project that turns **DFM Mimir v1.5** (an open 1B-class HRM-Text language model) into a **Jev-like decision model**: text state + typed questions in, calibrated probabilities out, no generated text. Code and docs were written on a Mac without a GPU. The owner then ran the smoke test and the first pilot on the GPU server (slot model and letter baseline, one seed; see O14 and O15). **Your job is to continue with the planned experiments in order and record what happens.**
 
 Read this file fully, then `docs/index.md`. Everything the previous agent knew that is not in the code is in `docs/`.
 
-## 1. State of the project (2026-10-04)
+## 1. State of the project (2026-10-09)
 
-Done and tested (53 tests: 50 offline, 3 need network):
-- Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark.
-- Documentation as an OKF bundle in `docs/`: 22 decision records, 13 open questions, 9 prefilled experiments (all **planned, none run**), 13 observations, update log.
+Done and tested (54 tests: 50 offline, 4 need network):
+- Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark, zero-shot reference (`mimir_decide.zeroshot`).
+- Documentation as an OKF bundle in `docs/`: 23 decision records, 14 open questions, 11 experiments, 15 observations, update log.
 
-Verified only on a **tiny random HRM** (real tokenizer, CPU) plus unit tests: build → train → calibrate → evaluate works end to end for both models; gradient checkpointing, `num_workers=2` and the `L_bp_cycles` override run.
+Run by the owner on the GPU server (NVIDIA RTX PRO 6000 Blackwell Server Edition): the smoke test (E02) and the first pilot (E03, one seed, defaults). Result: the slot model and the letter baseline are tied (validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456), and 96% of validation comes from sources Mimir saw ([O14](docs/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). Training fits in 33.6 GB at 6.15 examples per second ([O15](docs/observations/o15-pilot-training-memory-and-speed.md)). The small eval files are in `runs/`.
 
-**Not verified (you will hit these first):**
-- Loading and training the real 1.8B checkpoint; GPU memory, speed, whether `[3,3]` backprop fits ([Q03](docs/questions/q03-real-model-memory-and-speed.md)).
-- CUDA-specific paths: `torch.autocast` bf16, `fused=True` AdamW, gradient checkpointing on the real model, `sdpa` with the PrefixLM mask.
-- The **full** data build (only `--limit 4000` trial builds were run; takes network, disk and time).
-- Any statement about decision quality. No real-model number exists. The metrics in smoke runs are meaningless (random model).
+**Next, in the owner's order:** E10 (zero-shot letter baseline; code and plan are ready), then E11 (letter baseline with a trainable LM head).
+
+**Open or not recorded yet:**
+- The pilot built the full mixture, but its manifest numbers (counts, drops, `heldout_patterns_unmatched`) are not in the docs yet ([E01](docs/experiments/e01-full-mixture-build.md) stays `planned` until they are).
+- The decision rule of E03 needs a fixed margin because the owner chose one seed (proposal: NLL gap below 0.01 is a tie). Waiting for the owner.
+- E04 to E09 are not run. There is no result on genuinely unseen tasks ([Q01](docs/questions/q01-clean-generalisation-evidence.md)).
 
 ## 2. Set up (do this first)
 
@@ -45,10 +46,12 @@ In this file, `python` means the Python of the active environment. Run all comma
 
 Each step has a page in `docs/experiments/` with exact commands, metrics and a **decision rule written before running**. Follow the page; do not improvise the rule afterwards.
 
-1. **[E01 full mixture build](docs/experiments/e01-full-mixture-build.md)** — then read `reports/*` and hand-inspect `ngram_leak_examples.jsonl`. Check `heldout_patterns_unmatched` is empty.
-2. **[E02 smoke run on the real model](docs/experiments/e02-smoke-run-real-model.md)** — 50 steps; find a config that fits; record `peak_mem_gb`, `ex_per_s`. Update D04/D09/D10 if needed.
-3. **[E03 slot vs letter pilot](docs/experiments/e03-slot-vs-letter-pilot.md)** (`scripts/run_pilot.sh`), ≥2 seeds. This is the central question ([Q04](docs/questions/q04-slot-vs-letter-on-real-model.md)).
-4. E04 calibration, E05 option-order robustness, E07 seen-vs-unflagged analysis (from the E03 runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code.
+1. **[E10 zero-shot letter baseline](docs/experiments/e10-zero-shot-letter-baseline.md)** — no training, a few minutes. Needs the mixture from the pilot (`$DATA`) and `runs/baseline-v0`, `runs/slot-v0` for the comparison.
+2. **[E11 stronger baseline](docs/experiments/e11-stronger-baseline-trainable-lm-head.md)** (`train_lm_head=true`), after E10. Same settings as the pilot; about 17 hours.
+3. E04 calibration, E05 option-order robustness, E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code.
+4. Record the full-build numbers of the pilot's mixture (E01) from `$DATA/mixture_manifest.json` into an observation and the E01 table. Ask the owner for the file if you cannot read it.
+
+Done: E02 and E03 (see section 1). If you must repeat the pilot, `scripts/run_pilot.sh` runs both models; use another `RUNS` directory so the pilot results are not overwritten.
 
 After each experiment: fill the results table in its page, write an observation page (copy the template), set the experiment `status`, add a line to `docs/log.md`, regenerate indexes (section 5).
 
@@ -57,7 +60,7 @@ After each experiment: fill the results table in its page, write an observation 
 1. **Never train on, tune on, or casually look at the test split.** `train.py` reads only `train.parquet` and `validation.parquet` and refuses `eval/`, `heldout_tasks/`, `test*`, `heldout*`. `evaluate.py --split test` needs `--final`, is logged in `eval/test_access_log.jsonl`, and should be run at most once per finished model. Choose models and hyperparameters on validation (and held-out tasks), never test. ([D11](docs/design/d11-split-isolation-and-test-access.md))
 2. **Do not weaken the leakage guards** in `build_mixture.py` (exact state hash, group id, cross-source n-gram fingerprints, final assertions). If a guard fires unexpectedly, investigate with `reports/ngram_leak_examples.jsonl`; do not disable it. Each guard has a test that fails when it is removed. ([D12](docs/design/d12-ngram-fingerprint-guard-cross-source-only.md))
 3. **Permissive licences only** ([D02](docs/design/d02-permissive-licences-only.md)); bekko "qualified" subsets stay excluded ([D13](docs/design/d13-bekko-licence-and-test-handling.md)). Do not add data with unknown or non-commercial licences.
-4. **Held-out tasks are fixed before any training** ([D15](docs/design/d15-held-out-task-massive-nb-no.md)). It is currently provisional: `massive/nb-NO` is probably *not* clean (Mimir saw `tasksource__`). **Before the first real training run, raise this with the owner** (see Q01); do not change `held_out_sources` after a model has been trained.
+4. **Held-out tasks are fixed** ([D15](docs/design/d15-held-out-task-massive-nb-no.md)). The pilot used `massive/nb-NO`, which is probably *not* clean (Mimir saw `tasksource__`; Q01). Do not change `held_out_sources`: a changed set would make new runs incomparable with the pilot. Raise any change with the owner first.
 5. **Mimir overlap is a standing caveat.** Nearly all public sources are flagged "seen by Mimir" (name-level). Every reported result must say which sources are flagged; use `python -m mimir_decide.compare` (seen / not-flagged blocks). Do not claim generalisation from flagged sources.
 6. Do not describe outputs as "probability of correctness" ([Q07](docs/questions/q07-soft-label-semantics-vs-correctness.md)); calibration is to the given labels.
 7. Report faithfully: failing tests, OOMs, surprising or negative results go into observations and the log, with numbers and run paths.
@@ -98,10 +101,10 @@ mimir_decide/
   audit_mimir_overlap.py    name-level overlap with Mimir's training policy
   formatting.py model.py    prompt rendering/collation; SlotDecisionModel, LetterBaseline, loss, save/load
   train.py calibrate.py evaluate.py inference.py metrics.py
-  compare.py bench.py okf.py
+  compare.py bench.py okf.py zeroshot.py   (zeroshot.py: untrained base model with the letter prompt, E10)
 scripts/run_pilot.sh        build -> audit -> train both -> calibrate -> evaluate (validation + heldout)
 scripts/make_tiny_model.py  random tiny HRM with the real vocabulary (smoke tests without the big model)
-tests/                      53 tests; marker `network` needs internet
+tests/                      54 tests; marker `network` needs internet
 docs/                       the OKF knowledge base (section 5)
 ```
 
@@ -114,6 +117,8 @@ python -m mimir_decide.calibrate --run_dir $RUNS/x --data_dir $DATA
 python -m mimir_decide.evaluate  --run_dir $RUNS/x --data_dir $DATA --split validation|heldout [--order_seed 1] [--no_calibration]
 python -m mimir_decide.compare   $RUNS/a $RUNS/b --file validation.json
 python -m mimir_decide.bench     --run_dir $RUNS/x --data_dir $DATA
+python -m mimir_decide.zeroshot  --config configs/train_baseline.yaml --run_dir $RUNS/letter-zeroshot      # then calibrate/evaluate with --checkpoint zero-shot (E10)
+# evaluate/calibrate also take --limit N (random sample, smoke tests only); evaluate takes --tag NAME (output file suffix)
 ```
 Out-of-memory ladder for E02: `batch_size=4 grad_accum=8` → `max_len=1024` → `L_bp_cycles=[0,3]` → `param_dtype=bfloat16`. Log which rung worked.
 
