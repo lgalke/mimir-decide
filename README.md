@@ -62,7 +62,7 @@ A computer with no GPU can run the tests and the checks with the small model.
 
 In this README, `python` means the Python of the active environment. Run all commands from the project root. If a `.venv` folder exists and no environment is active, activate the `.venv` or put `uv run` before the command.
 
-The tests take about 1 minute. The 4 tests that need the internet are not in this run. Remove `-m "not network"` to include them.
+The tests take about 1 minute. The 6 tests that need the internet are not in this run. Remove `-m "not network"` to include them.
 
 ## Build the data
 

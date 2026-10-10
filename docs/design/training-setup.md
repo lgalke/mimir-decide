@@ -30,6 +30,7 @@ python -m mimir_decide.evaluate --run_dir <run> --data_dir <mixture> --split val
 python -m mimir_decide.compare <run_a> <run_b> --file validation.json                                    # side by side, seen vs not flagged
 python -m mimir_decide.bench   --run_dir <run> --data_dir <mixture>                                      # latency / throughput
 python -m mimir_decide.zeroshot --config configs/train_baseline.yaml --run_dir <run>                        # untrained base model, letter prompt (E10); use --checkpoint zero-shot below
+python -m mimir_decide.build_extra_eval --pilot_dir <mixture> --out_dir <dir> --sources_out configs/extra_eval_sources.yaml   # E12 extra tasks
 python -m mimir_decide.okf --check | --write                                                              # docs indexes
 ```
 

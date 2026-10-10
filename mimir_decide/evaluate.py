@@ -18,7 +18,7 @@ from .model import load_model
 from .schema import read_parquet
 
 PATHS = {"validation": "validation.parquet", "heldout": "heldout_tasks/heldout.parquet",
-         "test": "eval/test/test.parquet"}
+         "test": "eval/test/test.parquet", "extra": "extra_eval/extra_eval.parquet"}
 
 
 def main(argv=None):

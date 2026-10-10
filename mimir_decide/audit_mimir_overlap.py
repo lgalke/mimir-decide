@@ -90,7 +90,7 @@ def main(argv=None):
     mm = json.loads((data / "mixture_manifest.json").read_text())
     sources = {}
     for f in ["train.parquet", "validation.parquet", "calib.parquet", "heldout_tasks/heldout.parquet",
-              "eval/test/test.parquet"]:
+              "eval/test/test.parquet", "extra_eval/extra_eval.parquet"]:
         p = data / f
         if p.exists():
             t = pq.read_table(p, columns=["source", "dataset"]).to_pylist()

@@ -6,7 +6,7 @@ Read this file fully, then `docs/index.md`. Everything the previous agent knew t
 
 ## 1. State of the project (2026-10-09)
 
-Done and tested (54 tests: 50 offline, 4 need network):
+Done and tested (69 tests: 63 offline, 6 need network):
 - Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark, zero-shot reference (`mimir_decide.zeroshot`).
 - Documentation as an OKF bundle in `docs/`: 26 decision records, 15 open questions, 13 experiments, 19 observations, update log.
 
@@ -16,7 +16,7 @@ The zero-shot reference (E10) is done: the untrained model reaches 0.669 validat
 
 E04 and E05 are done on the pilot checkpoints: temperature scaling changes the fine-tuned models very little ([O18](docs/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md)), and neither model is sensitive to option order, so the slot design's invariance argument is not supported ([O19](docs/observations/o19-option-order-does-not-matter-for-either-model.md)). Note that the server code used for these re-evaluations predates the reliability tables; pull before the next evaluation.
 
-**Next, in the owner's order:** [E11](docs/experiments/e11-stronger-baseline-trainable-lm-head.md) (letter baseline with a trainable output head, original mixture, pilot settings; about 17 hours), then [E13](docs/experiments/e13-head-only-baselines.md) (head-only probes on the frozen backbone; cheaper than a full run; code is ready), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)).
+**Next, in the owner's order:** [E11](docs/experiments/e11-stronger-baseline-trainable-lm-head.md) (letter baseline with a trainable output head, original mixture, pilot settings; about 17 hours), then [E13](docs/experiments/e13-head-only-baselines.md) (head-only probes on the frozen backbone; cheaper than a full run; code is ready), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)); the tool is ready: `mimir_decide.build_extra_eval` (see the E12 page for the commands; commit the source list before evaluating).
 
 **Open or not recorded yet:**
 - The pilot built the full mixture, but its manifest numbers (counts, drops, `heldout_patterns_unmatched`) are not in the docs yet ([E01](docs/experiments/e01-full-mixture-build.md) stays `planned` until they are).
@@ -52,7 +52,7 @@ In this file, `python` means the Python of the active environment. Run all comma
 Each step has a page in `docs/experiments/` with exact commands, metrics and a **decision rule written before running**. Follow the page; do not improvise the rule afterwards.
 
 1. **[E11 stronger baseline](docs/experiments/e11-stronger-baseline-trainable-lm-head.md)** (`train_lm_head=true`), on the original mixture with the pilot's settings; about 17 hours. (E10, the zero-shot reference, is done.)
-2. **[E12 unseen label sets](docs/experiments/e12-unseen-label-sets.md)**: evaluation of all models on extra tasks. Task sources are decided (D26, option A, evaluation only). `select_heldout` and `derive_mixture` are the fallback design (D25, superseded).
+2. **[E12 unseen label sets](docs/experiments/e12-unseen-label-sets.md)**: evaluation of all models on extra tasks. Task sources are decided (D26, option A, evaluation only); build them with `build_extra_eval` and commit `configs/extra_eval_sources.yaml` before any evaluation. `select_heldout` and `derive_mixture` are the fallback design (D25, superseded).
 3. E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code. (E04 and E05 are done.)
 4. Record the full-build numbers of the pilot's mixture (E01) from `$DATA/mixture_manifest.json` into an observation and the E01 table. Ask the owner for the file if you cannot read it.
 
@@ -107,10 +107,11 @@ mimir_decide/
   formatting.py model.py    prompt rendering/collation; SlotDecisionModel, LetterBaseline, loss, save/load
   train.py calibrate.py evaluate.py inference.py metrics.py
   compare.py bench.py okf.py zeroshot.py   (zeroshot.py: untrained base model with the letter prompt, E10)
-  select_heldout.py derive_mixture.py     (E12: pick sources with unseen label sets; derive a mixture without them)
+  build_extra_eval.py                     (E12: evaluation-only extra tasks with unseen label sets, option A)
+  select_heldout.py derive_mixture.py     (E12 fallback: leave tasks out and retrain; superseded)
 scripts/run_pilot.sh        build -> audit -> train both -> calibrate -> evaluate (validation + heldout)
 scripts/make_tiny_model.py  random tiny HRM with the real vocabulary (smoke tests without the big model)
-tests/                      54 tests; marker `network` needs internet
+tests/                      69 tests; marker `network` needs internet
 docs/                       the OKF knowledge base (section 5)
 ```
 

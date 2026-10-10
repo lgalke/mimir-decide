@@ -52,6 +52,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("run_dirs", nargs="+")
     ap.add_argument("--file", default="validation.json", help="eval JSON name inside <run>/eval/")
+    ap.add_argument("--sources-key", default="held_out_sources", help="key of the source list inside --sources-file")
     ap.add_argument("--sources-file", default=None,
                     help="YAML with held_out_sources: also print results pooled over these sources and per source "
                          "(the first run is the reference for the gain)")
@@ -79,7 +80,7 @@ def main(argv=None):
     if a.sources_file:
         import yaml
 
-        names = yaml.safe_load(open(a.sources_file))["held_out_sources"]
+        names = yaml.safe_load(open(a.sources_file))[a.sources_key]
         runs = list(evs)
         pooled = {r: pool(evs[r]["results"], names) for r in runs}
         ref = pooled[runs[0]]
