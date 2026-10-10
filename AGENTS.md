@@ -8,7 +8,7 @@ Read this file fully, then `docs/index.md`. Everything the previous agent knew t
 
 Done and tested (54 tests: 50 offline, 4 need network):
 - Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark, zero-shot reference (`mimir_decide.zeroshot`).
-- Documentation as an OKF bundle in `docs/`: 25 decision records, 15 open questions, 12 experiments, 19 observations, update log.
+- Documentation as an OKF bundle in `docs/`: 26 decision records, 15 open questions, 12 experiments, 19 observations, update log.
 
 Run by the owner on the GPU server (NVIDIA RTX PRO 6000 Blackwell Server Edition): the smoke test (E02) and the first pilot (E03, one seed, defaults). Result: the slot model and the letter baseline are tied (validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456), and 96% of validation comes from sources Mimir saw ([O14](docs/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). Training fits in 33.6 GB at 6.15 examples per second ([O15](docs/observations/o15-pilot-training-memory-and-speed.md)). The small eval files are in `runs/`.
 
@@ -16,7 +16,7 @@ The zero-shot reference (E10) is done: the untrained model reaches 0.669 validat
 
 E04 and E05 are done on the pilot checkpoints: temperature scaling changes the fine-tuned models very little ([O18](docs/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md)), and neither model is sensitive to option order, so the slot design's invariance argument is not supported ([O19](docs/observations/o19-option-order-does-not-matter-for-either-model.md)). Note that the server code used for these re-evaluations predates the reliability tables; pull before the next evaluation.
 
-**Next, in the owner's order:** [E12](docs/experiments/e12-unseen-label-sets.md) (label sets unseen in training; leave-tasks-out, two trainings of about 16 hours, tooling and decision rule are ready; first run the selection step and commit its output before training), then E11 (letter baseline with a trainable LM head; it must also be run on E12's split if E12 supports the slot model).
+**Next, in the owner's order:** [E11](docs/experiments/e11-stronger-baseline-trainable-lm-head.md) (letter baseline with a trainable output head, original mixture, pilot settings; about 17 hours), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; waiting for the owner's choice of task sources, and the tool that builds the extra evaluation file is not written yet; see [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)).
 
 **Open or not recorded yet:**
 - The pilot built the full mixture, but its manifest numbers (counts, drops, `heldout_patterns_unmatched`) are not in the docs yet ([E01](docs/experiments/e01-full-mixture-build.md) stays `planned` until they are).
@@ -51,8 +51,8 @@ In this file, `python` means the Python of the active environment. Run all comma
 
 Each step has a page in `docs/experiments/` with exact commands, metrics and a **decision rule written before running**. Follow the page; do not improvise the rule afterwards.
 
-1. **[E12 unseen label sets](docs/experiments/e12-unseen-label-sets.md)**: `select_heldout`, commit the selection, `derive_mixture`, train slot and baseline on the derived mixture, evaluate with the references. Decision rule is in the page.
-2. **[E11 stronger baseline](docs/experiments/e11-stronger-baseline-trainable-lm-head.md)** (`train_lm_head=true`). Same settings as the pilot; about 17 hours. (E10, the zero-shot reference, is done.)
+1. **[E11 stronger baseline](docs/experiments/e11-stronger-baseline-trainable-lm-head.md)** (`train_lm_head=true`), on the original mixture with the pilot's settings; about 17 hours. (E10, the zero-shot reference, is done.)
+2. **[E12 unseen label sets](docs/experiments/e12-unseen-label-sets.md)**: evaluation of all models on extra tasks. Do not start before the owner has chosen the task sources (D26). `select_heldout` and `derive_mixture` are the fallback design (D25, superseded).
 3. E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code. (E04 and E05 are done.)
 4. Record the full-build numbers of the pilot's mixture (E01) from `$DATA/mixture_manifest.json` into an observation and the E01 table. Ask the owner for the file if you cannot read it.
 

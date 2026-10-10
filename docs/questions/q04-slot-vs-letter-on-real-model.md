@@ -19,6 +19,8 @@ On a 1-layer toy task the slot model learned shuffled-option decisions in ~120 s
 
 **First pilot result (2026-10-09, one seed):** a tie within 0.004 on accuracy, NLL and Brier, validation and held-out ([O14](/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). This is not an answer yet: almost all data is familiar to Mimir, and there is no zero-shot or second-seed reference. The open parts are robustness to option order ([E05](/experiments/e05-option-order-robustness.md)), more than 26 options, and truly unseen tasks.
 
+The baseline of the pilot had a frozen output head, while the slot model trained its new head. The fairer comparison is [E11](/experiments/e11-stronger-baseline-trainable-lm-head.md), followed by [E12](/experiments/e12-unseen-label-sets.md) on unseen label sets.
+
 ## How to resolve
 
 [E03](/experiments/e03-slot-vs-letter-pilot.md) with at least 2 seeds, reported with `compare.py`.

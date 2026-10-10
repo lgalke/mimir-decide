@@ -15,7 +15,7 @@ In the first pilot the baseline had a frozen language-model head ([D06](/design/
 
 ## Prerequisites
 
-[E10](/experiments/e10-zero-shot-letter-baseline.md) first (owner's order, done). Planned after [E12](/experiments/e12-unseen-label-sets.md), but required before E12's conclusion if E12 supports the slot model: then this baseline must also be trained on E12's split. The mixture from E01 and the same settings as the pilot, so the comparison stays fair.
+[E10](/experiments/e10-zero-shot-letter-baseline.md) first (owner's order, done). Now the next experiment (owner's order on 2026-10-11). It runs on the original mixture with the pilot's settings, so it stays comparable with the pilot. [E12](/experiments/e12-unseen-label-sets.md) then evaluates it together with the other models on extra tasks. The mixture from E01 and the same settings as the pilot, so the comparison stays fair.
 
 ## Setup
 
@@ -31,6 +31,8 @@ $PY -m mimir_decide.compare $RUNS/baseline-lmhead $RUNS/baseline-v0 $RUNS/slot-v
 ```
 
 The run goes to `runs/baseline-lmhead/`. Do not change any other setting: same seed, same data, same schedule as `baseline-v0`. If the pilot used overrides (`EXTRA_SET`), pass the same ones.
+
+Design note: the LM head is pretrained, so its rows train at the backbone learning rate (1e-5), not at the 1e-4 of the slot model's new head. Only the 26 letter rows receive gradient, because the readout multiplies only those rows. A variant with a higher rate for those rows is possible but not planned.
 
 Cost notes: the LM head has about 0.40B parameters (262,144 x 1,536), so gradients and AdamW state add roughly 5 GB to the 33.6 GB peak of the pilot ([O15](/observations/o15-pilot-training-memory-and-speed.md)). Only the 26 letter rows receive gradient, but weight decay touches all rows (a negligible shrink). Expect a run time similar to the pilot (about 17 hours).
 

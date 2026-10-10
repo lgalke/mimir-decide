@@ -2,12 +2,14 @@
 type: Decision
 title: 'D25: Leave whole tasks out to test unseen label sets'
 description: E12 trains on a mixture derived from the pilot mixture without ten selected sources, chosen by a measurable label-novelty rule and pre-registered. The pilot configuration stays unchanged.
-status: proposed
+status: superseded
 date: '2026-10-11'
 decided_by: owner chose the experiment; design by agent, pending the owner's confirmation of thresholds and rule
 tags: [evaluation, generalisation, held-out]
 timestamp: 2026-10-11T00:00:00Z
 ---
+
+> Superseded on 2026-10-11 by [D26](/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md): retraining on a reduced mixture makes the runs incomparable with the pilot and with the stronger baseline. The tools (`select_heldout`, `derive_mixture`) stay as a fallback.
 
 ## Context
 
