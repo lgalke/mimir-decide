@@ -15,7 +15,7 @@ In the first pilot the baseline had a frozen language-model head ([D06](/design/
 
 ## Prerequisites
 
-[E10](/experiments/e10-zero-shot-letter-baseline.md) first (owner's order). The mixture from E01 and the same settings as the pilot, so the comparison stays fair.
+[E10](/experiments/e10-zero-shot-letter-baseline.md) first (owner's order, done). Planned after [E12](/experiments/e12-unseen-label-sets.md), but required before E12's conclusion if E12 supports the slot model: then this baseline must also be trained on E12's split. The mixture from E01 and the same settings as the pilot, so the comparison stays fair.
 
 ## Setup
 

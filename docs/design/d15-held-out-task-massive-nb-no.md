@@ -21,6 +21,10 @@ The colleague advised holding out whole tasks and domains, not random rows.
 
 **Caveat found afterwards:** tasksource contains `multilingual/massive` and Mimir trained on `tasksource__`, so nb-NO may have been seen ([O08](/observations/o08-audit-flag-rates.md)). It still tests transfer to an unseen *locale of our conversion*, not unseen data. Only LocalLLaMA is unflagged.
 
+## Update 2026-10-11
+
+The label-set question needs whole held-out tasks. [E12](/experiments/e12-unseen-label-sets.md) uses a derived mixture ([D25](/design/d25-leave-tasks-out-for-unseen-label-sets.md)) and leaves this configuration unchanged.
+
 ## Revisit when
 
 Before the first real run: pick held-out tasks that are not flagged, or accept the weaker meaning ([Q01](/questions/q01-clean-generalisation-evidence.md)). Change it only before any training and log the change.

@@ -52,6 +52,9 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("run_dirs", nargs="+")
     ap.add_argument("--file", default="validation.json", help="eval JSON name inside <run>/eval/")
+    ap.add_argument("--sources-file", default=None,
+                    help="YAML with held_out_sources: also print results pooled over these sources and per source "
+                         "(the first run is the reference for the gain)")
     a = ap.parse_args(argv)
     evs = {}
     for r in a.run_dirs:
@@ -73,6 +76,27 @@ def main(argv=None):
         print(f"\n[{part}] (pooled over sources; ECE and selective risk omitted)")
         for run, ev in evs.items():
             print(f"  {run.name:<24} {fmt(split_by_seen(ev)[part])}")
+    if a.sources_file:
+        import yaml
+
+        names = yaml.safe_load(open(a.sources_file))["held_out_sources"]
+        runs = list(evs)
+        pooled = {r: pool(evs[r]["results"], names) for r in runs}
+        ref = pooled[runs[0]]
+        print(f"\n[selected sources, pooled over {len(names)} sources; gain in accuracy points vs {runs[0].name}]")
+        for r in runs:
+            p = pooled[r]
+            gain = f"  gain={100 * (p['acc'] - ref['acc']):+.1f}" if p.get("n") and ref.get("n") and r != runs[0] else ""
+            print(f"  {r.name:<24} {fmt(p)}{gain}")
+        print("\n[per source accuracy (n of the first run)]")
+        print("  " + "source".ljust(46) + "n".rjust(6) + "".join(r.name[:14].rjust(16) for r in runs))
+        for nme in names:
+            cells = []
+            for r in runs:
+                x = evs[r]["results"].get(f"source:{nme}")
+                cells.append((f"{x['acc']:.3f}" if x else "-").rjust(16))
+            n0 = evs[runs[0]]["results"].get(f"source:{nme}", {}).get("n", 0)
+            print("  " + nme[:45].ljust(46) + str(n0).rjust(6) + "".join(cells))
     print("\ncalibrated:", {r.name: ev["calibrated"] for r, ev in evs.items()},
           "| skipped_too_long:", {r.name: ev["n_skipped_too_long"] for r, ev in evs.items()})
 

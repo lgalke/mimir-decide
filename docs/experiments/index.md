@@ -15,6 +15,7 @@ Prefilled experiment plans: hypothesis, exact commands, metrics, decision rule, 
 * [E09: Recurrence depth probe (exploratory)](/experiments/e09-recurrence-depth-probe.md) - [planned] Evaluate the trained model with fewer H cycles to see whether depth matters for decisions.
 * [E10: Zero-shot letter baseline (untrained Mimir)](/experiments/e10-zero-shot-letter-baseline.md) - [done] Evaluate the untrained Mimir v1.5 with the letter prompt, to show how much of the fine-tuned baseline's quality was already there.
 * [E11: Stronger baseline with a trainable language-model head](/experiments/e11-stronger-baseline-trainable-lm-head.md) - [planned] Repeat the letter baseline with the LM head unfrozen, so the baseline is not handicapped before it is compared with the slot model.
+* [E12: Unseen label sets (leave-tasks-out)](/experiments/e12-unseen-label-sets.md) - [planned] Train the slot model and the letter baseline on a mixture without ten whole tasks, and test on those tasks, whose label sets never occur in training.
 
 ## Template
 

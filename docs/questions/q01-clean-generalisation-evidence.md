@@ -17,6 +17,8 @@ A decision model is only convincing if it works on tasks and questions it was no
 
 The name-level audit flags 316/316 tasksource, 7/7 bekko, 5/5 HelpSteer2 and 2/2 MASSIVE sources; only the 4 LocalLLaMA sources are unflagged ([O08](/observations/o08-audit-flag-rates.md)). LocalLLaMA is small, synthetic and templated. In-house sets (DaLA, GEC, Arena) are in Mimir's own policy too.
 
+**2026-10-11:** [E12](/experiments/e12-unseen-label-sets.md) tests transfer to tasks with label sets unseen in fine-tuning; its two sources that Mimir's mix does not contain by name are the first test that is unseen for both.
+
 ## How to resolve
 
 Options: (a) write or label new Danish decision items after the model was built; (b) use sources released after 2026-09-25 (v1.5 cut-off); (c) ask the Mimir team for a row-level check ([Q02](/questions/q02-row-level-overlap-with-mimir-data.md)); (d) report seen and not-flagged results side by side with `python -m mimir_decide.compare` ([E07](/experiments/e07-contamination-split-analysis.md)).
