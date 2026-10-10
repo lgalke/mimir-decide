@@ -23,6 +23,10 @@ Mimir is released on a 'permissible data' basis (Apache-2.0). Many sources in ta
 - bekko 'qualified' subsets are excluded by default ([D13](/design/d13-bekko-licence-and-test-handling.md)).
 - CC-BY-SA data is allowed but listed in the manifest ([Q05](/questions/q05-share-alike-licence-on-weights.md)).
 
+## Update 2026-10-11
+
+Exception for evaluation only, chosen by the owner ([D26](/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)): sources with a permissive licence but review status 'qualified', and allowlisted sources that are not in the mixture, may be used to evaluate models, never to train, calibrate or select them. Unknown, non-commercial and not-allowlisted licences stay excluded everywhere.
+
 ## Revisit when
 
 The owner accepts non-commercial research-only use (then `check()` needs a mode switch), or a licence review admits 'qualified' subsets.

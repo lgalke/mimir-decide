@@ -21,6 +21,10 @@ bekko licences are per upstream dataset with review status 'verified' or 'qualif
 
 bekko shrinks a lot ([Q06](/questions/q06-bekko-coverage-after-strict-licences.md)). 12 of 17 excluded subsets in the trial build were 'qualified'.
 
+## Update 2026-10-11
+
+'Qualified' subsets may be used for **evaluation only** in E12 ([D26](/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)). `accept_qualified: false` stays the setting for building the training mixture.
+
 ## Revisit when
 
 A review admits specific qualified subsets (set `accept_qualified` or add an allowlist).

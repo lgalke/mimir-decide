@@ -17,15 +17,15 @@ The slot readout was designed for open vocabulary: it reads a score at the place
 
 **No retraining.** Extra tasks that are not in the training mixture are collected as an evaluation-only set. Every model is tested on the same tasks: the zero-shot model, `slot-v0`, `baseline-v0` and the baseline with a trainable output head from [E11](/experiments/e11-stronger-baseline-trainable-lm-head.md). This keeps all runs comparable with the pilot and costs minutes of evaluation. The earlier leave-tasks-out design (retraining two models on a reduced mixture, with `select_heldout` and `derive_mixture`) is kept as a fallback only: it needs about 33 GPU hours and makes the runs incomparable with the pilot.
 
-**Where the extra tasks come from** (the owner decides; see the open choice in D26):
+**Where the extra tasks come from.** The owner chose option A on 2026-10-11 ([D26](/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)); B and C remain possible additions:
 
-- **A. Sources excluded from training only by the strict licence review.** Many bekko subsets have a permissive licence but the review status 'qualified', and some tasksource sources are on the allowlist but were not in the mixture. Using them for evaluation only would extend D02 and D13 from 'train and evaluate' to 'train'. They are mostly flagged as seen by Mimir, but they are unseen by our fine-tuning.
+- **A. Sources excluded from training only by the strict licence review (chosen).** Many bekko subsets have a permissive licence but the review status 'qualified', and some tasksource sources are on the allowlist but were not in the mixture. Using them for evaluation only would extend D02 and D13 from 'train and evaluate' to 'train'. They are mostly flagged as seen by Mimir, but they are unseen by our fine-tuning.
 - **B. Other permissive datasets** that neither tasksource nor bekko carries. Needs a converter for each.
 - **C. New tasks** that Mimir cannot have seen: written or labelled for this purpose, or released after Mimir's cutoff. Small, but the only clean test ([Q01](/questions/q01-clean-generalisation-evidence.md)).
 
 **Which candidates qualify.** The same measured rule as before, applied against the training mixture: a fixed label set (at least 50% of rows in an option set that occurs 20 times or more), at most 10% of rows with an option set that a training source uses, at most 30% of option strings that occur in training options, and enough rows (at least 150). In addition, every candidate row is checked against the training data with the leakage guards (exact state hash, group id, n-gram fingerprints). Option novelty is exact-string, not semantic.
 
-**Tooling status.** The scoring in `mimir_decide.select_heldout` can be reused for this. The script that builds the extra evaluation file (reads the candidates, applies the novelty rule and the leakage guards against `train.parquet`, writes one parquet file) is not written yet. It waits for the owner's decision on the sources.
+**Tooling status.** The scoring in `mimir_decide.select_heldout` can be reused for this. The script that builds the extra evaluation file (reads the candidates, applies the novelty rule and the leakage guards against `train.parquet`, writes one parquet file) is not written yet. The decision is made (option A); the tool is being written.
 
 ## Setup
 
