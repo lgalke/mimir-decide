@@ -43,7 +43,17 @@ def main(argv=None):
     ap.add_argument("run_dirs", nargs="+")
     ap.add_argument("--file", default="validation.json", help="eval JSON name inside <run>/eval/")
     a = ap.parse_args(argv)
-    evs = {Path(r).expanduser(): json.loads((Path(r).expanduser() / "eval" / a.file).read_text()) for r in a.run_dirs}
+    evs = {}
+    for r in a.run_dirs:
+        f = Path(r).expanduser() / "eval" / a.file
+        if not f.exists():
+            have = sorted(x.name for x in f.parent.glob("*.json")) if f.parent.exists() else []
+            raise SystemExit(
+                f"compare: {f} does not exist.\n"
+                f"  Files in {f.parent}: {', '.join(have) if have else '(none; run evaluate for this run first)'}\n"
+                f"  Create it with: python -m mimir_decide.evaluate --run_dir {r} --data_dir <mixture> --split validation"
+                + (" --checkpoint zero-shot" if "zero" in str(r) else ""))
+        evs[Path(r).expanduser()] = json.loads(f.read_text())
     groups = ["all", "kind:noul", "kind:choice", "kind:score"]
     for g in groups:
         print(f"\n[{g}]")

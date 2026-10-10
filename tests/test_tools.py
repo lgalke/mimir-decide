@@ -20,3 +20,19 @@ def test_compare_pools_seen_and_unflagged_sources_by_n():
     assert s["seen_by_mimir"]["n"] == 40 and abs(s["seen_by_mimir"]["acc"] - (9 + 15) / 40) < 1e-9
     assert s["not_flagged"] == {"n": 10, "acc": 0.3, "nll": 1.5, "brier": 0.7}
     assert pool(res, ["zzz"]) == {"n": 0}
+
+
+def test_compare_explains_a_missing_eval_file(tmp_path):
+    import json
+
+    import pytest
+
+    from mimir_decide.compare import main
+
+    run = tmp_path / "runs" / "letter-zeroshot"
+    (run / "eval").mkdir(parents=True)
+    (run / "eval" / "validation_uncal.json").write_text(json.dumps({}))
+    with pytest.raises(SystemExit) as e:
+        main([str(run), "--file", "validation.json"])
+    msg = str(e.value)
+    assert "validation.json does not exist" in msg and "validation_uncal.json" in msg and "evaluate" in msg

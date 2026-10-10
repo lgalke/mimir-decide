@@ -36,7 +36,7 @@ for S in validation heldout; do
   $PY -m mimir_decide.evaluate --run_dir $RUNS/letter-zeroshot --checkpoint zero-shot --data_dir $DATA --split $S
 done
 
-# 4. Side by side with the fine-tuned runs.
+# 4. Side by side with the fine-tuned runs. Needs step 3: `compare` reads <run>/eval/validation.json.
 $PY -m mimir_decide.compare $RUNS/letter-zeroshot $RUNS/baseline-v0 $RUNS/slot-v0 --file validation.json
 $PY -m mimir_decide.compare $RUNS/letter-zeroshot --file validation_uncal.json
 ```
