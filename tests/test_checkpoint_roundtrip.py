@@ -1,3 +1,5 @@
+import json
+
 import pytest
 import torch
 
@@ -103,3 +105,48 @@ def test_zero_shot_checkpoint_loads_base_weights_and_runs_calibrate_and_evaluate
     cal = json.loads((run / "eval" / "validation.json").read_text())
     assert raw["calibrated"] is False and raw["limit"] == 4 and raw["n_evaluated"] == 4
     assert cal["calibrated"] is True and cal["n_evaluated"] == 6          # --tag keeps the two files apart
+
+
+@pytest.mark.network  # real tokenizer; tiny random model on CPU stands in for the base model
+@pytest.mark.parametrize("model_type", ["slot", "letter"])
+def test_head_only_checkpoint_stores_no_backbone_and_reloads(tmp_path, model_type):
+    from transformers import AutoTokenizer
+    from transformers.models.hrm_text.configuration_hrm_text import HrmTextConfig
+    from transformers.models.hrm_text.modeling_hrm_text import HrmTextForCausalLM
+
+    from mimir_decide.formatting import Collator, Formatter
+    from mimir_decide.model import LetterBaseline, SlotDecisionModel, load_model, save_model
+
+    tok = AutoTokenizer.from_pretrained("danish-foundation-models/DFM-Mimir-v1.5",
+                                        revision="521b40b36a79918014544b970d4c2669ff1530eb")
+    torch.manual_seed(0)
+    cfg = HrmTextConfig(vocab_size=262144, hidden_size=64, intermediate_size=128, num_hidden_layers=1,
+                        num_attention_heads=4, num_key_value_heads=4, head_dim=16, H_cycles=2, L_cycles=3,
+                        L_bp_cycles=[3, 3], max_position_embeddings=512, prefix_lm=True, pad_token_id=0,
+                        bos_token_id=2, eos_token_id=106, initializer_range=0.0255)
+    lm = HrmTextForCausalLM(cfg)
+    lm.save_pretrained(tmp_path / "base")
+    if model_type == "slot":
+        model = SlotDecisionModel(lm, freeze_backbone=True)
+        with torch.no_grad():
+            model.head[1].weight.normal_(0, 0.5)
+    else:
+        model = LetterBaseline(tok, lm, train_letter_head=True, freeze_backbone=True)
+        with torch.no_grad():
+            model.letter_head.add_(0.3)                                     # make the trained head differ from the LM rows
+    marker_id = tok.convert_tokens_to_ids("<unused0>")
+    meta = {"model_type": model_type, "max_len": 256, "marker_id": marker_id, "base_model": str(tmp_path / "base"),
+            "revision": None}
+    save_model(model, tok, tmp_path / "ck", meta)
+    assert not (tmp_path / "ck" / "lm").exists()                            # no backbone copy
+    assert json.loads((tmp_path / "ck" / "decision_meta.json").read_text())["backbone_from_hub"] is True
+
+    d = mk(state="Hello world, this is a state.", question="Pick one?", options=["red", "green", "blue"], target=[0, 1, 0])
+    f = Formatter(tok, "slot" if model_type == "slot" else "letter", 256, marker_id)
+    batch = Collator(f, False).pack([f.encode(d)], [d])
+    model.eval()
+    with torch.no_grad():
+        ref = model(batch)[0, :3]
+    loaded, _, meta2 = load_model(tmp_path / "ck", "cpu", dtype=torch.float32)
+    with torch.no_grad():
+        assert torch.allclose(ref, loaded(batch)[0, :3], atol=1e-5)

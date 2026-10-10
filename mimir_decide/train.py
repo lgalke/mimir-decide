@@ -123,7 +123,8 @@ def main(argv=None):
 
     backbone = [p for p in model.lm.parameters() if p.requires_grad]
     new = model.new_parameters()
-    groups = [{"params": backbone, "lr": float(cfg["lr_backbone"]), "weight_decay": cfg.get("weight_decay", 0.01)}]
+    groups = ([{"params": backbone, "lr": float(cfg["lr_backbone"]), "weight_decay": cfg.get("weight_decay", 0.01)}]
+              if backbone else [])  # empty for head-only probes (freeze_backbone)
     if new:
         groups.append({"params": new, "lr": float(cfg["lr_head"]), "weight_decay": 0.0})
     opt = torch.optim.AdamW(groups, betas=(0.9, 0.95), fused=(device == "cuda"))

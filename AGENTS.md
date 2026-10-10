@@ -8,7 +8,7 @@ Read this file fully, then `docs/index.md`. Everything the previous agent knew t
 
 Done and tested (54 tests: 50 offline, 4 need network):
 - Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark, zero-shot reference (`mimir_decide.zeroshot`).
-- Documentation as an OKF bundle in `docs/`: 26 decision records, 15 open questions, 12 experiments, 19 observations, update log.
+- Documentation as an OKF bundle in `docs/`: 26 decision records, 15 open questions, 13 experiments, 19 observations, update log.
 
 Run by the owner on the GPU server (NVIDIA RTX PRO 6000 Blackwell Server Edition): the smoke test (E02) and the first pilot (E03, one seed, defaults). Result: the slot model and the letter baseline are tied (validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456), and 96% of validation comes from sources Mimir saw ([O14](docs/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). Training fits in 33.6 GB at 6.15 examples per second ([O15](docs/observations/o15-pilot-training-memory-and-speed.md)). The small eval files are in `runs/`.
 
@@ -16,7 +16,7 @@ The zero-shot reference (E10) is done: the untrained model reaches 0.669 validat
 
 E04 and E05 are done on the pilot checkpoints: temperature scaling changes the fine-tuned models very little ([O18](docs/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md)), and neither model is sensitive to option order, so the slot design's invariance argument is not supported ([O19](docs/observations/o19-option-order-does-not-matter-for-either-model.md)). Note that the server code used for these re-evaluations predates the reliability tables; pull before the next evaluation.
 
-**Next, in the owner's order:** [E11](docs/experiments/e11-stronger-baseline-trainable-lm-head.md) (letter baseline with a trainable output head, original mixture, pilot settings; about 17 hours), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)).
+**Next, in the owner's order:** [E11](docs/experiments/e11-stronger-baseline-trainable-lm-head.md) (letter baseline with a trainable output head, original mixture, pilot settings; about 17 hours), then [E13](docs/experiments/e13-head-only-baselines.md) (head-only probes on the frozen backbone; cheaper than a full run; code is ready), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)).
 
 **Open or not recorded yet:**
 - The pilot built the full mixture, but its manifest numbers (counts, drops, `heldout_patterns_unmatched`) are not in the docs yet ([E01](docs/experiments/e01-full-mixture-build.md) stays `planned` until they are).

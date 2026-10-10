@@ -24,9 +24,10 @@ NEG = -1e9
 class SlotDecisionModel(nn.Module):
     kind = "slot"
 
-    def __init__(self, lm: HrmTextForCausalLM, freeze_input_embeddings: bool = True):
+    def __init__(self, lm: HrmTextForCausalLM, freeze_input_embeddings: bool = True, freeze_backbone: bool = False):
         super().__init__()
         self.lm = lm
+        self.frozen_backbone = freeze_backbone  # head-only probe: backbone and marker fixed, no backward through the backbone
         D = lm.config.hidden_size
         for p in lm.lm_head.parameters():  # kept in checkpoints for reuse, not trained
             p.requires_grad = False
@@ -38,9 +39,13 @@ class SlotDecisionModel(nn.Module):
         nn.init.normal_(self.head[1].weight, std=0.02)
         nn.init.zeros_(self.head[1].bias)
         self.log_scale = nn.Parameter(torch.zeros(3))  # per kind (noul, choice, score)
+        if freeze_backbone:
+            for p in lm.parameters():
+                p.requires_grad = False
+            self.marker.requires_grad = False  # stays at its initialisation (mean embedding)
 
     def new_parameters(self):
-        return [self.marker, *self.head.parameters(), self.log_scale]
+        return [p for p in (self.marker, *self.head.parameters(), self.log_scale) if p.requires_grad]
 
     def forward(self, batch: dict) -> torch.Tensor:
         ids = batch["input_ids"]
@@ -48,8 +53,9 @@ class SlotDecisionModel(nn.Module):
         marker_mask.scatter_(1, batch["slot_pos"], batch["valid"])
         emb = self.lm.model.embed_tokens(ids)
         emb = torch.where(marker_mask.unsqueeze(-1), self.marker.to(emb.dtype), emb)
-        out = self.lm.model(inputs_embeds=emb, attention_mask=batch["attention_mask"],
-                            token_type_ids=batch["token_type_ids"])
+        with torch.set_grad_enabled(torch.is_grad_enabled() and not self.frozen_backbone):
+            out = self.lm.model(inputs_embeds=emb, attention_mask=batch["attention_mask"],
+                                token_type_ids=batch["token_type_ids"])
         h = out.last_hidden_state
         idx = batch["slot_pos"].unsqueeze(-1).expand(-1, -1, h.size(-1))
         hs = torch.gather(h, 1, idx)  # [B,K,D]
@@ -71,9 +77,11 @@ class LetterBaseline(nn.Module):
     kind = "letter"
 
     def __init__(self, tok, lm: HrmTextForCausalLM, freeze_input_embeddings: bool = True,
-                 train_lm_head: bool = False):
+                 train_lm_head: bool = False, train_letter_head: bool = False, freeze_backbone: bool = False):
         super().__init__()
+        assert not (train_lm_head and freeze_backbone), "train_lm_head trains the backbone's output matrix; use train_letter_head"
         self.lm = lm
+        self.frozen_backbone = freeze_backbone
         if freeze_input_embeddings:
             lm.model.embed_tokens.weight.requires_grad = False
         for p in lm.lm_head.parameters():
@@ -81,25 +89,41 @@ class LetterBaseline(nn.Module):
         ids = [tok(l, add_special_tokens=False)["input_ids"] for l in LETTERS]
         assert all(len(i) == 1 for i in ids), "letters must be single tokens"
         self.register_buffer("letter_ids", torch.tensor([i[0] for i in ids]), persistent=False)
+        self.letter_head = None
+        if train_letter_head:
+            self.enable_letter_head()
+        if freeze_backbone:
+            for p in lm.parameters():
+                p.requires_grad = False
+
+    def enable_letter_head(self) -> None:
+        """Trainable copy of the 26 letter rows of the LM head: the classifier head starts exactly at the LM head."""
+        w = self.lm.lm_head.weight.detach()[self.letter_ids].float().clone()
+        self.letter_head = nn.Parameter(w.to(self.letter_ids.device))
 
     def new_parameters(self):
-        return []
+        return [self.letter_head] if self.letter_head is not None else []
 
     def forward(self, batch: dict) -> torch.Tensor:
-        out = self.lm.model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
-                            token_type_ids=batch["token_type_ids"])
+        with torch.set_grad_enabled(torch.is_grad_enabled() and not self.frozen_backbone):
+            out = self.lm.model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                                token_type_ids=batch["token_type_ids"])
         h = out.last_hidden_state
         h = h[torch.arange(h.size(0), device=h.device), batch["last_pos"]]  # [B,D]
-        w = self.lm.lm_head.weight[self.letter_ids]  # [26,D]
+        w = self.letter_head if self.letter_head is not None else self.lm.lm_head.weight[self.letter_ids]  # [26,D]
         logits = (h @ w.t().to(h.dtype)).float()
         K = batch["valid"].size(1)
         return logits[:, :K].masked_fill(~batch["valid"], NEG)
 
     def extra_state(self) -> dict:
-        return {}
+        return {"letter_head": self.letter_head.detach().cpu()} if self.letter_head is not None else {}
 
     def load_extra(self, st: dict) -> None:
-        pass
+        if "letter_head" in st:
+            if self.letter_head is None:
+                self.enable_letter_head()
+            with torch.no_grad():
+                self.letter_head.copy_(st["letter_head"])
 
 
 # ---------------------------------------------------------------------------------------------- losses
@@ -130,9 +154,10 @@ def build_model(cfg: dict, tok, device: str, dtype: torch.dtype = torch.float32)
         lm.config.use_cache = False
     fe = cfg.get("freeze_input_embeddings", True)
     if cfg["model_type"] == "slot":
-        m = SlotDecisionModel(lm, fe)
+        m = SlotDecisionModel(lm, fe, cfg.get("freeze_backbone", False))
     elif cfg["model_type"] == "letter":
-        m = LetterBaseline(tok, lm, fe, cfg.get("train_lm_head", False))
+        m = LetterBaseline(tok, lm, fe, cfg.get("train_lm_head", False), cfg.get("train_letter_head", False),
+                           cfg.get("freeze_backbone", False))
     else:
         raise ValueError(cfg["model_type"])
     return m.to(device)
@@ -141,8 +166,11 @@ def build_model(cfg: dict, tok, device: str, dtype: torch.dtype = torch.float32)
 def save_model(model, tok, path, meta: dict) -> None:
     path = Path(path)
     path.mkdir(parents=True, exist_ok=True)
-    sd = {k: v.detach().to(torch.bfloat16).cpu().contiguous() for k, v in model.lm.state_dict().items()}
-    model.lm.save_pretrained(path / "lm", state_dict=sd)  # bf16 inference weights
+    if getattr(model, "frozen_backbone", False):  # head-only probe: the backbone is the untouched base model
+        meta = {**meta, "backbone_from_hub": True}
+    else:
+        sd = {k: v.detach().to(torch.bfloat16).cpu().contiguous() for k, v in model.lm.state_dict().items()}
+        model.lm.save_pretrained(path / "lm", state_dict=sd)  # bf16 inference weights
     torch.save(model.extra_state(), path / "extra.pt")
     tok.save_pretrained(path / "tokenizer")
     (path / "decision_meta.json").write_text(json.dumps(meta, indent=1))
@@ -156,8 +184,9 @@ def load_model(path, device: str, dtype: torch.dtype = torch.bfloat16):
     tok = AutoTokenizer.from_pretrained(path / "tokenizer")
     if (path / "lm").exists():
         lm = HrmTextForCausalLM.from_pretrained(path / "lm", attn_implementation="sdpa", dtype=dtype)
-    else:  # zero-shot checkpoint (see zeroshot.py): no weights stored, load the untrained base model
-        assert meta.get("zero_shot"), f"{path} has no lm/ weights and is not a zero-shot checkpoint"
+    else:  # zero-shot or head-only checkpoint: no backbone weights stored, load the untouched base model
+        assert meta.get("zero_shot") or meta.get("backbone_from_hub"), \
+            f"{path} has no lm/ weights and is neither a zero-shot nor a head-only checkpoint"
         lm = HrmTextForCausalLM.from_pretrained(meta["base_model"], revision=meta.get("revision"),
                                                 attn_implementation="sdpa", dtype=dtype)
     if meta["model_type"] == "slot":

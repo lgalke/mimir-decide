@@ -16,6 +16,7 @@ Prefilled experiment plans: hypothesis, exact commands, metrics, decision rule, 
 * [E10: Zero-shot letter baseline (untrained Mimir)](/experiments/e10-zero-shot-letter-baseline.md) - [done] Evaluate the untrained Mimir v1.5 with the letter prompt, to show how much of the fine-tuned baseline's quality was already there.
 * [E11: Stronger baseline with a trainable language-model head](/experiments/e11-stronger-baseline-trainable-lm-head.md) - [planned] Repeat the letter baseline with the LM head unfrozen, so the baseline is not handicapped before it is compared with the slot model.
 * [E12: Unseen label sets (evaluation on additional tasks)](/experiments/e12-unseen-label-sets.md) - [planned] Evaluate all existing models, without retraining, on extra tasks whose label sets never occur in the training mixture.
+* [E13: Head-only baselines (frozen backbone)](/experiments/e13-head-only-baselines.md) - [planned] Train only the output head on the frozen Mimir backbone, for the letter readout (head initialised from the LM head) and for the slot readout. Shows how much of the fine-tuning gain a readout alone can reach.
 
 ## Template
 

@@ -125,3 +125,49 @@ def test_metric_basics():
     assert metrics.spearman(np.arange(10.0), np.arange(10.0) * 2) == pytest.approx(1.0)
     sr = metrics.selective_risk(np.array([0.9, 0.8, 0.1, 0.2]), np.array([1.0, 1.0, 0.0, 0.0]))
     assert sr["risk@0.5"] == 0.0 and sr["risk@1.0"] == 0.5
+
+
+def _snapshot(module):
+    return {k: v.detach().clone() for k, v in module.state_dict().items()}
+
+
+def test_letter_probe_starts_at_the_lm_head_and_only_the_head_trains(tok, mk):
+    decs = synth(mk)
+    lm = tiny_lm(1)
+    base = LetterBaseline(tok, lm).eval()
+    probe = LetterBaseline(tok, lm, train_letter_head=True, freeze_backbone=True)
+    fmt = Formatter(tok, "letter", 160, MARKER)
+    batch = Collator(fmt, augment=False).pack([fmt.encode(d) for d in decs[:6]], decs[:6])
+    with torch.no_grad():
+        assert torch.allclose(base(batch), probe(batch), atol=1e-6)        # head initialised from the LM head: step 0 = zero-shot
+    assert probe.new_parameters() == [probe.letter_head] and probe.letter_head.shape == (26, lm.config.hidden_size)
+    before_lm, before_head = _snapshot(lm), probe.letter_head.detach().clone()
+    opt = torch.optim.AdamW(probe.new_parameters(), lr=1e-2)
+    for _ in range(5):
+        loss, _, _ = decision_loss(probe(batch).float(), batch)
+        opt.zero_grad(); loss.backward(); opt.step()
+    assert all(p.grad is None for p in lm.parameters())                    # no gradient reaches the backbone
+    assert not torch.equal(before_head, probe.letter_head.detach())        # the head moved
+    after_lm = _snapshot(lm)
+    assert all(torch.equal(before_lm[k], after_lm[k]) for k in before_lm)  # backbone and LM head unchanged
+    assert probe.extra_state()["letter_head"].shape == (26, lm.config.hidden_size)
+
+
+def test_slot_probe_trains_only_the_head(tok, mk):
+    decs = synth(mk)
+    lm = tiny_lm(2)
+    probe = SlotDecisionModel(lm, freeze_backbone=True)
+    fmt = Formatter(tok, "slot", 128, MARKER)
+    batch = Collator(fmt, augment=False).pack([fmt.encode(d) for d in decs[:6]], decs[:6])
+    new = probe.new_parameters()
+    assert all(x is not probe.marker for x in new) and len(new) == 5       # LayerNorm w+b, Linear w+b, 3 scales; no marker
+    marker0, before_lm = probe.marker.detach().clone(), _snapshot(lm)
+    opt = torch.optim.AdamW(new, lr=1e-2)
+    for _ in range(5):
+        loss, _, _ = decision_loss(probe(batch).float(), batch)
+        opt.zero_grad(); loss.backward(); opt.step()
+    assert torch.equal(marker0, probe.marker.detach())                      # marker stays at its initialisation
+    assert all(p.grad is None for p in lm.parameters())
+    after_lm = _snapshot(lm)
+    assert all(torch.equal(before_lm[k], after_lm[k]) for k in before_lm)
+    assert probe.head[1].weight.grad is not None and probe.head[1].weight.grad.abs().sum() > 0

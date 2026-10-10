@@ -33,6 +33,8 @@ python -m mimir_decide.zeroshot --config configs/train_baseline.yaml --run_dir <
 python -m mimir_decide.okf --check | --write                                                              # docs indexes
 ```
 
+Head-only models (E13): `freeze_backbone=true` freezes the backbone (and the slot model's marker); `train_letter_head=true` gives the letter baseline a trainable copy of the 26 letter rows of the LM head. Such runs store no backbone weights (`backbone_from_hub` in `decision_meta.json`) and load the base model from the hub, like the zero-shot checkpoint.
+
 `calibrate` and `evaluate` accept `--limit N` (seeded random sample, smoke tests only); `evaluate` accepts `--tag NAME` to keep raw and calibrated results in separate files.
 
 `evaluate` stores accuracy, NLL, Brier, ECE, mean confidence, selective risk and (since 2026-10-10) reliability tables for `all` and each kind; `compare` prints `conf` and the error among the 50% most confident decisions.
