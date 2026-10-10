@@ -36,3 +36,22 @@ def test_compare_explains_a_missing_eval_file(tmp_path):
         main([str(run), "--file", "validation.json"])
     msg = str(e.value)
     assert "validation.json does not exist" in msg and "validation_uncal.json" in msg and "evaluate" in msg
+
+
+def test_reliability_bins_match_ece_and_compare_shows_confidence():
+    import numpy as np
+
+    from mimir_decide.compare import fmt, pool
+    from mimir_decide.metrics import ece, reliability_bins
+
+    rng = np.random.default_rng(0)
+    conf = rng.uniform(0.2, 1.0, 500)
+    correct = (rng.uniform(size=500) < conf * 0.9).astype(float)
+    bins = reliability_bins(conf, correct)
+    assert sum(b["n"] for b in bins) == 500
+    assert abs(sum(b["n"] / 500 * abs(b["conf"] - b["acc"]) for b in bins) - ece(conf, correct)) < 2e-3  # rounding only
+    r = {"source:a": {"n": 10, "acc": 0.9, "nll": 0.2, "brier": 0.1, "mean_conf": 0.8},
+         "source:b": {"n": 30, "acc": 0.5, "nll": 1.0, "brier": 0.5, "mean_conf": 0.6}}
+    p = pool(r, ["a", "b"])
+    assert abs(p["mean_conf"] - (8 + 18) / 40) < 1e-9
+    assert "conf=0.650" in fmt(p) and "err@50%cov" in fmt({**p, "risk@0.5": 0.1})

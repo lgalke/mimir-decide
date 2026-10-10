@@ -12,7 +12,9 @@ Done and tested (54 tests: 50 offline, 4 need network):
 
 Run by the owner on the GPU server (NVIDIA RTX PRO 6000 Blackwell Server Edition): the smoke test (E02) and the first pilot (E03, one seed, defaults). Result: the slot model and the letter baseline are tied (validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456), and 96% of validation comes from sources Mimir saw ([O14](docs/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). Training fits in 33.6 GB at 6.15 examples per second ([O15](docs/observations/o15-pilot-training-memory-and-speed.md)). The small eval files are in `runs/`.
 
-**Next, in the owner's order:** E10 (zero-shot letter baseline; code and plan are ready), then E11 (letter baseline with a trainable LM head).
+The zero-shot reference (E10) is done: the untrained model reaches 0.669 validation accuracy against 0.835 after fine-tuning, so fine-tuning adds most of the quality ([O16](docs/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md)).
+
+**Next, in the owner's order:** E11 (letter baseline with a trainable LM head).
 
 **Open or not recorded yet:**
 - The pilot built the full mixture, but its manifest numbers (counts, drops, `heldout_patterns_unmatched`) are not in the docs yet ([E01](docs/experiments/e01-full-mixture-build.md) stays `planned` until they are).
@@ -47,12 +49,11 @@ In this file, `python` means the Python of the active environment. Run all comma
 
 Each step has a page in `docs/experiments/` with exact commands, metrics and a **decision rule written before running**. Follow the page; do not improvise the rule afterwards.
 
-1. **[E10 zero-shot letter baseline](docs/experiments/e10-zero-shot-letter-baseline.md)** — no training, a few minutes. Needs the mixture from the pilot (`$DATA`) and `runs/baseline-v0`, `runs/slot-v0` for the comparison.
-2. **[E11 stronger baseline](docs/experiments/e11-stronger-baseline-trainable-lm-head.md)** (`train_lm_head=true`), after E10. Same settings as the pilot; about 17 hours.
+1. **[E11 stronger baseline](docs/experiments/e11-stronger-baseline-trainable-lm-head.md)** (`train_lm_head=true`). Same settings as the pilot; about 17 hours. (E10, the zero-shot reference, is done.)
 3. E04 calibration, E05 option-order robustness, E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code.
 4. Record the full-build numbers of the pilot's mixture (E01) from `$DATA/mixture_manifest.json` into an observation and the E01 table. Ask the owner for the file if you cannot read it.
 
-Done: E02 and E03 (see section 1). If you must repeat the pilot, `scripts/run_pilot.sh` runs both models; use another `RUNS` directory so the pilot results are not overwritten.
+Done: E02, E03 and E10 (see section 1). If you must repeat the pilot, `scripts/run_pilot.sh` runs both models; use another `RUNS` directory so the pilot results are not overwritten.
 
 After each experiment: fill the results table in its page, write an observation page (copy the template), set the experiment `status`, add a line to `docs/log.md`, regenerate indexes (section 5).
 

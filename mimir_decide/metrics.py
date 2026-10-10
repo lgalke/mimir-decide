@@ -33,6 +33,18 @@ def ece(conf: np.ndarray, correct: np.ndarray, bins: int = 15) -> float:
     return float(out)
 
 
+def reliability_bins(conf: np.ndarray, correct: np.ndarray, bins: int = 15) -> list[dict]:
+    """Reliability table with the same bins as `ece`: [{lo, hi, n, conf, acc}], empty bins omitted."""
+    edges = np.linspace(0, 1, bins + 1)
+    out = []
+    for lo, hi in zip(edges[:-1], edges[1:]):
+        m = (conf > lo) & (conf <= hi) if lo > 0 else (conf >= lo) & (conf <= hi)
+        if m.any():
+            out.append({"lo": round(float(lo), 4), "hi": round(float(hi), 4), "n": int(m.sum()),
+                        "conf": round(float(conf[m].mean()), 4), "acc": round(float(correct[m].mean()), 4)})
+    return out
+
+
 def spearman(a: np.ndarray, b: np.ndarray) -> float:
     if len(a) < 3:
         return float("nan")
@@ -83,6 +95,7 @@ def evaluate(logits: list[np.ndarray], decs: list[Decision], temps: Optional[dic
             r["score_spearman"] = spearman(np.array(ev_p), np.array(ev_t))
         if name == "all" or name.startswith("kind:"):
             r.update(selective_risk(conf_a, corr_a))
+            r["reliability"] = reliability_bins(conf_a, corr_a)
         res[name] = r
     return res
 

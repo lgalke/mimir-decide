@@ -17,7 +17,7 @@ Source: 21 consecutive lines of `train_log.jsonl` (steps 9,570 to 9,770) pasted 
 - `ex_per_s`: 6.15 to 6.16. At step 9,770 the elapsed time was 50,740 s, so about 5.2 s per optimizer step.
 - `skipped`: 0 (no decision was too long).
 - Learning rate at step 9,770: 1.55e-6, close to the schedule floor of 1e-6.
-- Inferred, not read from the manifest: the cosine schedule puts step 9,770 at about 84% of training, so the run has about 11.6k optimizer steps, or about 370k training decisions, and about 17 hours per model. The `mixture_manifest.json` must confirm the count.
+- Inferred, not read from the manifest: the cosine schedule puts step 9,770 at about 84% of training, so the run has about 11.6k optimizer steps, or about 370k training decisions, and about 17 hours per model. The tracked training logs confirm the step count: both runs took exactly 11,603 steps (about 371k decisions). Slot: 16.8 h, 6.14 examples/s, 33.61 GB. Baseline: 15.8 h, 6.52 examples/s, 33.55 GB. The mixture manifest should still confirm the decision count.
 - The logged `loss` is the loss of the last micro-batch (8 decisions) and is noisy: 0.11 to 1.12, mean 0.39 over the 21 lines. `grad_norm` (before clipping) is 4 to 25 while `grad_clip` is 1.0, so clipping was active at every step.
 
 ## Interpretation

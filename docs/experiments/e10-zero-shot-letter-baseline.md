@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E10: Zero-shot letter baseline (untrained Mimir)'
 description: Evaluate the untrained Mimir v1.5 with the letter prompt, to show how much of the fine-tuned baseline's quality was already there.
-status: planned
+status: done
 answers: [q14, q04]
 depends_on: [e01]
 tags: [baseline, zero-shot]
@@ -61,10 +61,10 @@ Limit of this reference: the prompt is ours (`State / Question / Options / Answe
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **done**. Decision rule outcome: the gain over zero-shot is 16.6 points (0.835 versus 0.669 validation accuracy), above the 10-point threshold, so fine-tuning adds most of the baseline's quality.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-10 | `runs/letter-zeroshot` | `zero-shot` checkpoint, 3 temperatures from the calibration half | validation accuracy 0.669 (raw and calibrated), NLL 0.841 raw / 0.806 calibrated; held-out accuracy 0.895 | [O16](/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md) |
 
 When run: fill this table, write an observation page from the template, set `status`, add a line to the update log, and regenerate the indexes.

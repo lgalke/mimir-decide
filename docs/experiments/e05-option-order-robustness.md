@@ -37,7 +37,12 @@ Accuracy and NLL per seed vs identity order; spread across seeds; agreement of t
 
 ## Decision rule
 
-Report spread per model. If the slot model's spread is not clearly smaller, D05's invariance argument is not supported.
+Fixed on 2026-10-11, before the results were read. Let `drop` be the validation accuracy with the given option order minus the mean accuracy over the 3 random orders, per model.
+
+- The invariance argument of [D05](/design/d05-slot-readout-heads.md) is **supported** if the baseline's `drop` is at least 1 point of accuracy larger than the slot model's `drop`.
+- Otherwise it is **not supported**: the two models are equally robust to option order, and the simpler baseline is preferred.
+
+Also report, for each model, the spread (maximum minus minimum accuracy) over the 3 orders and the agreement of the predicted option between orders. They inform the discussion but do not change the rule. The 1-point margin is a proposal of the agent that the owner did not object to; the owner can change it for later experiments.
 
 ## Status and results
 

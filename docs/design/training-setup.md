@@ -35,6 +35,8 @@ python -m mimir_decide.okf --check | --write                                    
 
 `calibrate` and `evaluate` accept `--limit N` (seeded random sample, smoke tests only); `evaluate` accepts `--tag NAME` to keep raw and calibrated results in separate files.
 
+`evaluate` stores accuracy, NLL, Brier, ECE, mean confidence, selective risk and (since 2026-10-10) reliability tables for `all` and each kind; `compare` prints `conf` and the error among the 50% most confident decisions.
+
 `train_log.jsonl` records `peak_mem_gb` (CUDA) and `ex_per_s`.
 
 Overrides: `train --set key=value ...` (values are YAML; `1e-3` is also accepted as a float).
