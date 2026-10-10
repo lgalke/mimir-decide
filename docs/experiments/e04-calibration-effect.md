@@ -34,6 +34,8 @@ done
 ```
 Copy `eval/<split>.json` to `eval/<split>_uncal.json` between the two calls. Also read `calibration.json` for temperatures and the `calib_ece_before/after` fields.
 
+Note: for the pilot runs only calibrated eval files exist in git ([O17](/observations/o17-calibration-and-selective-risk-of-the-pilot-runs.md)). Run this experiment with the current code, so the eval files also contain the reliability tables, and copy the pilot checkpoints to `runs/` first (see D24).
+
 ## Metrics to record
 
 ECE, NLL and Brier raw vs calibrated, per kind; temperature values (flag any at the clamp bounds 0.05 or 20); ECE on hard-label vs soft-label sources; reliability diagram data from selective-risk curves (`risk@coverage`).

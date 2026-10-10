@@ -15,12 +15,20 @@ from pathlib import Path
 
 def pool(results: dict, sources: list[str]) -> dict:
     """n-weighted acc/nll/brier over the given `source:*` entries."""
-    n = acc = nll = brier = 0.0
+    n = acc = nll = brier = conf = 0.0
+    have_conf = True
     for s in sources:
         r = results.get(f"source:{s}")
         if r:
             n += r["n"]; acc += r["n"] * r["acc"]; nll += r["n"] * r["nll"]; brier += r["n"] * r["brier"]
-    return {"n": int(n), "acc": acc / n, "nll": nll / n, "brier": brier / n} if n else {"n": 0}
+            have_conf = have_conf and "mean_conf" in r
+            conf += r["n"] * r.get("mean_conf", 0.0)
+    if not n:
+        return {"n": 0}
+    out = {"n": int(n), "acc": acc / n, "nll": nll / n, "brier": brier / n}
+    if have_conf:
+        out["mean_conf"] = conf / n
+    return out
 
 
 def split_by_seen(ev: dict) -> dict:
@@ -34,8 +42,10 @@ def split_by_seen(ev: dict) -> dict:
 def fmt(r: dict) -> str:
     if not r or not r.get("n"):
         return "n=0"
+    conf = f" conf={r['mean_conf']:.3f}" if "mean_conf" in r else ""
     ece = f" ece={r['ece']:.3f}" if "ece" in r else ""
-    return f"n={r['n']:<6} acc={r['acc']:.3f} nll={r['nll']:.3f} brier={r['brier']:.3f}{ece}"
+    risk = f" err@50%cov={r['risk@0.5']:.3f}" if "risk@0.5" in r else ""
+    return f"n={r['n']:<6} acc={r['acc']:.3f}{conf} nll={r['nll']:.3f} brier={r['brier']:.3f}{ece}{risk}"
 
 
 def main(argv=None):
@@ -60,7 +70,7 @@ def main(argv=None):
         for run, ev in evs.items():
             print(f"  {run.name:<24} {fmt(ev['results'].get(g, {}))}")
     for part in ("seen_by_mimir", "not_flagged"):
-        print(f"\n[{part}] (pooled over sources; ECE omitted)")
+        print(f"\n[{part}] (pooled over sources; ECE and selective risk omitted)")
         for run, ev in evs.items():
             print(f"  {run.name:<24} {fmt(split_by_seen(ev)[part])}")
     print("\ncalibrated:", {r.name: ev["calibrated"] for r, ev in evs.items()},
