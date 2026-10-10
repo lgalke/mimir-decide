@@ -34,7 +34,7 @@ No decision was skipped for length (`skipped_too_long` is 0 for both).
 - **Mimir already knows this kind of data.** 96% of validation comes from sources that Mimir's own training mix contains ([O07](/observations/o07-mimir-policy-includes-tasksource-and-flan.md), [O08](/observations/o08-audit-flag-rates.md)). The numbers show that the format conversion and a readout work. They do not show generalisation.
 - **The held-out set is easy and probably familiar.** Accuracy 0.95 to 0.96 on MASSIVE nb-NO, which is probably covered by tasksource ([D15](/design/d15-held-out-task-massive-nb-no.md)).
 - **Score is hardest** (accuracy about 0.67), as expected for ordinal ratings with neighbouring bins.
-- **Missing reference points.** There is no zero-shot Mimir result with the letter prompt (how much did fine-tuning add?), no prior or majority baseline, and no second seed. The owner decided that one seed is enough, so the E03 decision rule needs a fixed margin instead of a seed spread.
+- **Missing reference points.** The zero-shot reference now exists: 0.669 accuracy against 0.835, so fine-tuning adds most of the quality ([O16](/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md)). There is still no prior or majority baseline and no second seed. The owner decided that one seed is enough, so the E03 decision rule needs a fixed margin instead of a seed spread.
 
 ## Reproduce
 

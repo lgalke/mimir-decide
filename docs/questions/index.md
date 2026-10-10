@@ -17,7 +17,7 @@ One page per open question: why it matters, how to resolve it, linked experiment
 * [Q11: How does Jev actually work?](/questions/q11-jev-internals.md) - [open] Backbone, size, parallel sampler and RLCD details are not public.
 * [Q12: How position-sensitive are the predictions?](/questions/q12-option-position-bias-at-evaluation.md) - [open] Evaluation uses the given option order; a model could still prefer early or late slots.
 * [Q13: Does calibration transfer to held-out sources?](/questions/q13-calibration-transfer-across-domains.md) - [open] Laya's calibration was not shown to transfer across domains.
-* [Q14: How much of the fine-tuned baseline's quality comes from fine-tuning?](/questions/q14-how-much-of-the-baseline-quality-is-fine-tuning.md) - [open] The letter baseline reaches about 0.835 accuracy after fine-tuning. How much would the untrained Mimir already reach with the same prompt?
+* [Q14: How much of the fine-tuned baseline's quality comes from fine-tuning?](/questions/q14-how-much-of-the-baseline-quality-is-fine-tuning.md) - [answered] The letter baseline reaches about 0.835 accuracy after fine-tuning. How much would the untrained Mimir already reach with the same prompt?
 
 ## Template
 

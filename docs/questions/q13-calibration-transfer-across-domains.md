@@ -17,6 +17,8 @@ Temperatures are fitted on validation of the training sources ([D19](/design/d19
 
 Held-out tasks are evaluated with the same temperatures.
 
+**First evidence (2026-10-10):** for the zero-shot model, temperatures fitted on the calibration half cut the validation ECE (0.069 to 0.032) but worsened the held-out nb-NO result (ECE 0.029 to 0.047, NLL 0.299 to 0.310). One case, not yet checked for the fine-tuned runs, which have no raw held-out evaluation ([O16](/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md)).
+
 ## How to resolve
 
 [E04](/experiments/e04-calibration-effect.md): ECE on heldout vs validation, before and after.

@@ -19,6 +19,7 @@ Dated, evidence-backed things seen so far; add new ones with the template.
 * [O13: L_bp_cycles [0,3] shrinks L-stack gradients about 230x](/observations/o13-l-bp-cycles-changes-gradient-scale.md) - Single-batch probe on the tiny model: the L stack gets far smaller gradients with [0,3] than with the checkpoint's [3,3].
 * [O14: First pilot results: slot readout and letter baseline are tied](/observations/o14-first-pilot-results-slot-and-baseline-tie.md) - One seed, validation n=6127. Slot and letter baseline differ by at most 0.004 in accuracy-level metrics; 96% of validation comes from sources Mimir saw.
 * [O15: Pilot training fits in 33.6 GB and runs at 6.15 examples per second](/observations/o15-pilot-training-memory-and-speed.md) - Memory and speed of the first real training run (slot model, default settings) on an NVIDIA RTX PRO 6000 Blackwell Server Edition.
+* [O16: The untrained model reaches 0.669 accuracy; fine-tuning adds about 17 points](/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md) - Zero-shot Mimir v1.5 with the letter prompt scores 0.669 on validation against 0.835 for the fine-tuned baseline. The gain is largest on Score and smallest on the MASSIVE held-out task.
 
 ## Template
 
