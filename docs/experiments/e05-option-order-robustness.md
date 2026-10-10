@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E05: Option-order robustness'
 description: Evaluate with options presented in random orders and measure the change in accuracy and agreement.
-status: planned
+status: done
 answers: [q12]
 depends_on: [e03]
 tags: []
@@ -46,10 +46,10 @@ Also report, for each model, the spread (maximum minus minimum accuracy) over th
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **done**. Rule outcome: the baseline's drop minus the slot model's drop is 0.14 points, below the 1-point margin, so the order-invariance argument is **not supported**; both models are equally robust.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-11 | `runs/slot-v0`, `runs/baseline-v0` | `--order_seed 1,2,3` on validation | drop +0.03 points (slot), +0.17 points (baseline); spread at most 0.4 points | [O19](/observations/o19-option-order-does-not-matter-for-either-model.md) |
 
 When run: fill this table, create an observation page (copy the template) with the numbers, set `status` in the frontmatter, add a line to the update log, and regenerate the indexes.

@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-10-11
+* **Finding**: E04 and E05 on the pilot checkpoints. [O18](/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md): the fine-tuned models are already calibrated without the post-hoc step (raw ECE 0.015 to 0.019; temperature scaling changes ECE by at most 0.009 and worsens noul ECE; no help on the held-out task). [O19](/observations/o19-option-order-does-not-matter-for-either-model.md): with 3 random option orders accuracy changes by 0.03 points (slot) and 0.17 points (baseline); by the rule fixed beforehand (margin 1 point) the order-invariance argument for the slot design is not supported. E04 and E05 are done, [Q12](/questions/q12-option-position-bias-at-evaluation.md) is answered, [Q13](/questions/q13-calibration-transfer-across-domains.md) has more evidence, new [Q15](/questions/q15-is-nll-fitted-temperature-scaling-the-right-calibration.md), D05 and D19 carry update notes. Slot and baseline remain tied on every measure so far. The re-evaluated calibrated files equal the first pilot files except for one added field (reproducible). The server code predated the reliability tables, so none were produced.
 * **Decision**: E05 decision rule fixed before the results were read ([E05](/experiments/e05-option-order-robustness.md)): the slot design's order-invariance is supported if the baseline loses at least 1 point more accuracy than the slot model under random option orders; otherwise the simpler baseline is preferred.
 
 ## 2026-10-10

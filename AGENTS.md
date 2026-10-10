@@ -8,11 +8,13 @@ Read this file fully, then `docs/index.md`. Everything the previous agent knew t
 
 Done and tested (54 tests: 50 offline, 4 need network):
 - Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark, zero-shot reference (`mimir_decide.zeroshot`).
-- Documentation as an OKF bundle in `docs/`: 23 decision records, 14 open questions, 11 experiments, 15 observations, update log.
+- Documentation as an OKF bundle in `docs/`: 23 decision records, 15 open questions, 11 experiments, 19 observations, update log.
 
 Run by the owner on the GPU server (NVIDIA RTX PRO 6000 Blackwell Server Edition): the smoke test (E02) and the first pilot (E03, one seed, defaults). Result: the slot model and the letter baseline are tied (validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456), and 96% of validation comes from sources Mimir saw ([O14](docs/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). Training fits in 33.6 GB at 6.15 examples per second ([O15](docs/observations/o15-pilot-training-memory-and-speed.md)). The small eval files are in `runs/`.
 
 The zero-shot reference (E10) is done: the untrained model reaches 0.669 validation accuracy against 0.835 after fine-tuning, so fine-tuning adds most of the quality ([O16](docs/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md)).
+
+E04 and E05 are done on the pilot checkpoints: temperature scaling changes the fine-tuned models very little ([O18](docs/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md)), and neither model is sensitive to option order, so the slot design's invariance argument is not supported ([O19](docs/observations/o19-option-order-does-not-matter-for-either-model.md)). Note that the server code used for these re-evaluations predates the reliability tables; pull before the next evaluation.
 
 **Next, in the owner's order:** E11 (letter baseline with a trainable LM head).
 
@@ -53,7 +55,7 @@ Each step has a page in `docs/experiments/` with exact commands, metrics and a *
 3. E04 calibration, E05 option-order robustness, E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code.
 4. Record the full-build numbers of the pilot's mixture (E01) from `$DATA/mixture_manifest.json` into an observation and the E01 table. Ask the owner for the file if you cannot read it.
 
-Done: E02, E03 and E10 (see section 1). If you must repeat the pilot, `scripts/run_pilot.sh` runs both models; use another `RUNS` directory so the pilot results are not overwritten.
+Done: E02, E03, E04, E05 and E10 (see section 1). If you must repeat the pilot, `scripts/run_pilot.sh` runs both models; use another `RUNS` directory so the pilot results are not overwritten.
 
 After each experiment: fill the results table in its page, write an observation page (copy the template), set the experiment `status`, add a line to `docs/log.md`, regenerate indexes (section 5).
 

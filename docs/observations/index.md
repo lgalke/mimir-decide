@@ -21,6 +21,8 @@ Dated, evidence-backed things seen so far; add new ones with the template.
 * [O15: Pilot training fits in 33.6 GB and runs at 6.15 examples per second](/observations/o15-pilot-training-memory-and-speed.md) - Memory and speed of the first real training run (slot model, default settings) on an NVIDIA RTX PRO 6000 Blackwell Server Edition.
 * [O16: The untrained model reaches 0.669 accuracy; fine-tuning adds about 17 points](/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md) - Zero-shot Mimir v1.5 with the letter prompt scores 0.669 on validation against 0.835 for the fine-tuned baseline. The gain is largest on Score and smallest on the MASSIVE held-out task.
 * [O17: Calibration and selective risk of the pilot and zero-shot runs](/observations/o17-calibration-and-selective-risk-of-the-pilot-runs.md) - Fine-tuned models are well calibrated and slightly underconfident; their confidence ranks errors very well. The zero-shot model is overconfident, most on Score. Gaps in what is recorded are listed.
+* [O18: Temperature scaling barely changes the fine-tuned models](/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md) - Raw and calibrated results of the slot model and the baseline differ by 0.001 to 0.009 in ECE and by at most 0.005 in NLL. Calibration does not help on the held-out task, and it worsens noul ECE.
+* [O19: Neither model is sensitive to option order](/observations/o19-option-order-does-not-matter-for-either-model.md) - With 3 random option orders, validation accuracy changes by 0.03 points (slot) and 0.17 points (baseline). The pre-set rule does not support the slot design's order-invariance advantage.
 
 ## Template
 

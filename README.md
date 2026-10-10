@@ -27,7 +27,7 @@ The code runs on a GPU server. The first pilot is complete. It used one seed.
 
 The slot model and the letter baseline give the same quality. On validation data they differ by less than 0.005 in accuracy. Mimir already knows most of this data. The result does not show that the model generalizes.
 
-The untrained model with the letter prompt reaches 0.669 accuracy. Fine-tuning raises this to 0.835. The next step is a stronger baseline with a trainable output head. The experiment pages in `docs/experiments/` list the steps.
+The untrained model with the letter prompt reaches 0.669 accuracy. Fine-tuning raises this to 0.835. A change in the order of the options changes the accuracy by less than 0.5 points. Both models are close to calibrated before the post-hoc step. The next step is a stronger baseline with a trainable output head. The experiment pages in `docs/experiments/` list the steps.
 
 ## How it works
 

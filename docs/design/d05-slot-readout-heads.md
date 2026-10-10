@@ -22,6 +22,10 @@ See [heads and baseline](/design/heads-and-baseline.md): Choice = softmax over s
 - Option sets are open vocabulary; the same weights handle any question.
 - Cost is one forward pass per decision ([Q12](/questions/q12-option-position-bias-at-evaluation.md) for position bias).
 
+## Update 2026-10-11
+
+Evidence so far does not show an advantage of the slot readout over the letter baseline: tie on accuracy, NLL and calibration ([O14](/observations/o14-first-pilot-results-slot-and-baseline-tie.md), [O18](/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md)) and no difference in robustness to option order ([O19](/observations/o19-option-order-does-not-matter-for-either-model.md)). The decision stays `accepted` until the owner decides; the open parts are more than 26 options, label vocabularies unseen in training, and the stronger baseline ([E11](/experiments/e11-stronger-baseline-trainable-lm-head.md)).
+
 ## Revisit when
 
 [E03](/experiments/e03-slot-vs-letter-pilot.md) shows no advantage over the baseline.

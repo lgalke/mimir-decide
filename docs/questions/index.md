@@ -15,9 +15,10 @@ One page per open question: why it matters, how to resolve it, linked experiment
 * [Q09: Should we add LLM-judge distillation?](/questions/q09-teacher-distillation-stage.md) - [open] Stage 1 of the first plan is not implemented.
 * [Q10: Does HRM recurrence help the decision readout?](/questions/q10-does-hrm-recurrence-help-the-readout.md) - [open] Unknown whether more H/L cycles improve decisions or only cost compute.
 * [Q11: How does Jev actually work?](/questions/q11-jev-internals.md) - [open] Backbone, size, parallel sampler and RLCD details are not public.
-* [Q12: How position-sensitive are the predictions?](/questions/q12-option-position-bias-at-evaluation.md) - [open] Evaluation uses the given option order; a model could still prefer early or late slots.
+* [Q12: How position-sensitive are the predictions?](/questions/q12-option-position-bias-at-evaluation.md) - [answered] Evaluation uses the given option order; a model could still prefer early or late slots.
 * [Q13: Does calibration transfer to held-out sources?](/questions/q13-calibration-transfer-across-domains.md) - [open] Laya's calibration was not shown to transfer across domains.
 * [Q14: How much of the fine-tuned baseline's quality comes from fine-tuning?](/questions/q14-how-much-of-the-baseline-quality-is-fine-tuning.md) - [answered] The letter baseline reaches about 0.835 accuracy after fine-tuning. How much would the untrained Mimir already reach with the same prompt?
+* [Q15: Is NLL-fitted temperature scaling the right calibration?](/questions/q15-is-nll-fitted-temperature-scaling-the-right-calibration.md) - [open] The fitted temperatures lower NLL slightly but raise ECE on noul and held-out data. Another fitting criterion, or no post-hoc step for the fine-tuned models, may be better.
 
 ## Template
 

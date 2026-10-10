@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E04: Effect of temperature calibration'
 description: Quantify ECE before and after per-kind temperature scaling, on validation and held-out tasks.
-status: planned
+status: done
 answers: [q07, q13]
 depends_on: [e03]
 tags: []
@@ -46,10 +46,10 @@ Calibration helps if ECE falls on validation and does not rise on heldout. A ris
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **done** (pilot checkpoints, one seed). Rule outcome: ECE does not fall on validation (slot 0.019 to 0.018, baseline 0.015 to 0.016) and it rises slightly on the held-out task for the slot model (0.021 to 0.027), so the temperatures do not transfer; the effect is small because the raw ECE is already small. The server code did not yet contain the reliability tables, so none were produced.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-11 | `runs/slot-v0`, `runs/baseline-v0` | `--no_calibration --tag uncal` vs calibrated, validation and held-out | raw ECE 0.015-0.019; NLL improves by at most 0.005; noul ECE worse after calibration | [O18](/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md) |
 
 When run: fill this table, create an observation page (copy the template) with the numbers, set `status` in the frontmatter, add a line to the update log, and regenerate the indexes.
