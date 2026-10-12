@@ -3,6 +3,7 @@
     python -m mimir_decide.typed_decisions --run_dir runs/slot-v0 --final            # checkpoint 'best'; writes calibrated AND raw from one pass
     python -m mimir_decide.typed_decisions --run_dir runs/letter-zeroshot --checkpoint zero-shot --final
     python -m mimir_decide.typed_decisions --references                               # Uniform and Prior only
+    python -m mimir_decide.typed_decisions --score_predictions anna.json --name anna --final   # another approach, same scorer
 
 Metrics (per decision, then averaged over all 2,000 decisions; the benchmark README does not define them, so the
 definitions are fixed here and written into every output):
@@ -122,6 +123,53 @@ def references(train: list[Decision], test: list[Decision]) -> dict:
                     "(the README does not define them), so only compare scores made with this scorer."}
 
 
+# ------------------------------------------------------------------------------------------------ external predictions
+_BOOL = {"true": "true", "yes": "true", "1": "true", "false": "false", "no": "false", "0": "false"}
+
+
+def parse_external(raw, decs: list[Decision]) -> list[np.ndarray]:
+    """Align predictions of another approach with the benchmark's decisions, independent of its option order.
+
+    Accepted: a list of entries, or a dict id -> entry. An entry has an id `<case id>:<question>` (the row `id` of the
+    dataset and the question name) and either `keys` + `probs` (this module's own output format) or
+    `probabilities` as {option key: probability}. Option keys are the criterion ids for choice questions, the level
+    "0".."n-1" for scores, and true/false (also yes/no) for noul. Each distribution is renormalised to sum to 1."""
+    if isinstance(raw, dict):
+        raw = [{"id": k, **(v if isinstance(v, dict) else {"probabilities": v})} for k, v in raw.items()]
+    by_id = {}
+    for e in raw:
+        if "probabilities" in e:
+            m = e["probabilities"]
+            if isinstance(m, dict):
+                pairs = list(m.items())
+            else:
+                raise ValueError(f"{e['id']}: 'probabilities' must be a dict option key -> probability")
+        else:
+            pairs = list(zip(e["keys"], e["probs"]))
+        by_id[e["id"]] = {str(k).strip().lower() if str(k).strip().lower() in _BOOL else str(k): float(v) for k, v in pairs}
+    out, missing = [], []
+    for d in decs:
+        m = by_id.get(d.id)
+        if m is None:
+            missing.append(d.id)
+            continue
+        keys = option_keys(d)
+        vals = []
+        for k in keys:
+            alt = [k] + ([a for a, t in _BOOL.items() if t == k] if d.kind == "noul" else [])
+            hit = next((m[a] for a in alt if a in m), None)
+            if hit is None:
+                raise ValueError(f"{d.id}: no probability for option key {k!r} (found {sorted(m)})")
+            vals.append(hit)
+        p = np.array(vals, float)
+        if not np.all(p >= 0) or p.sum() <= 0:
+            raise ValueError(f"{d.id}: probabilities must be non-negative and sum to more than 0")
+        out.append(p / p.sum())
+    if missing:
+        raise ValueError(f"{len(missing)} of {len(decs)} decisions have no prediction, first: {missing[:3]}")
+    return out
+
+
 # ------------------------------------------------------------------------------------------------ model scoring
 def softmax_T(logits: np.ndarray, T: float) -> np.ndarray:
     z = logits / T
@@ -164,6 +212,8 @@ def main(argv=None):
     ap.add_argument("--no_calibration", action="store_true", help="write only the raw version (default: calibrated and raw, from one pass)")
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--references", action="store_true", help="only compute Uniform and Prior")
+    ap.add_argument("--score_predictions", metavar="FILE", help="score another approach's predictions (JSON) with this scorer")
+    ap.add_argument("--name", default="external", help="name for --score_predictions; results go to runs/external-<name>/eval/")
     ap.add_argument("--final", action="store_true", help="required: this reads the benchmark's test split")
     ap.add_argument("--limit", type=int, default=None, help="first N decisions (smoke test only)")
     a = ap.parse_args(argv)
@@ -172,6 +222,19 @@ def main(argv=None):
     test = load_decisions("test")
     if a.limit is None:
         assert len(test) == REPO_N_DECISIONS, f"expected {REPO_N_DECISIONS} decisions, got {len(test)}"
+    if a.score_predictions:
+        probs = parse_external(json.load(open(a.score_predictions)), test)
+        run = Path("runs") / f"external-{a.name}"
+        (run / "eval").mkdir(parents=True, exist_ok=True)
+        write_variant(run, "typed_decisions_test", [np.log(np.clip(p, 1e-12, 1)) for p in probs], test, None, a.score_predictions, None)
+        (run / "eval" / "typed_decisions_test.json").write_text(
+            (run / "eval" / "typed_decisions_test.json").read_text().replace('"calibrated": false', '"calibrated": "n/a (predictions as given)"'))
+        res = json.loads((run / "eval" / "typed_decisions_test.json").read_text())
+        for k, v in res["by_kind"].items():
+            print(f"  {k:<7} n={v['n']:<5} accuracy {v['accuracy']:.3f}  KL {v['kl_from_gold']:.3f}  Brier {v['brier']:.3f}")
+        for k, v in res["by_workflow"].items():
+            print(f"  {k:<28} n={v['n']:<5} accuracy {v['accuracy']:.3f}  KL {v['kl_from_gold']:.3f}  Brier {v['brier']:.3f}")
+        return
     if a.references or not a.run_dir:
         print(json.dumps(references(load_decisions("train"), test), indent=1))
         return

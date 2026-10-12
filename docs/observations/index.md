@@ -25,6 +25,7 @@ Dated, evidence-backed things seen so far; add new ones with the template.
 * [O19: Neither model is sensitive to option order](/observations/o19-option-order-does-not-matter-for-either-model.md) - With 3 random option orders, validation accuracy changes by 0.03 points (slot) and 0.17 points (baseline). The pre-set rule does not support the slot design's order-invariance advantage.
 * [O20: The baseline with a trainable output head ties with the frozen-head baseline and the slot model](/observations/o20-trainable-output-head-ties-with-the-frozen-head-baseline.md) - Training the output head of the letter baseline changes validation accuracy by 0.2 points and NLL by 0.002. All three trained models are indistinguishable on every in-distribution measure.
 * [O21: Our benchmark scorer reproduces the published Uniform row for KL and Brier, not for accuracy and ECE](/observations/o21-benchmark-scorer-matches-the-published-uniform-row-only-for-kl-and-brier.md) - The Typed Decisions README names its metrics but does not define them. Testing definitions against the published Uniform and Prior rows pinned down KL and Brier, and left accuracy and ECE open.
+* [O22: On the Typed Decisions test split the fine-tuned models reach accuracy 0.788 and KL 0.086, level with fine-tuned LoRA models](/observations/o22-typed-decisions-benchmark-results.md) - First benchmark results of our four models (full test split, 2,000 decisions). The three fine-tuned models are tied; the untrained model reaches 0.607.
 
 ## Template
 

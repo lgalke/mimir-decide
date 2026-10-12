@@ -85,3 +85,38 @@ def test_scoring_run_writes_results_and_predictions_and_logs_the_access(tmp_path
     assert "typed-decisions benchmark test" in (run / "eval" / "test_access_log.jsonl").read_text()
     # the loader returns the benchmark's size
     assert len(td.load_decisions("test")) == 2000
+
+
+def _decs():
+    ch = mk(id="te_a_1:action", source="localllama/customer_service", kind="choice",
+            options=["continue: x", "stop: y", "observe: z"], target=[0.2, 0.7, 0.1])
+    nl = mk(id="te_a_1:needs_review", source="localllama/customer_service", kind="noul", options=["yes!", "no!"], target=[0.8, 0.2])
+    sc = mk(id="te_a_1:risk", source="localllama/customer_service", kind="score", options=["l0", "l1", "l2"], target=[0.1, 0.3, 0.6])
+    return [ch, nl, sc]
+
+
+def test_external_predictions_are_aligned_by_key_not_by_position():
+    d = _decs()
+    ours = [{"id": "te_a_1:action", "keys": ["continue", "stop", "observe"], "probs": [0.2, 0.7, 0.1]},
+            {"id": "te_a_1:needs_review", "keys": ["true", "false"], "probs": [0.8, 0.2]},
+            {"id": "te_a_1:risk", "keys": ["0", "1", "2"], "probs": [0.1, 0.3, 0.6]}]
+    p1 = td.parse_external(ours, d)
+    other = {"te_a_1:action": {"probabilities": {"observe": 0.1, "continue": 0.2, "stop": 0.7}},                 # other key order
+             "te_a_1:needs_review": {"probabilities": {"no": 2.0, "yes": 8.0}},                                    # yes/no, unnormalised
+             "te_a_1:risk": {"probabilities": {"2": 0.6, "0": 0.1, "1": 0.3}}}
+    p2 = td.parse_external(other, d)
+    for a, b in zip(p1, p2):
+        assert np.allclose(a, b)
+    s = td.score(p2, d)["overall"]
+    assert s["accuracy"] == 1.0 and s["kl_from_gold"] < 1e-9 and s["brier"] < 1e-12                               # the gold itself scores perfectly
+
+
+def test_external_predictions_fail_loudly_on_gaps():
+    d = _decs()
+    with pytest.raises(ValueError, match="no prediction"):
+        td.parse_external([{"id": "te_a_1:action", "keys": ["continue", "stop", "observe"], "probs": [1, 0, 0]}], d)
+    bad = [{"id": "te_a_1:action", "keys": ["continue", "stop"], "probs": [0.5, 0.5]},
+           {"id": "te_a_1:needs_review", "keys": ["true", "false"], "probs": [0.5, 0.5]},
+           {"id": "te_a_1:risk", "keys": ["0", "1", "2"], "probs": [0.2, 0.3, 0.5]}]
+    with pytest.raises(ValueError, match="no probability for option key 'observe'"):
+        td.parse_external(bad, d)

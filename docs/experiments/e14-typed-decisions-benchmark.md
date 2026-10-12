@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E14: Typed Decisions benchmark (comparison with Anna''s approach)'
 description: Score our models on the full test split of LocalLLaMA/typed-decisions (400 cases, 2,000 decisions) with accuracy, KL from gold, Brier and ECE, to compare with a second approach on the same data.
-status: planned
+status: done
 answers: [q04]
 depends_on: [e10, e11]
 tags: [benchmark, comparison, typed-decisions, priority]
@@ -57,6 +57,14 @@ git commit -m "Add Typed Decisions benchmark results"
 git push
 ```
 
+Another approach (for example Anna's) is scored with the same code from its predictions. The file is JSON, either a list of entries or a dict from id to entry. The id is `<case id>:<question>` (the dataset row `id`, a colon, the question name). An entry has `probabilities` as `{option key: probability}`, or `keys` and `probs` as in our own files. Option keys are the criterion ids for choice questions, `"0"`...`"n-1"` for scores, and `true`/`false` (or `yes`/`no`) for noul. The order does not matter, and each distribution is renormalised. All 2,000 decisions must be present.
+
+```bash
+python -m mimir_decide.typed_decisions --score_predictions path/to/anna_predictions.json --name anna --final
+```
+
+The result goes to `runs/external-anna/eval/typed_decisions_test.json`. Rescoring our own `slot-v0` predictions this way reproduces its own numbers exactly.
+
 The probes of [E13](/experiments/e13-head-only-baselines.md) are scored the same way once they exist (`--run_dir runs/letter-probe --final`, `--run_dir runs/slot-probe --final`).
 
 ## Metrics to record
@@ -73,8 +81,8 @@ One seed per model. Our models answer each question separately. The scorer's acc
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_. The scorer is tested and was run end to end with the real zero-shot model on 100 decisions (not a result).
+Status: **done** for the four models of the first batch (the probes of E13 and Anna's approach are still to be scored). Results are in [O22](/observations/o22-typed-decisions-benchmark-results.md).
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-12 | `runs/letter-zeroshot`, `slot-v0`, `baseline-v0`, `baseline-lmhead` | one pass per model, calibrated and raw | accuracy 0.607 / 0.788 / 0.788 / 0.779; KL 0.295 / 0.086 / 0.087 / 0.086; Brier 0.166 / 0.048 / 0.048 / 0.048 | [O22](/observations/o22-typed-decisions-benchmark-results.md) |
