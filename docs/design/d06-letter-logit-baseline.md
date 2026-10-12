@@ -22,6 +22,10 @@ The owner asked for the baseline alongside the heads strategy.
 - Options are capped at 26 ([D17](/design/d17-sequence-and-option-budget.md)).
 - The prompt was verified identical to `apply_chat_template` by a network test ([O11](/observations/o11-letter-prompt-tokenization-boundary.md)).
 
+## Update 2026-10-12
+
+The stronger variant `train_lm_head: true` was run ([E11](/experiments/e11-stronger-baseline-trainable-lm-head.md)): it ties with the frozen-head baseline (validation NLL 0.454 against 0.456), needs 4.4 GB more memory, and does not change any conclusion ([O20](/observations/o20-trainable-output-head-ties-with-the-frozen-head-baseline.md)). The frozen head remains the default.
+
 ## Revisit when
 
 The baseline is unfairly handicapped (for example frozen head) and the comparison needs a stronger variant (`train_lm_head: true`).

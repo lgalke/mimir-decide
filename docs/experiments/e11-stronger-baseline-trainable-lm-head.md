@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E11: Stronger baseline with a trainable language-model head'
 description: Repeat the letter baseline with the LM head unfrozen, so the baseline is not handicapped before it is compared with the slot model.
-status: planned
+status: done
 answers: [q04]
 depends_on: [e10]
 tags: [baseline, lm-head]
@@ -46,8 +46,8 @@ Written before running. A fixed margin replaces the seed spread, because the own
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **done** (one seed). Rule outcome: the validation NLL difference to the frozen-head baseline is 0.002 (slot model: 0.001), below the margin of 0.01, so it is a tie and the simpler frozen-head baseline is preferred. The margin is still a proposal until the owner confirms it.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-12 | `runs/baseline-lmhead` | `train_lm_head=true`, pilot settings | validation accuracy 0.833, NLL 0.454 (frozen head 0.835 / 0.456, slot 0.831 / 0.455); 16.1 h, 37.99 GB | [O20](/observations/o20-trainable-output-head-ties-with-the-frozen-head-baseline.md) |

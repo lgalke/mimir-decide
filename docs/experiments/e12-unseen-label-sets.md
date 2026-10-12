@@ -4,7 +4,7 @@ title: 'E12: Unseen label sets (evaluation on additional tasks)'
 description: Evaluate all existing models, without retraining, on extra tasks whose label sets never occur in the training mixture.
 status: planned
 answers: [q04, q01]
-depends_on: [e11]
+depends_on: [e11, e10]
 tags: [generalisation, label-sets, slot, baseline]
 timestamp: 2026-10-11T00:00:00Z
 ---
