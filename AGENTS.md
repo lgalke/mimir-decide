@@ -6,9 +6,9 @@ Read this file fully, then `docs/index.md`. Everything the previous agent knew t
 
 ## 1. State of the project (2026-10-09)
 
-Done and tested (69 tests: 63 offline, 6 need network):
+Done and tested (78 tests: 71 offline, 7 need network):
 - Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark, zero-shot reference (`mimir_decide.zeroshot`).
-- Documentation as an OKF bundle in `docs/`: 27 decision records, 15 open questions, 13 experiments, 20 observations, update log.
+- Documentation as an OKF bundle in `docs/`: 28 decision records, 15 open questions, 14 experiments, 21 observations, update log.
 
 Run by the owner on the GPU server (NVIDIA RTX PRO 6000 Blackwell Server Edition): the smoke test (E02) and the first pilot (E03, one seed, defaults). Result: the slot model and the letter baseline are tied (validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456), and 96% of validation comes from sources Mimir saw ([O14](docs/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). Training fits in 33.6 GB at 6.15 examples per second ([O15](docs/observations/o15-pilot-training-memory-and-speed.md)). The small eval files are in `runs/`.
 
@@ -18,7 +18,9 @@ E04 and E05 are done on the pilot checkpoints: temperature scaling changes the f
 
 E11 is done (letter baseline with a trainable output head): it ties with the frozen-head baseline and the slot model ([O20](docs/observations/o20-trainable-output-head-ties-with-the-frozen-head-baseline.md)).
 
-**Next, in the owner's order:** [E13](docs/experiments/e13-head-only-baselines.md) (head-only probes on the frozen backbone; cheaper than a full run; code is ready), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)); the tool is ready: `mimir_decide.build_extra_eval` (see the E12 page for the commands; commit the source list before evaluating).
+**TOP PRIORITY (owner, 2026-10-12): [E14](docs/experiments/e14-typed-decisions-benchmark.md)**, scoring our models on the Typed Decisions benchmark test split to compare with a PhD student's approach (commands are in the page; the scorer is `mimir_decide.typed_decisions`; D28).
+
+**Then, in the owner's order:** [E13](docs/experiments/e13-head-only-baselines.md) (head-only probes on the frozen backbone; cheaper than a full run; code is ready), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)); the tool is ready: `mimir_decide.build_extra_eval` (see the E12 page for the commands; commit the source list before evaluating).
 
 **Open or not recorded yet:**
 - The pilot built the full mixture, but its manifest numbers (counts, drops, `heldout_patterns_unmatched`) are not in the docs yet ([E01](docs/experiments/e01-full-mixture-build.md) stays `planned` until they are).
@@ -53,6 +55,7 @@ In this file, `python` means the Python of the active environment. Run all comma
 
 Each step has a page in `docs/experiments/` with exact commands, metrics and a **decision rule written before running**. Follow the page; do not improvise the rule afterwards.
 
+0. **[E14 Typed Decisions benchmark](docs/experiments/e14-typed-decisions-benchmark.md)** — top priority; scoring each model once with `--final`.
 1. **[E13 head-only baselines](docs/experiments/e13-head-only-baselines.md)** (frozen backbone; cheaper than a full run). (E10 and E11 are done.)
 2. **[E12 unseen label sets](docs/experiments/e12-unseen-label-sets.md)**: evaluation of all models on extra tasks. Task sources are decided (D26, option A, evaluation only); build them with `build_extra_eval` and commit `configs/extra_eval_sources.yaml` before any evaluation. `select_heldout` and `derive_mixture` are the fallback design (D25, superseded).
 3. E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code. (E04 and E05 are done.)
@@ -109,11 +112,12 @@ mimir_decide/
   formatting.py model.py    prompt rendering/collation; SlotDecisionModel, LetterBaseline, loss, save/load
   train.py calibrate.py evaluate.py inference.py metrics.py
   compare.py bench.py okf.py zeroshot.py   (zeroshot.py: untrained base model with the letter prompt, E10)
+  typed_decisions.py                      (E14: score a model on the Typed Decisions benchmark test split)
   build_extra_eval.py                     (E12: evaluation-only extra tasks with unseen label sets, option A)
   select_heldout.py derive_mixture.py     (E12 fallback: leave tasks out and retrain; superseded)
 scripts/run_pilot.sh        build -> audit -> train both -> calibrate -> evaluate (validation + heldout)
 scripts/make_tiny_model.py  random tiny HRM with the real vocabulary (smoke tests without the big model)
-tests/                      69 tests; marker `network` needs internet
+tests/                      78 tests; marker `network` needs internet
 docs/                       the OKF knowledge base (section 5)
 ```
 

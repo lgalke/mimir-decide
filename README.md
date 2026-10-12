@@ -27,7 +27,7 @@ The code runs on a GPU server. The first pilot is complete. It used one seed.
 
 The slot model and the letter baseline give the same quality. On validation data they differ by less than 0.005 in accuracy. Mimir already knows most of this data. The result does not show that the model generalizes.
 
-The untrained model with the letter prompt reaches 0.669 accuracy. Fine-tuning raises this to 0.835. A change in the order of the options changes the accuracy by less than 0.5 points. Both models are close to calibrated before the post-hoc step. A baseline with a trainable output head gives the same quality. The next steps are probes with a frozen backbone and a test on new tasks. The new tasks have label sets that the training data does not contain. The experiment pages in `docs/experiments/` list the steps.
+The untrained model with the letter prompt reaches 0.669 accuracy. Fine-tuning raises this to 0.835. A change in the order of the options changes the accuracy by less than 0.5 points. Both models are close to calibrated before the post-hoc step. The first priority is a comparison with another approach on the Typed Decisions benchmark. A baseline with a trainable output head gives the same quality. The next steps are probes with a frozen backbone and a test on new tasks. The new tasks have label sets that the training data does not contain. The experiment pages in `docs/experiments/` list the steps.
 
 ## How it works
 
@@ -62,7 +62,7 @@ A computer with no GPU can run the tests and the checks with the small model.
 
 In this README, `python` means the Python of the active environment. Run all commands from the project root. If a `.venv` folder exists and no environment is active, activate the `.venv` or put `uv run` before the command.
 
-The tests take about 1 minute. The 6 tests that need the internet are not in this run. Remove `-m "not network"` to include them.
+The tests take about 1 minute. The 7 tests that need the internet are not in this run. Remove `-m "not network"` to include them.
 
 ## Build the data
 
