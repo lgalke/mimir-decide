@@ -69,7 +69,7 @@ The tests take about 1 minute. The 6 tests that need the internet are not in thi
 Do a small build first. It takes about 1 minute:
 
 ```bash
-python -m mimir_decide.build_mixture --limit 300 --output_dir ~/mimir-decide-data/smoke
+python -m mimir_decide.build_mixture --limit 300 --output_dir "${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/smoke"
 ```
 
 Do the full build when the small build is correct. The full build needs time, disk space and a network connection:
@@ -78,7 +78,7 @@ Do the full build when the small build is correct. The full build needs time, di
 python -m mimir_decide.build_mixture --config configs/data.yaml
 ```
 
-The build writes the data to `~/mimir-decide-data` by default. Change `output_dir` and `cache_dir` in `configs/data.yaml` to use other places.
+The build writes the data to the folder in the variable `MIMIR_DECIDE_DATA`. The default is `~/mimir-decide-data`. Set the variable to a persistent folder if your home folder is not persistent.
 
 ## Train and evaluate
 

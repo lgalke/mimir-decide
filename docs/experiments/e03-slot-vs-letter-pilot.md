@@ -21,7 +21,7 @@ E01, E02
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=runs
+export DATA=${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/mixture-v0 RUNS=runs
 PY=python
 ```
 ```bash

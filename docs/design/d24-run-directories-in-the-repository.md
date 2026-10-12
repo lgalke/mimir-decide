@@ -18,14 +18,14 @@ timestamp: 2026-10-09T00:00:00Z
 - Runs default to `runs/` in the repository: `run_dir: runs/slot-v0` and `runs/baseline-v0` in the training configs, and `RUNS` defaults to `$PWD/runs` in `scripts/run_pilot.sh`. The paths are relative to the repository root, so commands must run from there.
 - The experiment pages use `RUNS=runs`.
 - `.gitignore` is unchanged: it tracks only `runs/*/eval/*.json` and `runs/*/train_log.jsonl` and ignores everything else under `runs/`.
-- Data and caches stay in `~/mimir-decide-data` (`DATA`, `cache_dir`).
+- Data and caches stay in the data root (`MIMIR_DECIDE_DATA`, default `~/mimir-decide-data`; [D27](/design/d27-configurable-data-root.md)).
 - The baseline config now names its run `baseline-v0` (it was `letter-v0`), like the pilot script.
 
 ## Consequences
 
 - Results and training curves appear in `git status` right after a run. Check their size before committing, as `AGENTS.md` section 9 says.
 - **Checkpoints now use disk space inside the repository folder:** `best/` and `final/` are about 3.6 GB each, so about 7 GB per run, ignored by git. Check the free space where the repository is, or set `RUNS` (or `--set run_dir=...`) to another place. On a machine where the repository folder is synced (the OneDrive Mac), always set `RUNS` elsewhere.
-- The pilot checkpoints were written to the old location on the server. To use them with the new default, copy them without overwriting the tracked files, for example `rsync -a --ignore-existing ~/mimir-decide-data/runs/slot-v0/ runs/slot-v0/`. This copy was not tested. Experiments that need the pilot checkpoints (E04, E05, E08) need it, or `RUNS=$HOME/mimir-decide-data/runs`. E10's comparison needs only the tracked eval files.
+- **Warning (2026-10-12):** the pilot checkpoints of `slot-v0` and `baseline-v0` were written to the old location, `~/mimir-decide-data/runs`. On the owner's server that is the non-persistent `/home/ucloud`. Copy them to the repository's `runs/` (persistent under `/work`) before the session ends; only `best/` and the small files are needed. The pilot checkpoints were written to the old location on the server. To use them with the new default, copy them without overwriting the tracked files, for example `rsync -a --ignore-existing ~/mimir-decide-data/runs/slot-v0/ runs/slot-v0/`. This copy was not tested. Experiments that need the pilot checkpoints (E04, E05, E08) need it, or `RUNS=$HOME/mimir-decide-data/runs`. E10's comparison needs only the tracked eval files.
 - Old documents that mention the old path were updated; the remaining mentions (D20 note, `AGENTS.md` migration hint) are intended.
 
 ## Revisit when

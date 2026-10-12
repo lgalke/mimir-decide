@@ -15,3 +15,4 @@ runs/**
 !runs/*/eval/
 !runs/*/eval/*.json
 !runs/*/train_log.jsonl
+.env.sh

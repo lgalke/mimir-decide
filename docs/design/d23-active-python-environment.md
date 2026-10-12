@@ -26,7 +26,7 @@ The first setup used a fixed environment path (`UV_PROJECT_ENVIRONMENT=$HOME/.ve
 - The right environment must be active before a command runs. A wrong interpreter fails at import, not silently.
 - `.venv/` is in `.gitignore`. On a machine whose project folder is synced (the OneDrive Mac), a `.venv` in the project root would sync. Set `UV_PROJECT_ENVIRONMENT` yourself there. This is a local choice of the owner and not part of the documented workflow.
 - The conda route was checked only by a dry-run resolution of `pip install -e ".[dev]"` (through `uv pip`). It was not installed into a real conda environment.
-- Data, caches and runs still default to `~/mimir-decide-data` ([D20](/design/d20-environment-outside-onedrive.md)).
+- Data and caches use the data root ([D27](/design/d27-configurable-data-root.md)); runs go to `runs/` ([D24](/design/d24-run-directories-in-the-repository.md)).
 
 ## Revisit when
 

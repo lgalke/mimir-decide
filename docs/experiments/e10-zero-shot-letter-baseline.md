@@ -21,7 +21,7 @@ The mixture from [E01](/experiments/e01-full-mixture-build.md) (`calib.parquet`,
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=runs
+export DATA=${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/mixture-v0 RUNS=runs
 PY=python
 
 # 1. Zero-shot checkpoint: no weights are copied; they are loaded from the hub at the pinned revision.

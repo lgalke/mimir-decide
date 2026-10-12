@@ -25,7 +25,7 @@ from typing import Iterator, Optional
 
 import yaml
 
-from . import licenses
+from . import licenses, paths
 from .convert import bekko, helpsteer2, localllama, massive, tasksource
 from .convert.common import Counter0
 from .schema import Decision, bucket, fingerprints, full_hash, query_hash, state_hash, write_parquet
@@ -75,7 +75,7 @@ class Reservoir:
 
 def iter_source(name: str, split: str, cfg: dict, drops: Counter0, limit: Optional[int], lic_excl: Counter0):
     s = cfg["sources"][name]
-    cache = Path(cfg.get("cache_dir", "~/mimir-decide-data/cache")).expanduser()  # shared across builds
+    cache = Path(cfg.get("cache_dir") or paths.data_root() / "cache").expanduser()  # shared across builds
     if name == "tasksource":
         return tasksource.iter_records(split, drops, limit, s.get("revision"), s.get("streaming", True))
     if name == "bekko":
@@ -318,7 +318,7 @@ def main(argv=None):
     ap.add_argument("--output_dir", default=None)
     ap.add_argument("--sources", nargs="*", default=None, help="restrict to these sources")
     a = ap.parse_args(argv)
-    cfg = yaml.safe_load(open(a.config))
+    cfg = paths.load_config(a.config)
     if a.output_dir:
         cfg["output_dir"] = a.output_dir
     if a.sources:

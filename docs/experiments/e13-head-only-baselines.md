@@ -26,7 +26,7 @@ Nothing in the backbone changes, so its weights are not stored; the checkpoint h
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0
+export DATA=${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/mixture-v0
 PY=python
 COMMON="data_dir=$DATA freeze_backbone=true lr_head=1.0e-3"     # use the pilot's other overrides if there were any
 

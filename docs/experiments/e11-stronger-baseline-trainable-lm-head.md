@@ -21,7 +21,7 @@ In the first pilot the baseline had a frozen language-model head ([D06](/design/
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0 RUNS=runs
+export DATA=${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/mixture-v0 RUNS=runs
 PY=python
 
 $PY -m mimir_decide.train --config configs/train_baseline.yaml --set data_dir=$DATA run_dir=$RUNS/baseline-lmhead train_lm_head=true

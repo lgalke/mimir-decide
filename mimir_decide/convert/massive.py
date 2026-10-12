@@ -80,7 +80,9 @@ def rows_to_decisions(rows: list[dict], locale: str, split: str, all_intents: li
 
 def iter_records(split: str, drops: Counter0, limit: Optional[int] = None, locales=("da-DK", "en-US"),
                  n_options: int = 8, seed: int = 0, cache_dir: Optional[Path] = None) -> Iterator:
-    archive = fetch_archive(Path(cache_dir or Path.home() / "mimir-decide-data" / "cache"))
+    from .. import paths
+
+    archive = fetch_archive(Path(cache_dir or paths.data_root() / "cache"))
     n = 0
     for loc in locales:
         rows = read_locale(archive, loc)

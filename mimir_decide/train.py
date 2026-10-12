@@ -18,6 +18,7 @@ import torch
 import yaml
 from torch.utils.data import DataLoader, Dataset
 
+from . import paths
 from .formatting import Collator, Formatter
 from .inference import device_auto, predict_logits
 from .metrics import evaluate
@@ -80,7 +81,7 @@ def main(argv=None):
     ap.add_argument("--config", required=True)
     ap.add_argument("--set", nargs="*", default=[], help="overrides key=value (yaml-parsed)")
     a = ap.parse_args(argv)
-    cfg = yaml.safe_load(open(a.config))
+    cfg = paths.load_config(a.config)
     for kv in a.set:
         k, v = kv.split("=", 1)
         val = yaml.safe_load(v)

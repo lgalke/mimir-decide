@@ -33,7 +33,7 @@ The slot readout was designed for open vocabulary: it reads a score at the place
 
 ```bash
 # Run from the repository root with the project environment active (uv .venv or conda).
-export DATA=$HOME/mimir-decide-data/mixture-v0 DATA_EXTRA=$HOME/mimir-decide-data/mixture-extra-eval
+export DATA=${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/mixture-v0 DATA_EXTRA=${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/mixture-extra-eval
 PY=python
 
 # 1. Build the extra evaluation set (needs network for the bekko and tasksource eval splits; minutes).

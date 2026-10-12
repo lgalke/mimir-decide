@@ -9,7 +9,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 export TOKENIZERS_PARALLELISM=false
 PY="${PY:-python}"   # Python of the active environment (uv .venv or conda); override with PY=/path/to/python
-DATA="${DATA:-$HOME/mimir-decide-data/mixture-v0}"
+DATA="${DATA:-${MIMIR_DECIDE_DATA:-$HOME/mimir-decide-data}/mixture-v0}"   # set MIMIR_DECIDE_DATA to a persistent folder
 RUNS="${RUNS:-$PWD/runs}"   # the script runs from the repository root; default: runs/ in the repository (D24)
 
 if [[ -z "${SKIP_BUILD:-}" ]]; then

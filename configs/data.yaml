@@ -1,7 +1,7 @@
 # Data mixture config for Mimir-Decide. See docs/design/dataset-selection.md for the rationale.
 seed: 0
-output_dir: ~/mimir-decide-data/mixture-v0
-cache_dir: ~/mimir-decide-data/cache   # shared download cache (MASSIVE archive)
+output_dir: "{DATA_ROOT}/mixture-v0"   # DATA_ROOT = $MIMIR_DECIDE_DATA, default ~/mimir-decide-data
+cache_dir: "{DATA_ROOT}/cache"   # shared download cache (MASSIVE archive)
 
 max_state_chars: 12000        # longer states are dropped (keeps sequences within ~2-3k tokens)
 max_options: 26               # letters A-Z for the baseline; larger option sets are subsampled (gold kept)

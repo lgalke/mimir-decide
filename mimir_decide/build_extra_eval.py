@@ -29,7 +29,7 @@ from typing import Iterable
 import pyarrow.parquet as pq
 import yaml
 
-from . import licenses
+from . import licenses, paths
 from .build_mixture import cap_options
 from .convert import bekko, tasksource
 from .convert.common import Counter0
@@ -237,7 +237,7 @@ def main(argv=None):
     ap.add_argument("--max_seen", type=float, default=0.1)
     ap.add_argument("--max_overlap", type=float, default=0.3)
     a = ap.parse_args(argv)
-    cfg = yaml.safe_load(open(a.config))
+    cfg = paths.load_config(a.config)
     rep = build(cfg, a.pilot_dir, a.out_dir, a.sources_out, min_eval=a.min_eval, max_per_source=a.max_per_source,
                 seed=a.seed, max_seen=a.max_seen, max_overlap=a.max_overlap)
     print(json.dumps({k: rep[k] for k in ("n_sources_with_rows", "n_sources_chosen", "rows", "row_drops")}, indent=1))
