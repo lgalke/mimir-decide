@@ -87,7 +87,8 @@ def main(argv=None):
     pol = yaml.safe_load(open(hf_hub_download(REPO, "dfm11_sampling_policy.yaml", revision=REVISION)))
     prefixes = [e["prefix"] for e in pol]
     manifest = json.loads(Path(hf_hub_download(REPO, "training_data_manifest.json", revision=REVISION)).read_text())
-    mm = json.loads((data / "mixture_manifest.json").read_text())
+    mm_path = data / "mixture_manifest.json"
+    mm = json.loads(mm_path.read_text()) if mm_path.exists() else {}  # optional: only used for the report
     sources = {}
     for f in ["train.parquet", "validation.parquet", "calib.parquet", "heldout_tasks/heldout.parquet",
               "eval/test/test.parquet", "extra_eval/extra_eval.parquet"]:
@@ -100,7 +101,7 @@ def main(argv=None):
         "mimir_repo": REPO, "mimir_revision": REVISION, "policy_prefixes": len(prefixes),
         "public_addition_packages": [p["repo_id"] for p in manifest["public_addition_packages"]],
         "collection_notes": {k: v[1] for k, v in COLLECTION_RULES.items()},
-        "mixture_manifest_counts": mm["counts"],
+        "mixture_manifest_counts": mm.get("counts", {}),
         "limitations": [
             "Name-level only; DFM10 base data (tokenized_dfm10) is not public.",
             "A flag means the collection/task family was in Mimir's mixture, not that specific eval rows were seen.",

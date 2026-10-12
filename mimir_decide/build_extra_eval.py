@@ -151,7 +151,11 @@ def build(cfg: dict, pilot_dir: Path, out_dir: Path, sources_out: Path, rows: It
           max_options: int = 26, max_seen: float = 0.1, max_overlap: float = 0.3, min_repeat_fraction: float = 0.5) -> dict:
     pilot_dir, out_dir = Path(pilot_dir).expanduser(), Path(out_dir).expanduser()
     drops, excluded = Counter0(), Counter0()
+    log = lambda m: print(f"[build_extra_eval] {m}", flush=True)
+    log(f"1/5 reading the training vocabulary from {pilot_dir / 'train.parquet'}")
     sets, strings, train_sources, train_states = train_vocab(pilot_dir)
+    log(f"    {len(train_sources)} training sources, {len(train_states)} train rows")
+    log("2/5 reading candidate rows (bekko and tasksource validation/test; needs network) and filtering by licence, source and size")
     rows = candidate_rows(cfg, drops, excluded) if rows is None else rows
 
     why, by_source = Counter(), defaultdict(list)
@@ -170,18 +174,21 @@ def build(cfg: dict, pilot_dir: Path, out_dir: Path, sources_out: Path, rows: It
         lic[d.source] = d.license
         by_source[d.source].append(d)
 
+    log(f"    {sum(len(v) for v in by_source.values())} candidate rows in {len(by_source)} sources; row drops so far: {dict(why)}")
     rng = random.Random(seed)
     for name, lst in by_source.items():          # cap per source before the expensive leakage pass
         if len(lst) > max_per_source:
             rng.shuffle(lst)
             by_source[name] = lst[:max_per_source]
     flat = [d for lst in by_source.values() for d in lst]
+    log(f"3/5 leakage filter on {len(flat)} rows against {len(train_states)} train states (the slow step: minutes)")
     kept, leak_drops = leak_filter(flat, train_states)
     why.update(leak_drops)
     kept_by_source: dict[str, list[Decision]] = defaultdict(list)
     for d in kept:
         kept_by_source[d.source].append(d)
 
+    log(f"4/5 label-novelty scoring of {len(kept_by_source)} sources; leakage drops: {dict(leak_drops)}")
     scores = score_candidates(kept_by_source, sets, strings)
     chosen, rejected = [], {}
     for name, m in sorted(scores.items()):
@@ -194,6 +201,7 @@ def build(cfg: dict, pilot_dir: Path, out_dir: Path, sources_out: Path, rows: It
     familiar = {n: familiar_task(n, train_sources) for n in chosen}
     task_novel = [n for n in chosen if familiar[n] is None]
     final = [d for n in chosen for d in kept_by_source[n]]
+    log(f"5/5 writing {len(final)} rows of {len(chosen)} sources to {out_dir}")
     (out_dir / "extra_eval").mkdir(parents=True, exist_ok=True)
     (out_dir / "reports").mkdir(parents=True, exist_ok=True)
     write_parquet(final, out_dir / "extra_eval" / "extra_eval.parquet")
