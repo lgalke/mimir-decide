@@ -26,6 +26,8 @@ See [heads and baseline](/design/heads-and-baseline.md): Choice = softmax over s
 
 Evidence so far does not show an advantage of the slot readout over the letter baseline: tie on accuracy, NLL and calibration ([O14](/observations/o14-first-pilot-results-slot-and-baseline-tie.md), [O18](/observations/o18-temperature-scaling-barely-changes-the-fine-tuned-models.md)) and no difference in robustness to option order ([O19](/observations/o19-option-order-does-not-matter-for-either-model.md)). The tie also holds against the baseline with a trainable output head ([O20](/observations/o20-trainable-output-head-ties-with-the-frozen-head-baseline.md)), so the frozen head was not the cause. The decision stays `accepted` until the owner decides; the open parts are more than 26 options, label vocabularies unseen in training, and the stronger baseline ([E11](/experiments/e11-stronger-baseline-trainable-lm-head.md)).
 
+Update 2026-10-14 ([O24](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md)): on a frozen backbone the slot head reaches only 0.446 validation accuracy, against 0.703 for the letter probe. The slot readout works only with a trained backbone. This does not change the tie between the fine-tuned models.
+
 ## Revisit when
 
 [E03](/experiments/e03-slot-vs-letter-pilot.md) shows no advantage over the baseline.

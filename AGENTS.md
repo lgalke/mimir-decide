@@ -55,7 +55,7 @@ In this file, `python` means the Python of the active environment. Run all comma
 
 Each step has a page in `docs/experiments/` with exact commands, metrics and a **decision rule written before running**. Follow the page; do not improvise the rule afterwards.
 
-0. **[E14 Typed Decisions benchmark](docs/experiments/e14-typed-decisions-benchmark.md)** — top priority; first batch done; next: the other approach's predictions and the slot probe of E13 (score each model once with `--final`).
+0. **[E14 Typed Decisions benchmark](docs/experiments/e14-typed-decisions-benchmark.md)** — top priority; first batch done; next: the other approach's predictions (score each model once with `--final`). E13 is done (letter probe O23, slot probe O24).
 1. **[E13 head-only baselines](docs/experiments/e13-head-only-baselines.md)** (frozen backbone; cheaper than a full run). (E10 and E11 are done.)
 2. **[E12 unseen label sets](docs/experiments/e12-unseen-label-sets.md)**: evaluation of all models on extra tasks. Task sources are decided (D26, option A, evaluation only); build them with `build_extra_eval` and commit `configs/extra_eval_sources.yaml` before any evaluation. `select_heldout` and `derive_mixture` are the fallback design (D25, superseded).
 3. E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code. (E04 and E05 are done.)

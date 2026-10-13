@@ -65,7 +65,7 @@ python -m mimir_decide.typed_decisions --score_predictions path/to/anna_predicti
 
 The result goes to `runs/external-anna/eval/typed_decisions_test.json`. Rescoring our own `slot-v0` predictions this way reproduces its own numbers exactly.
 
-The probes of [E13](/experiments/e13-head-only-baselines.md) are scored the same way once they exist (`--run_dir runs/letter-probe --final`, `--run_dir runs/slot-probe --final`).
+The probes of [E13](/experiments/e13-head-only-baselines.md) are scored the same way (`--run_dir runs/letter-probe --final`, `--run_dir runs/slot-probe --final`). Both are done: letter probe accuracy 0.611 / KL 0.301 / Brier 0.164; slot probe 0.504 / 0.369 / 0.201 ([O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md), [O24](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md)).
 
 ## Metrics to record
 

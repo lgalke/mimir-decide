@@ -2,11 +2,11 @@
 type: Experiment
 title: 'E13: Head-only baselines (frozen backbone)'
 description: Train only the output head on the frozen Mimir backbone, for the letter readout (head initialised from the LM head) and for the slot readout. Shows how much of the fine-tuning gain a readout alone can reach.
-status: running
+status: done
 answers: [q04, q14]
 depends_on: [e10]
 tags: [baseline, probe, frozen-backbone]
-timestamp: 2026-10-11T00:00:00Z
+timestamp: 2026-10-14T00:00:00Z
 ---
 
 ## Purpose
@@ -61,8 +61,9 @@ One seed. The marker vector of the slot probe is not trained, which handicaps it
 
 ## Status and results
 
-Status: **running**. The letter probe is done: R = 0.20, so the gain comes mostly from the backbone ([O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md)). The slot probe has not been run yet; it decides the second question (slot against letter probe on the same frozen features).
+Status: **done**. Letter probe: R = 0.20, the gain comes mostly from the backbone ([O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md)). Slot probe: validation accuracy 0.446 against 0.703 for the letter probe, 25.7 points worse, so by the pre-set rule the letter readout extracts more from the same frozen features ([O24](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md)).
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
 | 2026-10-13 | `runs/letter-probe` | `freeze_backbone=true train_letter_head=true lr_head=1.0e-3`, pilot settings | validation accuracy 0.703 (zero-shot 0.669, fine-tuned 0.835), R = 0.20; benchmark accuracy 0.611 (zero-shot 0.607); 3.6 h, 9.04 GB | [O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md) |
+| 2026-10-14 | `runs/slot-probe` | `freeze_backbone=true lr_head=1.0e-3`, pilot settings | validation accuracy 0.446 (zero-shot 0.669, letter probe 0.703); benchmark accuracy 0.504; 3.0 h, 9.22 GB | [O24](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md) |

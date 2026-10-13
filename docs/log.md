@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-10-14
+* **Finding**: E13 slot probe ([O24](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md)): slot head on the frozen backbone reaches validation accuracy 0.446 (NLL 1.302), against 0.703 for the letter probe and 0.669 for the untrained letter readout; the validation curve is flat from step 1,000. By the pre-set rule (2-point margin) the letter readout extracts more from the same frozen features. Benchmark: accuracy 0.504, KL 0.369, Brier 0.201 (untrained 0.607 / 0.295 / 0.166). Held-out nb-NO ECE 0.221 (under-confident). Cost: 3.0 h, 9.22 GB. The slot design needs a trained backbone; this is no evidence against the fine-tuned slot model. Limits: one seed, untuned rate, fixed marker vector. E13 is done.
+
 ## 2026-10-13
 * **Finding**: E13 letter probe ([O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md)): head-only training (frozen backbone, head started from the LM head's letter rows) lifts validation accuracy from 0.669 to 0.703 (NLL 0.806 to 0.766); R = (0.703 - 0.669) / (0.835 - 0.669) = 0.20, below the pre-set 0.25, so the fine-tuning gain comes mostly from the backbone. The gain is on score questions (0.377 to 0.568); none on choice. On the Typed Decisions benchmark the probe is no better than the untrained model (accuracy 0.611 against 0.607, KL 0.301 against 0.295). Cost: 3.6 h, 9 GB. The slot probe is still to be run; E13 is `running`.
 
