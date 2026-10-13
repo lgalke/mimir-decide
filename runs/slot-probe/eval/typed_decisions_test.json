@@ -1,0 +1,271 @@
+{
+ "benchmark": "LocalLLaMA/typed-decisions",
+ "split": "test",
+ "checkpoint": "best",
+ "calibrated": true,
+ "temperatures": {
+  "noul": 1.6715125281450345,
+  "choice": 0.9667925752438689,
+  "score": 0.8216214731587452
+ },
+ "limit": null,
+ "scorer": "mimir_decide.typed_decisions (definitions in the module docstring)",
+ "overall": {
+  "n": 2000,
+  "accuracy": 0.5045,
+  "kl_from_gold": 0.3694451729916604,
+  "brier": 0.20062812300142305,
+  "ece": 0.04097832221537828,
+  "nll": 1.1368037286159893,
+  "mean_conf": 0.4929272432252765
+ },
+ "by_kind": {
+  "choice": {
+   "n": 600,
+   "accuracy": 0.5766666666666667,
+   "kl_from_gold": 0.4173422267930244,
+   "brier": 0.20454448984473048,
+   "ece": 0.13964208545784157,
+   "nll": 1.2811368236398466,
+   "mean_conf": 0.4584357392539581
+  },
+  "noul": {
+   "n": 600,
+   "accuracy": 0.6216666666666667,
+   "kl_from_gold": 0.21387851998561236,
+   "brier": 0.17416598627730398,
+   "ece": 0.034465014735857696,
+   "nll": 0.6676007633381769,
+   "mean_conf": 0.6017512047290802
+  },
+  "score": {
+   "n": 800,
+   "accuracy": 0.3625,
+   "kl_from_gold": 0.4501973723951734,
+   "brier": 0.21753745041203174,
+   "ece": 0.07795535378158093,
+   "nll": 1.3804561313064556,
+   "mean_conf": 0.43717790007591245
+  }
+ },
+ "by_workflow": {
+  "agent_trace_observability": {
+   "n": 500,
+   "accuracy": 0.4,
+   "kl_from_gold": 0.4389404525888315,
+   "brier": 0.21602000470650426,
+   "ece": 0.11543140429258347,
+   "nll": 1.317410725534055,
+   "mean_conf": 0.5135867373347283
+  },
+  "customer_service": {
+   "n": 500,
+   "accuracy": 0.564,
+   "kl_from_gold": 0.370427974043389,
+   "brier": 0.19370304878525213,
+   "ece": 0.12210743775963787,
+   "nll": 1.1075826120528718,
+   "mean_conf": 0.44189256224036216
+  },
+  "invoice_processing": {
+   "n": 500,
+   "accuracy": 0.548,
+   "kl_from_gold": 0.4364541685979319,
+   "brier": 0.2673946621473377,
+   "ece": 0.06843183165788651,
+   "nll": 1.0114016442628264,
+   "mean_conf": 0.5143686853051186
+  },
+  "security_incidents": {
+   "n": 500,
+   "accuracy": 0.506,
+   "kl_from_gold": 0.23195809673648915,
+   "brier": 0.12539477636659815,
+   "ece": 0.05933620285987855,
+   "nll": 1.1108199326142034,
+   "mean_conf": 0.501860988020897
+  }
+ },
+ "by_question": {
+  "agent_trace_observability/action": {
+   "n": 100,
+   "accuracy": 0.37,
+   "kl_from_gold": 0.3190436691429703,
+   "brier": 0.168188870999871,
+   "ece": 0.19896312296390536,
+   "nll": 1.3530875439253156,
+   "mean_conf": 0.4958543962240219
+  },
+  "agent_trace_observability/needs_review": {
+   "n": 100,
+   "accuracy": 0.48,
+   "kl_from_gold": 0.18680940355488748,
+   "brier": 0.1681858003528966,
+   "ece": 0.09105772554874417,
+   "nll": 0.7022752711757747,
+   "mean_conf": 0.5569372481107712
+  },
+  "agent_trace_observability/outcome": {
+   "n": 100,
+   "accuracy": 0.48,
+   "kl_from_gold": 0.484611074737126,
+   "brier": 0.23337331607759418,
+   "ece": 0.12390287816524503,
+   "nll": 1.409397439341316,
+   "mean_conf": 0.5874688071012497
+  },
+  "agent_trace_observability/risk": {
+   "n": 100,
+   "accuracy": 0.31,
+   "kl_from_gold": 0.7511651448868375,
+   "brier": 0.3220831074955723,
+   "ece": 0.20551192104816432,
+   "nll": 1.6435352532955898,
+   "mean_conf": 0.5033393323421478
+  },
+  "agent_trace_observability/urgency": {
+   "n": 100,
+   "accuracy": 0.36,
+   "kl_from_gold": 0.45307297062233637,
+   "brier": 0.18826892860658714,
+   "ece": 0.06526592046022417,
+   "nll": 1.4787581199322801,
+   "mean_conf": 0.4243339028954506
+  },
+  "customer_service/action": {
+   "n": 100,
+   "accuracy": 0.52,
+   "kl_from_gold": 0.3780080226266923,
+   "brier": 0.15795625702236016,
+   "ece": 0.1589869531989097,
+   "nll": 1.3438659185878823,
+   "mean_conf": 0.42487201184034346
+  },
+  "customer_service/category": {
+   "n": 100,
+   "accuracy": 0.76,
+   "kl_from_gold": 0.6895904699931011,
+   "brier": 0.337010966030299,
+   "ece": 0.32807624921202655,
+   "nll": 1.100012352926944,
+   "mean_conf": 0.4319237507879734
+  },
+  "customer_service/churn_risk": {
+   "n": 100,
+   "accuracy": 0.37,
+   "kl_from_gold": 0.3695394971405966,
+   "brier": 0.1955622014411962,
+   "ece": 0.021793824434280372,
+   "nll": 1.2599580295764,
+   "mean_conf": 0.35270956575870516
+  },
+  "customer_service/needs_human": {
+   "n": 100,
+   "accuracy": 0.73,
+   "kl_from_gold": 0.12464902118656827,
+   "brier": 0.11200617616937825,
+   "ece": 0.1626608985662461,
+   "nll": 0.67376143001557,
+   "mean_conf": 0.567339101433754
+  },
+  "customer_service/urgency": {
+   "n": 100,
+   "accuracy": 0.44,
+   "kl_from_gold": 0.29035285926998633,
+   "brier": 0.16597964326302705,
+   "ece": 0.03762166023254394,
+   "nll": 1.160315329157563,
+   "mean_conf": 0.43261838138103487
+  },
+  "invoice_processing/discrepancy_severity": {
+   "n": 100,
+   "accuracy": 0.47,
+   "kl_from_gold": 0.6409232334363019,
+   "brier": 0.34233053403167735,
+   "ece": 0.05327266186475758,
+   "nll": 1.2851665977720463,
+   "mean_conf": 0.5201641163229942
+  },
+  "invoice_processing/disposition": {
+   "n": 100,
+   "accuracy": 0.59,
+   "kl_from_gold": 0.4228166991529914,
+   "brier": 0.22910269295415575,
+   "ece": 0.18989638060331349,
+   "nll": 1.2462760031082123,
+   "mean_conf": 0.4098875716328621
+  },
+  "invoice_processing/duplicate": {
+   "n": 100,
+   "accuracy": 0.88,
+   "kl_from_gold": 0.3196554032662063,
+   "brier": 0.219069195345172,
+   "ece": 0.27159952521324154,
+   "nll": 0.5272084554294512,
+   "mean_conf": 0.6185968387126922
+  },
+  "invoice_processing/matches_order": {
+   "n": 100,
+   "accuracy": 0.46,
+   "kl_from_gold": 0.4427838474394782,
+   "brier": 0.3561392840639774,
+   "ece": 0.12017644643783575,
+   "nll": 0.7004745209181923,
+   "mean_conf": 0.5681918179988861
+  },
+  "invoice_processing/urgency": {
+   "n": 100,
+   "accuracy": 0.34,
+   "kl_from_gold": 0.3560916596946818,
+   "brier": 0.19033160434170604,
+   "ece": 0.18464052826166155,
+   "nll": 1.2978826440862303,
+   "mean_conf": 0.45500308185815813
+  },
+  "security_incidents/credential_compromise": {
+   "n": 100,
+   "accuracy": 0.45,
+   "kl_from_gold": 0.12485340176657093,
+   "brier": 0.11583631805609328,
+   "ece": 0.18319574952125547,
+   "nll": 0.7380508048212059,
+   "mean_conf": 0.6331957495212555
+  },
+  "security_incidents/disposition": {
+   "n": 100,
+   "accuracy": 0.74,
+   "kl_from_gold": 0.20998342510526513,
+   "brier": 0.10163483598410292,
+   "ece": 0.33939210206270215,
+   "nll": 1.2341816839494095,
+   "mean_conf": 0.40060789793729784
+  },
+  "security_incidents/severity": {
+   "n": 100,
+   "accuracy": 0.1,
+   "kl_from_gold": 0.5626364662330883,
+   "brier": 0.2418375266586955,
+   "ece": 0.3057582426071167,
+   "nll": 1.718189972915269,
+   "mean_conf": 0.4057582426071167
+  },
+  "security_incidents/true_positive": {
+   "n": 100,
+   "accuracy": 0.73,
+   "kl_from_gold": 0.08452004269996324,
+   "brier": 0.07375914367630647,
+   "ece": 0.11608152985572813,
+   "nll": 0.6638340976688673,
+   "mean_conf": 0.6662464725971222
+  },
+  "security_incidents/urgency": {
+   "n": 100,
+   "accuracy": 0.51,
+   "kl_from_gold": 0.1777971478775583,
+   "brier": 0.09390605745779258,
+   "ece": 0.10650342255830766,
+   "nll": 1.199843103716266,
+   "mean_conf": 0.4034965774416924
+  }
+ }
+}
