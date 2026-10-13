@@ -1,0 +1,3452 @@
+{
+ "split": "validation",
+ "order_seed": null,
+ "limit": null,
+ "checkpoint": "best",
+ "calibrated": true,
+ "temperatures": {
+  "noul": 1.0595024659060757,
+  "choice": 1.0565726772272945,
+  "score": 1.0756179113113937
+ },
+ "n_records": 6127,
+ "n_evaluated": 6127,
+ "n_skipped_too_long": 0,
+ "results": {
+  "all": {
+   "n": 6127,
+   "acc": 0.7026277133997062,
+   "nll": 0.7659272766457405,
+   "brier": 0.3544845703705181,
+   "ece": 0.013466163161276844,
+   "mean_conf": 0.7068391797694137,
+   "score_mae": 0.6291388246444746,
+   "score_spearman": 0.7375670172785428,
+   "risk@0.1": 0.01631321370309951,
+   "risk@0.25": 0.037859007832898174,
+   "risk@0.5": 0.10345953002610966,
+   "risk@0.75": 0.19499455930359086,
+   "risk@1.0": 0.2973722866002938,
+   "reliability": [
+    {
+     "lo": 0.0667,
+     "hi": 0.1333,
+     "n": 6,
+     "conf": 0.1096,
+     "acc": 0.3333
+    },
+    {
+     "lo": 0.1333,
+     "hi": 0.2,
+     "n": 55,
+     "conf": 0.1709,
+     "acc": 0.0909
+    },
+    {
+     "lo": 0.2,
+     "hi": 0.2667,
+     "n": 103,
+     "conf": 0.2396,
+     "acc": 0.2039
+    },
+    {
+     "lo": 0.2667,
+     "hi": 0.3333,
+     "n": 185,
+     "conf": 0.3035,
+     "acc": 0.2865
+    },
+    {
+     "lo": 0.3333,
+     "hi": 0.4,
+     "n": 305,
+     "conf": 0.3677,
+     "acc": 0.3574
+    },
+    {
+     "lo": 0.4,
+     "hi": 0.4667,
+     "n": 327,
+     "conf": 0.4351,
+     "acc": 0.4159
+    },
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 452,
+     "conf": 0.5055,
+     "acc": 0.4889
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 537,
+     "conf": 0.5666,
+     "acc": 0.5438
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 612,
+     "conf": 0.6333,
+     "acc": 0.6209
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 551,
+     "conf": 0.6993,
+     "acc": 0.7096
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 499,
+     "conf": 0.7655,
+     "acc": 0.7756
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 550,
+     "conf": 0.8339,
+     "acc": 0.8636
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 720,
+     "conf": 0.9005,
+     "acc": 0.8986
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 1225,
+     "conf": 0.9721,
+     "acc": 0.9682
+    }
+   ]
+  },
+  "kind:choice": {
+   "n": 4030,
+   "acc": 0.7126550868486352,
+   "nll": 0.7667598330652879,
+   "brier": 0.36122184928528533,
+   "ece": 0.019464953868619864,
+   "mean_conf": 0.7238935733477472,
+   "risk@0.1": 0.01240694789081886,
+   "risk@0.25": 0.03373015873015873,
+   "risk@0.5": 0.08833746898263027,
+   "risk@0.75": 0.17769688947716744,
+   "risk@1.0": 0.2873449131513648,
+   "reliability": [
+    {
+     "lo": 0.0667,
+     "hi": 0.1333,
+     "n": 6,
+     "conf": 0.1096,
+     "acc": 0.3333
+    },
+    {
+     "lo": 0.1333,
+     "hi": 0.2,
+     "n": 50,
+     "conf": 0.1698,
+     "acc": 0.06
+    },
+    {
+     "lo": 0.2,
+     "hi": 0.2667,
+     "n": 87,
+     "conf": 0.2382,
+     "acc": 0.2184
+    },
+    {
+     "lo": 0.2667,
+     "hi": 0.3333,
+     "n": 126,
+     "conf": 0.3031,
+     "acc": 0.2937
+    },
+    {
+     "lo": 0.3333,
+     "hi": 0.4,
+     "n": 187,
+     "conf": 0.3687,
+     "acc": 0.3529
+    },
+    {
+     "lo": 0.4,
+     "hi": 0.4667,
+     "n": 200,
+     "conf": 0.4351,
+     "acc": 0.415
+    },
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 266,
+     "conf": 0.5042,
+     "acc": 0.4737
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 286,
+     "conf": 0.5665,
+     "acc": 0.5629
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 339,
+     "conf": 0.6326,
+     "acc": 0.59
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 307,
+     "conf": 0.7001,
+     "acc": 0.6938
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 305,
+     "conf": 0.7654,
+     "acc": 0.7672
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 371,
+     "conf": 0.8338,
+     "acc": 0.8733
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 488,
+     "conf": 0.9007,
+     "acc": 0.875
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 1012,
+     "conf": 0.9738,
+     "acc": 0.9654
+    }
+   ]
+  },
+  "source:tasksource/HelpSteer3/edit_quality": {
+   "n": 12,
+   "acc": 0.75,
+   "nll": 0.5584978722035885,
+   "brier": 0.376471722790825,
+   "ece": 0.23619759579499564,
+   "mean_conf": 0.6207864830891291
+  },
+  "lang:und": {
+   "n": 3791,
+   "acc": 0.6874175679240306,
+   "nll": 0.7872783555383582,
+   "brier": 0.3796364677986241,
+   "ece": 0.019226028644623527,
+   "mean_conf": 0.6990270535951709,
+   "score_mae": 0.5819016952344844,
+   "score_spearman": 0.7719673408153255
+  },
+  "source:tasksource/HelpSteer3/preference": {
+   "n": 11,
+   "acc": 0.7272727272727273,
+   "nll": 0.47539495067162946,
+   "brier": 0.299535951929766,
+   "ece": 0.28183182261206885,
+   "mean_conf": 0.6827488108114763
+  },
+  "source:tasksource/MedQA-USMLE-4-options-hf": {
+   "n": 33,
+   "acc": 0.3939393939393939,
+   "nll": 1.3056343958684893,
+   "brier": 0.7088124067547203,
+   "ece": 0.2883241817806706,
+   "mean_conf": 0.45809680313775036
+  },
+  "kind:noul": {
+   "n": 1079,
+   "acc": 0.7924003707136237,
+   "nll": 0.4525427090271653,
+   "brier": 0.20248592806617766,
+   "ece": 0.03118838398847678,
+   "mean_conf": 0.7807848050817502,
+   "risk@0.1": 0.018518518518518517,
+   "risk@0.25": 0.014814814814814815,
+   "risk@0.5": 0.06666666666666667,
+   "risk@0.75": 0.12978986402966625,
+   "risk@1.0": 0.20759962928637626,
+   "reliability": [
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 54,
+     "conf": 0.5177,
+     "acc": 0.5741
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 105,
+     "conf": 0.5666,
+     "acc": 0.4857
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 126,
+     "conf": 0.6354,
+     "acc": 0.619
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 137,
+     "conf": 0.6982,
+     "acc": 0.708
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 124,
+     "conf": 0.7655,
+     "acc": 0.7984
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 128,
+     "conf": 0.8349,
+     "acc": 0.8359
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 203,
+     "conf": 0.8999,
+     "acc": 0.9557
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 202,
+     "conf": 0.9644,
+     "acc": 0.9802
+    }
+   ]
+  },
+  "source:tasksource/PARADISE": {
+   "n": 34,
+   "acc": 0.29411764705882354,
+   "nll": 1.696800554280772,
+   "brier": 0.9067015986303277,
+   "ece": 0.34987512493834777,
+   "mean_conf": 0.6439927719971713
+  },
+  "source:tasksource/UltraFeedback-paired": {
+   "n": 22,
+   "acc": 0.7727272727272727,
+   "nll": 0.5936420112848282,
+   "brier": 0.3770737490614459,
+   "ece": 0.2501104257323525,
+   "mean_conf": 0.7168353687633168
+  },
+  "source:tasksource/ai2_arc/ARC-Challenge/challenge": {
+   "n": 4,
+   "acc": 0.75,
+   "nll": 0.6933038192801178,
+   "brier": 0.3922250266196562,
+   "ece": 0.2828419804573059,
+   "mean_conf": 0.8405929505825043
+  },
+  "source:tasksource/ai2_arc/ARC-Easy/challenge": {
+   "n": 8,
+   "acc": 1.0,
+   "nll": 0.11339552560821176,
+   "brier": 0.02093795072932336,
+   "ece": 0.10564755648374557,
+   "mean_conf": 0.8943524435162544
+  },
+  "source:tasksource/arct": {
+   "n": 32,
+   "acc": 0.78125,
+   "nll": 0.47090317818219773,
+   "brier": 0.2989305902364948,
+   "ece": 0.13323347270488745,
+   "mean_conf": 0.8177503794431686
+  },
+  "source:tasksource/balanced-copa": {
+   "n": 10,
+   "acc": 0.9,
+   "nll": 0.339910549018532,
+   "brier": 0.19448823396085155,
+   "ece": 0.1433043122291565,
+   "mean_conf": 0.8996358275413513
+  },
+  "source:tasksource/cicero": {
+   "n": 26,
+   "acc": 0.8076923076923077,
+   "nll": 0.4045313958866665,
+   "brier": 0.18769008891960567,
+   "ece": 0.16714835625428423,
+   "mean_conf": 0.795671692261329
+  },
+  "source:tasksource/cloth": {
+   "n": 42,
+   "acc": 0.7142857142857143,
+   "nll": 0.7357740804575206,
+   "brier": 0.4113497194359573,
+   "ece": 0.14015243025053115,
+   "mean_conf": 0.727936775911422
+  },
+  "source:tasksource/codah/codah": {
+   "n": 14,
+   "acc": 0.9285714285714286,
+   "nll": 0.3879485886011805,
+   "brier": 0.18083401279821906,
+   "ece": 0.23756238392421178,
+   "mean_conf": 0.738064203943525
+  },
+  "source:tasksource/commonsense_qa": {
+   "n": 31,
+   "acc": 0.9032258064516129,
+   "nll": 0.31348738841141666,
+   "brier": 0.15867220507982321,
+   "ece": 0.08984600151738814,
+   "mean_conf": 0.8724277961638666
+  },
+  "source:tasksource/cosmos_qa": {
+   "n": 30,
+   "acc": 0.7,
+   "nll": 0.8262794029898941,
+   "brier": 0.4611889001851156,
+   "ece": 0.19455534418423975,
+   "mean_conf": 0.8146332840124766
+  },
+  "source:tasksource/cycic_multiplechoice": {
+   "n": 32,
+   "acc": 0.90625,
+   "nll": 0.45556883423705585,
+   "brier": 0.18133331674093447,
+   "ece": 0.20077991671860218,
+   "mean_conf": 0.8046818133443594
+  },
+  "source:tasksource/dgen": {
+   "n": 24,
+   "acc": 0.9583333333333334,
+   "nll": 0.21286420706504336,
+   "brier": 0.1084853336074446,
+   "ece": 0.14583622043331462,
+   "mean_conf": 0.8569596794744333
+  },
+  "source:tasksource/e-CARE": {
+   "n": 25,
+   "acc": 0.72,
+   "nll": 0.56002490193001,
+   "brier": 0.3634355080553021,
+   "ece": 0.18593060731887817,
+   "mean_conf": 0.8807611346244812
+  },
+  "source:tasksource/fig-qa": {
+   "n": 26,
+   "acc": 0.7692307692307693,
+   "nll": 0.6350466115847946,
+   "brier": 0.37041030470302716,
+   "ece": 0.17415400651785046,
+   "mean_conf": 0.9304323884157034
+  },
+  "source:tasksource/goal-step-wikihow/goal": {
+   "n": 12,
+   "acc": 0.6666666666666666,
+   "nll": 0.7780092215786377,
+   "brier": 0.46191764871224034,
+   "ece": 0.3459477896491686,
+   "mean_conf": 0.5912143265207609
+  },
+  "source:tasksource/goal-step-wikihow/order": {
+   "n": 16,
+   "acc": 0.4375,
+   "nll": 0.7710818080231547,
+   "brier": 0.5630005874141789,
+   "ece": 0.2373996376991272,
+   "mean_conf": 0.6748996376991272
+  },
+  "source:tasksource/goal-step-wikihow/step": {
+   "n": 14,
+   "acc": 0.9285714285714286,
+   "nll": 0.37293576129845213,
+   "brier": 0.16512258172556754,
+   "ece": 0.12739865268979753,
+   "mean_conf": 0.801172775881631
+  },
+  "source:tasksource/hh-rlhf/harmless-base": {
+   "n": 9,
+   "acc": 0.8888888888888888,
+   "nll": 0.495782308280468,
+   "brier": 0.32063105880292664,
+   "ece": 0.25384819507598877,
+   "mean_conf": 0.7028404341803657
+  },
+  "source:tasksource/hh-rlhf/helpful-base": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 0.7938845157623291,
+   "brier": 0.6004211321215962,
+   "ece": 0.5479147434234619,
+   "mean_conf": 0.5479147434234619
+  },
+  "source:tasksource/hh-rlhf/helpful-online": {
+   "n": 10,
+   "acc": 0.5,
+   "nll": 0.8271433979272842,
+   "brier": 0.5962531814356591,
+   "ece": 0.3571633100509644,
+   "mean_conf": 0.6518832087516785
+  },
+  "source:tasksource/hh-rlhf/helpful-rejection-sampled": {
+   "n": 5,
+   "acc": 0.8,
+   "nll": 0.6181044235825539,
+   "brier": 0.4169051183699725,
+   "ece": 0.37587890625000003,
+   "mean_conf": 0.7588141918182373
+  },
+  "source:tasksource/lex_glue/case_hold": {
+   "n": 33,
+   "acc": 0.696969696969697,
+   "nll": 0.8922147948407766,
+   "brier": 0.46573146221144673,
+   "ece": 0.23748169252366733,
+   "mean_conf": 0.5466701903126456
+  },
+  "source:tasksource/math_qa": {
+   "n": 26,
+   "acc": 0.8461538461538461,
+   "nll": 0.8653106162181268,
+   "brier": 0.4526473963246077,
+   "ece": 0.3852834231578387,
+   "mean_conf": 0.527001379774167
+  },
+  "source:tasksource/medmcqa": {
+   "n": 35,
+   "acc": 0.45714285714285713,
+   "nll": 1.1818667620420455,
+   "brier": 0.6497236530293886,
+   "ece": 0.13301759787968226,
+   "mean_conf": 0.45629894392830983
+  },
+  "source:tasksource/moral_stories/full": {
+   "n": 24,
+   "acc": 0.8333333333333334,
+   "nll": 0.4176950727123767,
+   "brier": 0.2729807218305406,
+   "ece": 0.14468046029408774,
+   "mean_conf": 0.8300041308005651
+  },
+  "source:tasksource/multilingual/exams/multilingual": {
+   "n": 35,
+   "acc": 0.4857142857142857,
+   "nll": 1.006742689864976,
+   "brier": 0.5673655763591583,
+   "ece": 0.1310011318751744,
+   "mean_conf": 0.5148691126278468
+  },
+  "source:tasksource/multilingual/xcopa/et": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 1.0241183638572693,
+   "brier": 0.8189724323345371,
+   "ece": 0.6386512219905853,
+   "mean_conf": 0.6386512219905853
+  },
+  "source:tasksource/multilingual/xcopa/id": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.13276398181915283,
+   "brier": 0.03091501919181483,
+   "ece": 0.12432825565338135,
+   "mean_conf": 0.8756717443466187
+  },
+  "source:tasksource/multilingual/xcopa/it": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.06700471043586731,
+   "brier": 0.00840046562532848,
+   "ece": 0.06480920314788818,
+   "mean_conf": 0.9351907968521118
+  },
+  "source:tasksource/multilingual/xcopa/qu": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 0.6400439739227295,
+   "brier": 0.44712504659336005,
+   "ece": 0.47193443775177,
+   "mean_conf": 0.528989851474762
+  },
+  "source:tasksource/multilingual/xcopa/sw": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.6294547617435455,
+   "brier": 0.4366383481975302,
+   "ece": 0.46621614694595337,
+   "mean_conf": 0.5337838530540466
+  },
+  "source:tasksource/multilingual/xcopa/ta": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 0.8647060394287109,
+   "brier": 0.670075926168721,
+   "ece": 0.5788246393203735,
+   "mean_conf": 0.5788246393203735
+  },
+  "source:tasksource/multilingual/xcopa/th": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 0.7118034958839417,
+   "brier": 0.5186541880358329,
+   "ece": 0.5092417001724243,
+   "mean_conf": 0.5092417001724243
+  },
+  "source:tasksource/multilingual/xcopa/tr": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.3506307899951935,
+   "brier": 0.17564483311001178,
+   "ece": 0.2953275442123413,
+   "mean_conf": 0.7046724557876587
+  },
+  "source:tasksource/multilingual/xcopa/translation-ht": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.07894771546125412,
+   "brier": 0.011525180532303614,
+   "ece": 0.0759117603302002,
+   "mean_conf": 0.9240882396697998
+  },
+  "source:tasksource/multilingual/xcopa/translation-id": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.35355791449546814,
+   "brier": 0.17738715202853683,
+   "ece": 0.29781466722488403,
+   "mean_conf": 0.702185332775116
+  },
+  "source:tasksource/multilingual/xcopa/translation-sw": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.0425744391977787,
+   "brier": 0.0034745952235262223,
+   "ece": 0.041680872440338135,
+   "mean_conf": 0.9583191275596619
+  },
+  "source:tasksource/multilingual/xcopa/translation-ta": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.06748557835817337,
+   "brier": 0.008517424156453623,
+   "ece": 0.06525880098342896,
+   "mean_conf": 0.934741199016571
+  },
+  "source:tasksource/multilingual/xcopa/translation-tr": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 1.0495779421180487,
+   "brier": 0.762660091522152,
+   "ece": 0.4558984339237213,
+   "mean_conf": 0.9165172874927521
+  },
+  "source:tasksource/multilingual/xcopa/translation-vi": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.08719298243522644,
+   "brier": 0.013944438315282304,
+   "ece": 0.08349978923797607,
+   "mean_conf": 0.9165002107620239
+  },
+  "source:tasksource/multilingual/xcopa/translation-zh": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.028209617361426353,
+   "brier": 0.0016386176105814276,
+   "ece": 0.02779129147529602,
+   "mean_conf": 0.972208708524704
+  },
+  "source:tasksource/multilingual/xcopa/vi": {
+   "n": 3,
+   "acc": 0.3333333333333333,
+   "nll": 0.7129894097646078,
+   "brier": 0.5520188442822843,
+   "ece": 0.4566280643145243,
+   "mean_conf": 0.7304043968518575
+  },
+  "source:tasksource/multilingual/xcopa/zh": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.5878758132457733,
+   "brier": 0.3963613112443358,
+   "ece": 0.44182950258255005,
+   "mean_conf": 0.55817049741745
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-ar": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 1.196655035018921,
+   "brier": 0.6870225611748426,
+   "ece": 0.5977417528629303,
+   "mean_conf": 0.4063023626804352
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-en": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.008249721489846706,
+   "brier": 9.391336118206195e-05,
+   "ece": 0.008215785026550293,
+   "mean_conf": 0.9917842149734497
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-fr": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.28876668214797974,
+   "brier": 0.0787587205137711,
+   "ece": 0.25081300735473633,
+   "mean_conf": 0.7491869926452637
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-hi": {
+   "n": 3,
+   "acc": 0.6666666666666666,
+   "nll": 0.7249045570691427,
+   "brier": 0.3343239737511148,
+   "ece": 0.30222952365875244,
+   "mean_conf": 0.5490274429321289
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-it": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.2385147660970688,
+   "brier": 0.06250960120430929,
+   "ece": 0.21220296621322632,
+   "mean_conf": 0.7877970337867737
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-jap": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 1.407962441444397,
+   "brier": 0.7153378807548252,
+   "ece": 0.7553587406873703,
+   "mean_conf": 0.2446412593126297
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-pt": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 3.086466431617737,
+   "brier": 1.1867485570118064,
+   "ece": 0.3729958087205887,
+   "mean_conf": 0.3729958087205887
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-sw": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.6392167806625366,
+   "brier": 0.8189521920390714,
+   "ece": 0.260944128036499,
+   "mean_conf": 0.260944128036499
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-ur": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.38835838437080383,
+   "brier": 0.13125624287978732,
+   "ece": 0.32183074951171875,
+   "mean_conf": 0.6781692504882812
+  },
+  "source:tasksource/multilingual/xcsr/X-CSQA-zh": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.7067112922668457,
+   "brier": 0.871439492272116,
+   "ece": 0.3582780659198761,
+   "mean_conf": 0.3582780659198761
+  },
+  "source:tasksource/multilingual/xstory_cloze/ar": {
+   "n": 3,
+   "acc": 1.0,
+   "nll": 0.14127440502246222,
+   "brier": 0.03893869059136249,
+   "ece": 0.13029205799102783,
+   "mean_conf": 0.8697079420089722
+  },
+  "source:tasksource/multilingual/xstory_cloze/en": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.007749328855425119,
+   "brier": 0.00012791111525895362,
+   "ece": 0.007717162370681763,
+   "mean_conf": 0.9922828376293182
+  },
+  "source:tasksource/multilingual/xstory_cloze/es": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.017237862572073936,
+   "brier": 0.0005841451913350705,
+   "ece": 0.017090141773223877,
+   "mean_conf": 0.9829098582267761
+  },
+  "source:tasksource/multilingual/xstory_cloze/eu": {
+   "n": 3,
+   "acc": 1.0,
+   "nll": 0.3329814573129018,
+   "brier": 0.16518540168282705,
+   "ece": 0.2805255055427551,
+   "mean_conf": 0.7194744944572449
+  },
+  "source:tasksource/multilingual/xstory_cloze/hi": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.13500691577792168,
+   "brier": 0.03239423621633408,
+   "ece": 0.1261243224143982,
+   "mean_conf": 0.8738756775856018
+  },
+  "source:tasksource/multilingual/xstory_cloze/id": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.2672267258167267,
+   "brier": 0.10998102263942044,
+   "ece": 0.23450052738189697,
+   "mean_conf": 0.765499472618103
+  },
+  "source:tasksource/multilingual/xstory_cloze/my": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 0.7865066975355148,
+   "brier": 0.5856543161783709,
+   "ece": 0.177778422832489,
+   "mean_conf": 0.677778422832489
+  },
+  "source:tasksource/multilingual/xstory_cloze/ru": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.48640120029449463,
+   "brier": 0.29670400287093646,
+   "ece": 0.38516491651535034,
+   "mean_conf": 0.6148350834846497
+  },
+  "source:tasksource/multilingual/xstory_cloze/sw": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.3363039195537567,
+   "brier": 0.16312795239914024,
+   "ece": 0.28559404611587524,
+   "mean_conf": 0.7144059538841248
+  },
+  "source:tasksource/multilingual/xstory_cloze/zh": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.21655404567718506,
+   "brier": 0.07582472942105078,
+   "ece": 0.19471096992492676,
+   "mean_conf": 0.8052890300750732
+  },
+  "source:tasksource/onestop_qa": {
+   "n": 11,
+   "acc": 1.0,
+   "nll": 0.03082236067645929,
+   "brier": 0.0032703341044009846,
+   "ece": 0.0296912789344788,
+   "mean_conf": 0.9703087210655212
+  },
+  "source:tasksource/prm800k_dpo/solution": {
+   "n": 52,
+   "acc": 0.5192307692307693,
+   "nll": 0.7495111883617938,
+   "brier": 0.5459513903634868,
+   "ece": 0.2020726937514085,
+   "mean_conf": 0.6993018297048715
+  },
+  "source:tasksource/prm800k_dpo/step": {
+   "n": 55,
+   "acc": 0.7818181818181819,
+   "nll": 0.5027851870791479,
+   "brier": 0.3409288188245599,
+   "ece": 0.11861765384674071,
+   "mean_conf": 0.7313748446377841
+  },
+  "source:tasksource/prost": {
+   "n": 14,
+   "acc": 1.0,
+   "nll": 0.23871827351727656,
+   "brier": 0.1123893286565855,
+   "ece": 0.1809872644288199,
+   "mean_conf": 0.81901273557118
+  },
+  "source:tasksource/qasc": {
+   "n": 21,
+   "acc": 0.8571428571428571,
+   "nll": 0.726601134453501,
+   "brier": 0.3312758533168679,
+   "ece": 0.30222565929094947,
+   "mean_conf": 0.6621546135062263
+  },
+  "source:tasksource/quartz": {
+   "n": 28,
+   "acc": 0.8571428571428571,
+   "nll": 0.3550495490198955,
+   "brier": 0.23041904124309684,
+   "ece": 0.13897431535380228,
+   "mean_conf": 0.8609616862876075
+  },
+  "source:tasksource/social_i_qa": {
+   "n": 34,
+   "acc": 0.7647058823529411,
+   "nll": 0.595170621842365,
+   "brier": 0.3350161998468066,
+   "ece": 0.12239811876240893,
+   "mean_conf": 0.8577869516961715
+  },
+  "source:tasksource/spartqa-mchoice": {
+   "n": 33,
+   "acc": 0.5757575757575758,
+   "nll": 0.8458887248328237,
+   "brier": 0.4966839925531777,
+   "ece": 0.21523231990409622,
+   "mean_conf": 0.6497771776083744
+  },
+  "source:tasksource/wiki_hop/original": {
+   "n": 37,
+   "acc": 0.24324324324324326,
+   "nll": 1.90400669461972,
+   "brier": 0.7930232327079448,
+   "ece": 0.23915370372501585,
+   "mean_conf": 0.41114513978764816
+  },
+  "source:tasksource/wikimedqa/medwiki": {
+   "n": 37,
+   "acc": 0.5945945945945946,
+   "nll": 1.3220247389084812,
+   "brier": 0.6079532817940315,
+   "ece": 0.296383373640679,
+   "mean_conf": 0.862697384647421
+  },
+  "source:tasksource/winodict": {
+   "n": 29,
+   "acc": 0.8275862068965517,
+   "nll": 0.5691030259276258,
+   "brier": 0.32328797947359544,
+   "ece": 0.18890227942631163,
+   "mean_conf": 0.794150315482041
+  },
+  "source:tasksource/wnut_17/wnut_17": {
+   "n": 92,
+   "acc": 0.782608695652174,
+   "nll": 0.6048905168528386,
+   "brier": 0.2614105604765711,
+   "ece": 0.0951701224498127,
+   "mean_conf": 0.805740006915901
+  },
+  "source:tasksource/UNLI": {
+   "n": 100,
+   "acc": 0.67,
+   "nll": 0.6494144132961277,
+   "brier": 0.19599812893967605,
+   "ece": 0.07467728853225708,
+   "mean_conf": 0.7391956996917725
+  },
+  "source:tasksource/acceptability-prediction/binary_votes": {
+   "n": 11,
+   "acc": 0.5454545454545454,
+   "nll": 0.6041186887624744,
+   "brier": 0.23008262608454474,
+   "ece": 0.2959313555197282,
+   "mean_conf": 0.6882964318448846
+  },
+  "kind:score": {
+   "n": 1018,
+   "acc": 0.5677799607072691,
+   "nll": 1.0947944142583788,
+   "brier": 0.48892003306194365,
+   "ece": 0.02983222859371857,
+   "mean_conf": 0.5609486730575327,
+   "score_mae": 0.6291388246444746,
+   "score_spearman": 0.7375670172785428,
+   "risk@0.1": 0.10784313725490197,
+   "risk@0.25": 0.19291338582677164,
+   "risk@0.5": 0.275049115913556,
+   "risk@0.75": 0.35732984293193715,
+   "risk@1.0": 0.43222003929273084,
+   "reliability": [
+    {
+     "lo": 0.1333,
+     "hi": 0.2,
+     "n": 5,
+     "conf": 0.1825,
+     "acc": 0.4
+    },
+    {
+     "lo": 0.2,
+     "hi": 0.2667,
+     "n": 16,
+     "conf": 0.2473,
+     "acc": 0.125
+    },
+    {
+     "lo": 0.2667,
+     "hi": 0.3333,
+     "n": 59,
+     "conf": 0.3044,
+     "acc": 0.2712
+    },
+    {
+     "lo": 0.3333,
+     "hi": 0.4,
+     "n": 118,
+     "conf": 0.3662,
+     "acc": 0.3644
+    },
+    {
+     "lo": 0.4,
+     "hi": 0.4667,
+     "n": 127,
+     "conf": 0.435,
+     "acc": 0.4173
+    },
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 132,
+     "conf": 0.5031,
+     "acc": 0.4848
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 146,
+     "conf": 0.567,
+     "acc": 0.5479
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 147,
+     "conf": 0.6331,
+     "acc": 0.6939
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 107,
+     "conf": 0.6985,
+     "acc": 0.757
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 70,
+     "conf": 0.766,
+     "acc": 0.7714
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 51,
+     "conf": 0.8329,
+     "acc": 0.8627
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 29,
+     "conf": 0.9014,
+     "acc": 0.8966
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 11,
+     "conf": 0.9562,
+     "acc": 1.0
+    }
+   ]
+  },
+  "source:tasksource/acceptability-prediction/rating_votes": {
+   "n": 26,
+   "acc": 0.4230769230769231,
+   "nll": 1.3157160174837823,
+   "brier": 0.201288851338234,
+   "ece": 0.12507968338636255,
+   "mean_conf": 0.4036939889192581,
+   "score_mae": 0.6473486819601754,
+   "score_spearman": 0.6095726495726496
+  },
+  "source:tasksource/civil_comments/identity_attack_share": {
+   "n": 6,
+   "acc": 0.6666666666666666,
+   "nll": 0.5774475176927668,
+   "brier": 0.3371180923708108,
+   "ece": 0.2694125175476074,
+   "mean_conf": 0.583511213461558
+  },
+  "source:tasksource/civil_comments/insult_share": {
+   "n": 6,
+   "acc": 0.8333333333333334,
+   "nll": 0.5248126439048247,
+   "brier": 0.20292737649172202,
+   "ece": 0.21131043632825214,
+   "mean_conf": 0.6635810633500417
+  },
+  "source:tasksource/civil_comments/obscene_share": {
+   "n": 6,
+   "acc": 1.0,
+   "nll": 0.363908650110921,
+   "brier": 0.1926466837722224,
+   "ece": 0.2977797289689382,
+   "mean_conf": 0.7022202710310618
+  },
+  "source:tasksource/civil_comments/severe_toxicity_share": {
+   "n": 5,
+   "acc": 0.8,
+   "nll": 0.4383305758237839,
+   "brier": 0.26281324842753373,
+   "ece": 0.34390958547592165,
+   "mean_conf": 0.6715443968772888
+  },
+  "source:tasksource/civil_comments/sexual_explicit_share": {
+   "n": 5,
+   "acc": 1.0,
+   "nll": 0.13932660073041916,
+   "brier": 0.03638631273196945,
+   "ece": 0.12918765544891359,
+   "mean_conf": 0.8708123445510865
+  },
+  "source:tasksource/civil_comments/threat_share": {
+   "n": 5,
+   "acc": 1.0,
+   "nll": 0.36971521392856077,
+   "brier": 0.19864327862985148,
+   "ece": 0.3001320004463196,
+   "mean_conf": 0.6998679995536804
+  },
+  "source:tasksource/civil_comments/toxicity_share": {
+   "n": 5,
+   "acc": 1.0,
+   "nll": 0.566338904759677,
+   "brier": 0.21453368595022998,
+   "ece": 0.3937831282615662,
+   "mean_conf": 0.6062168717384339
+  },
+  "source:tasksource/dynasent/r1_votes": {
+   "n": 55,
+   "acc": 0.7818181818181819,
+   "nll": 0.7652976066009564,
+   "brier": 0.26157005092174723,
+   "ece": 0.06883773045106366,
+   "mean_conf": 0.7289403601126238
+  },
+  "source:tasksource/dynasent/r2_votes": {
+   "n": 46,
+   "acc": 0.6086956521739131,
+   "nll": 0.9755161872660013,
+   "brier": 0.37644984680088317,
+   "ece": 0.151552624028662,
+   "mean_conf": 0.7231858981692273
+  },
+  "source:tasksource/google_wellformed_query": {
+   "n": 14,
+   "acc": 0.7142857142857143,
+   "nll": 0.6011238909193447,
+   "brier": 0.14849773491329638,
+   "ece": 0.19568377307483126,
+   "mean_conf": 0.681828281709126
+  },
+  "source:tasksource/proto_qa/proto_qa": {
+   "n": 34,
+   "acc": 0.38235294117647056,
+   "nll": 1.847711691224375,
+   "brier": 0.2269117793690542,
+   "ece": 0.19300407083595497,
+   "mean_conf": 0.504770362201859
+  },
+  "source:tasksource/sts-companion": {
+   "n": 46,
+   "acc": 0.3695652173913043,
+   "nll": 1.2703460973242056,
+   "brier": 0.3359242376374566,
+   "ece": 0.18038076745427173,
+   "mean_conf": 0.40913549000802246,
+   "score_mae": 0.7051743522488876,
+   "score_spearman": 0.7836571076164046
+  },
+  "source:tasksource/procedural-typed-decisions/arithmetic": {
+   "n": 42,
+   "acc": 0.6190476190476191,
+   "nll": 1.050306860097691,
+   "brier": 0.4643463042290948,
+   "ece": 0.2327201103880292,
+   "mean_conf": 0.620784736814953,
+   "score_mae": 1.2116893295315094,
+   "score_spearman": 0.7186813186813187
+  },
+  "source:tasksource/procedural-typed-decisions/entity_belief_tracking": {
+   "n": 58,
+   "acc": 0.7931034482758621,
+   "nll": 0.5430155794240599,
+   "brier": 0.26068753566659375,
+   "ece": 0.15238483378599432,
+   "mean_conf": 0.7231496837118576
+  },
+  "source:tasksource/procedural-typed-decisions/event_state_reconstruction": {
+   "n": 63,
+   "acc": 0.8253968253968254,
+   "nll": 0.3873280837895378,
+   "brier": 0.21070193891180936,
+   "ece": 0.15878842321653214,
+   "mean_conf": 0.7436638677877093,
+   "score_mae": 0.2618732702297469,
+   "score_spearman": 0.8766233766233766
+  },
+  "source:tasksource/procedural-typed-decisions/evidence_sufficiency": {
+   "n": 57,
+   "acc": 0.8596491228070176,
+   "nll": 0.4611209542735627,
+   "brier": 0.23703714622824346,
+   "ece": 0.15487239444464965,
+   "mean_conf": 0.7631638928463584
+  },
+  "source:tasksource/procedural-typed-decisions/multi_view_adjudication": {
+   "n": 69,
+   "acc": 0.8985507246376812,
+   "nll": 0.3780394894057426,
+   "brier": 0.18106349908040156,
+   "ece": 0.21557366416074225,
+   "mean_conf": 0.7345526486203291,
+   "score_mae": 0.36672044836956524,
+   "score_spearman": 0.8003952569169961
+  },
+  "source:tasksource/procedural-typed-decisions/needle_retrieval": {
+   "n": 72,
+   "acc": 0.9166666666666666,
+   "nll": 0.3298432851346054,
+   "brier": 0.14445298454157557,
+   "ece": 0.06342364847660069,
+   "mean_conf": 0.876337867644098
+  },
+  "source:tasksource/procedural-typed-decisions/partial_observation_calibration": {
+   "n": 65,
+   "acc": 0.5692307692307692,
+   "nll": 0.6892152962705204,
+   "brier": 0.23219716407124955,
+   "ece": 0.1093858535473164,
+   "mean_conf": 0.6402070834086492
+  },
+  "source:tasksource/procedural-typed-decisions/policy_applicability": {
+   "n": 63,
+   "acc": 0.6825396825396826,
+   "nll": 0.8592047487932538,
+   "brier": 0.4784328769897512,
+   "ece": 0.16976652802929046,
+   "mean_conf": 0.7234973417861121,
+   "score_mae": 0.8052207214669103,
+   "score_spearman": 0.21428571428571425
+  },
+  "source:tasksource/procedural-typed-decisions/policy_under_uncertainty": {
+   "n": 66,
+   "acc": 0.6060606060606061,
+   "nll": 0.9152605589163934,
+   "brier": 0.38617084759938547,
+   "ece": 0.14121233468705954,
+   "mean_conf": 0.662168768770767
+  },
+  "source:tasksource/procedural-typed-decisions/record_aggregation": {
+   "n": 84,
+   "acc": 0.8809523809523809,
+   "nll": 0.3908317987086429,
+   "brier": 0.18827961121140918,
+   "ece": 0.08169262749808173,
+   "mean_conf": 0.8516669486250196,
+   "score_mae": 0.23420030736209205,
+   "score_spearman": 0.9743589743589743
+  },
+  "source:tasksource/procedural-typed-decisions/state_perturbation": {
+   "n": 63,
+   "acc": 0.8253968253968254,
+   "nll": 0.45436126094252344,
+   "brier": 0.2383107525020892,
+   "ece": 0.1676598546050844,
+   "mean_conf": 0.7293166286415524,
+   "score_mae": 0.6428594064144861,
+   "score_spearman": 0.6298701298701298
+  },
+  "source:tasksource/procedural-typed-decisions/table_lookup": {
+   "n": 32,
+   "acc": 1.0,
+   "nll": 0.07332179603690747,
+   "brier": 0.013122982227840821,
+   "ece": 0.06776436977088449,
+   "mean_conf": 0.9322356302291155,
+   "score_mae": 0.1223903487152711,
+   "score_spearman": 0.9761904761904763
+  },
+  "source:tasksource/procedural-typed-decisions/taxonomy_routing": {
+   "n": 42,
+   "acc": 0.8095238095238095,
+   "nll": 0.5824160714345497,
+   "brier": 0.2816876187345895,
+   "ece": 0.15942020643325075,
+   "mean_conf": 0.7475028797274544,
+   "score_mae": 0.24442323766249632,
+   "score_spearman": 0.6835164835164835
+  },
+  "source:tasksource/CONDAQA": {
+   "n": 15,
+   "acc": 0.7333333333333333,
+   "nll": 0.6385278170307477,
+   "brier": 0.3782016641645921,
+   "ece": 0.21115568280220032,
+   "mean_conf": 0.6633930067221324
+  },
+  "source:tasksource/CREAK": {
+   "n": 10,
+   "acc": 0.8,
+   "nll": 0.5831388682126999,
+   "brier": 0.3880251249185368,
+   "ece": 0.2903926968574524,
+   "mean_conf": 0.7551625847816468
+  },
+  "source:tasksource/FLUTE": {
+   "n": 13,
+   "acc": 0.5384615384615384,
+   "nll": 0.7097265453149493,
+   "brier": 0.5009236814074397,
+   "ece": 0.32514658341040975,
+   "mean_conf": 0.8303634111697857
+  },
+  "source:tasksource/FOL-nli": {
+   "n": 40,
+   "acc": 0.725,
+   "nll": 0.666182413790375,
+   "brier": 0.39298613214869194,
+   "ece": 0.10479520335793496,
+   "mean_conf": 0.6923720546066761,
+   "score_mae": 0.018111377954483032,
+   "score_spearman": NaN
+  },
+  "source:tasksource/HatemojiBuild": {
+   "n": 11,
+   "acc": 0.5454545454545454,
+   "nll": 0.6079953912306916,
+   "brier": 0.4396659522319509,
+   "ece": 0.2036610679192977,
+   "mean_conf": 0.6703565933487632
+  },
+  "source:tasksource/HelpSteer/coherence": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 1.351377546787262,
+   "brier": 0.8007994699966324,
+   "ece": 0.467484787106514,
+   "mean_conf": 0.467484787106514,
+   "score_mae": 0.15469418466091156,
+   "score_spearman": NaN
+  },
+  "source:tasksource/HelpSteer/complexity": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.913975715637207,
+   "brier": 1.022539602857173,
+   "ece": 0.48147299885749817,
+   "mean_conf": 0.48147299885749817
+  },
+  "source:tasksource/HelpSteer/correctness": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.3045480251312256,
+   "brier": 0.8422195735965691,
+   "ece": 0.5448338985443115,
+   "mean_conf": 0.5448338985443115,
+   "score_mae": 0.2545505054295063,
+   "score_spearman": NaN
+  },
+  "source:tasksource/HelpSteer/helpfulness": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.1279908418655396,
+   "brier": 0.6816702811585689,
+   "ece": 0.44814133644104004,
+   "mean_conf": 0.44814133644104004
+  },
+  "source:tasksource/HelpSteer/verbosity": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.6287691593170166,
+   "brier": 0.9115464622659657,
+   "ece": 0.47641485929489136,
+   "mean_conf": 0.47641485929489136
+  },
+  "source:tasksource/HelpSteer2/coherence": {
+   "n": 3,
+   "acc": 1.0,
+   "nll": 0.4820166826248169,
+   "brier": 0.22685594164842407,
+   "ece": 0.37653378645579016,
+   "mean_conf": 0.6234662135442098,
+   "score_mae": 0.5759115777909756,
+   "score_spearman": -1.0
+  },
+  "source:tasksource/HelpSteer2/complexity": {
+   "n": 6,
+   "acc": 0.6666666666666666,
+   "nll": 0.9052768846352895,
+   "brier": 0.5320744560015872,
+   "ece": 0.5227529058853785,
+   "mean_conf": 0.5179240653912226,
+   "score_mae": 0.4097288250923157,
+   "score_spearman": 0.5
+  },
+  "source:tasksource/HelpSteer2/correctness": {
+   "n": 6,
+   "acc": 0.5,
+   "nll": 0.9366818716128668,
+   "brier": 0.5373846156849803,
+   "ece": 0.42292811969916017,
+   "mean_conf": 0.5055564890305201,
+   "score_mae": 0.8778141848742962,
+   "score_spearman": NaN
+  },
+  "source:tasksource/HelpSteer2/helpfulness": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.5294068455696106,
+   "brier": 0.24095036568046416,
+   "ece": 0.41104578971862793,
+   "mean_conf": 0.5889542102813721,
+   "score_mae": 0.6559137925505638,
+   "score_spearman": NaN
+  },
+  "source:tasksource/HelpSteer2/verbosity": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 2.292100191116333,
+   "brier": 1.1979416405833225,
+   "ece": 0.5786420106887817,
+   "mean_conf": 0.5786420106887817
+  },
+  "source:tasksource/HelpSteer3/feedback": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 2.7552034854888916,
+   "brier": 1.175266338935022,
+   "ece": 0.4433273673057556,
+   "mean_conf": 0.4433273673057556,
+   "score_mae": 2.249550048261881,
+   "score_spearman": NaN
+  },
+  "source:tasksource/HelpSteer3/preference_strength": {
+   "n": 4,
+   "acc": 0.25,
+   "nll": 1.6610001474618912,
+   "brier": 0.8180702057618191,
+   "ece": 0.30116503313183784,
+   "mean_conf": 0.3577625937759876,
+   "score_mae": 0.8848924711346626,
+   "score_spearman": NaN
+  },
+  "source:tasksource/HelpSteer3/principle": {
+   "n": 7,
+   "acc": 0.7142857142857143,
+   "nll": 0.5151158390300614,
+   "brier": 0.3476956832902752,
+   "ece": 0.270253700869424,
+   "mean_conf": 0.8144048026629856
+  },
+  "source:tasksource/I2D2": {
+   "n": 8,
+   "acc": 0.625,
+   "nll": 0.8763405655045062,
+   "brier": 0.5789898352967389,
+   "ece": 0.2902015149593353,
+   "mean_conf": 0.8688007742166519
+  },
+  "source:tasksource/MSciNLI": {
+   "n": 9,
+   "acc": 0.6666666666666666,
+   "nll": 1.0096272362603083,
+   "brier": 0.5526273030425359,
+   "ece": 0.2829018665684594,
+   "mean_conf": 0.47722506191995406
+  },
+  "source:tasksource/PARARULE-Plus": {
+   "n": 13,
+   "acc": 1.0,
+   "nll": 0.09988754299970773,
+   "brier": 0.041665801420707894,
+   "ece": 0.08578812159024748,
+   "mean_conf": 0.9142118784097525
+  },
+  "source:tasksource/Prompt-injection-dataset/full": {
+   "n": 12,
+   "acc": 0.75,
+   "nll": 0.49571344784150523,
+   "brier": 0.3423453490353617,
+   "ece": 0.24820033212502798,
+   "mean_conf": 0.7592974851528803
+  },
+  "source:tasksource/PromptShield": {
+   "n": 15,
+   "acc": 0.9333333333333333,
+   "nll": 0.2752140134572983,
+   "brier": 0.14296143751700463,
+   "ece": 0.0915033181508382,
+   "mean_conf": 0.8418300151824951
+  },
+  "source:tasksource/SDOH-NLI": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.2962522506713867,
+   "brier": 0.13148206167614163,
+   "ece": 0.2564001679420471,
+   "mean_conf": 0.7435998320579529
+  },
+  "source:tasksource/SpaceNLI": {
+   "n": 13,
+   "acc": 0.9230769230769231,
+   "nll": 0.2572068622192511,
+   "brier": 0.14147396767810447,
+   "ece": 0.168617844581604,
+   "mean_conf": 0.8791034313348624
+  },
+  "source:tasksource/Touche23-ValueEval": {
+   "n": 8,
+   "acc": 0.875,
+   "nll": 0.3801383441314101,
+   "brier": 0.2237069869379455,
+   "ece": 0.181429922580719,
+   "mean_conf": 0.8934385478496552
+  },
+  "source:tasksource/TuringBench": {
+   "n": 25,
+   "acc": 0.24,
+   "nll": 3.16611777305603,
+   "brier": 1.024007130620073,
+   "ece": 0.2927196162939072,
+   "mean_conf": 0.5089492267370224,
+   "score_mae": 0.3743870407342911,
+   "score_spearman": NaN
+  },
+  "source:tasksource/WANLI": {
+   "n": 44,
+   "acc": 0.5909090909090909,
+   "nll": 1.0432815003970808,
+   "brier": 0.6264257603174086,
+   "ece": 0.2839107466014949,
+   "mean_conf": 0.7644941542636264,
+   "score_mae": 0.2727486938238144,
+   "score_spearman": NaN
+  },
+  "source:tasksource/agent_action_safety": {
+   "n": 7,
+   "acc": 1.0,
+   "nll": 0.16817538759538106,
+   "brier": 0.05385600706303637,
+   "ece": 0.15264382532664705,
+   "mean_conf": 0.8473561746733529
+  },
+  "source:tasksource/amazon_counterfactual/en": {
+   "n": 16,
+   "acc": 0.8125,
+   "nll": 0.4553086655214429,
+   "brier": 0.28227646492912395,
+   "ece": 0.26208459213376045,
+   "mean_conf": 0.7257810197770596
+  },
+  "source:tasksource/amazon_polarity/amazon_polarity": {
+   "n": 11,
+   "acc": 1.0,
+   "nll": 0.07965093444694173,
+   "brier": 0.02375058387653632,
+   "ece": 0.07265623591162942,
+   "mean_conf": 0.9273437640883706
+  },
+  "source:tasksource/args_me": {
+   "n": 14,
+   "acc": 0.7142857142857143,
+   "nll": 0.5505615965064082,
+   "brier": 0.3743205701195936,
+   "ece": 0.08407540406499592,
+   "mean_conf": 0.6675894473280225
+  },
+  "source:tasksource/autotnli": {
+   "n": 7,
+   "acc": 0.8571428571428571,
+   "nll": 0.33296217183981625,
+   "brier": 0.21041079108805288,
+   "ece": 0.24711310011999946,
+   "mean_conf": 0.7890540105955941
+  },
+  "source:tasksource/babi_nli/basic-coreference": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.09040171653032303,
+   "brier": 0.016815837518491007,
+   "ece": 0.08586999773979187,
+   "mean_conf": 0.9141300022602081
+  },
+  "source:tasksource/babi_nli/basic-induction": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.5073843002319336,
+   "brier": 1.2121600386040365,
+   "ece": 0.7785114049911499,
+   "mean_conf": 0.7785114049911499
+  },
+  "source:tasksource/babi_nli/conjunction": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.5883725881576538,
+   "brier": 0.39564045550832816,
+   "ece": 0.44476985931396484,
+   "mean_conf": 0.5552301406860352
+  },
+  "source:tasksource/babi_nli/counting": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.44089680910110474,
+   "brier": 0.25440693777852497,
+   "ece": 0.35639795660972595,
+   "mean_conf": 0.643602043390274
+  },
+  "source:tasksource/babi_nli/indefinite-knowledge": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.34481921419501305,
+   "brier": 0.20269397672964828,
+   "ece": 0.27294886112213135,
+   "mean_conf": 0.7270511388778687
+  },
+  "source:tasksource/babi_nli/lists-sets": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.45113372802734375,
+   "brier": 0.2636750279994011,
+   "ece": 0.3630943298339844,
+   "mean_conf": 0.6369056701660156
+  },
+  "source:tasksource/babi_nli/path-finding": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.1803383827209473,
+   "brier": 0.9600135517439634,
+   "ece": 0.692825198173523,
+   "mean_conf": 0.692825198173523
+  },
+  "source:tasksource/babi_nli/positional-reasoning": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 0.9181283414363861,
+   "brier": 0.7212295971883362,
+   "ece": 0.6000696122646332,
+   "mean_conf": 0.6000696122646332
+  },
+  "source:tasksource/babi_nli/simple-negation": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.20218977611511946,
+   "brier": 0.10463650022906418,
+   "ece": 0.16855692863464355,
+   "mean_conf": 0.8314430713653564
+  },
+  "source:tasksource/babi_nli/single-supporting-fact": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.3692546784877777,
+   "brier": 0.19065390234072765,
+   "ece": 0.30875062942504883,
+   "mean_conf": 0.6912493705749512
+  },
+  "source:tasksource/babi_nli/size-reasoning": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.3238331079483032,
+   "brier": 0.1530472742337743,
+   "ece": 0.2766290307044983,
+   "mean_conf": 0.7233709692955017
+  },
+  "source:tasksource/babi_nli/three-arg-relations": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.09097371995449066,
+   "brier": 0.015123491989884885,
+   "ece": 0.08695828914642334,
+   "mean_conf": 0.9130417108535767
+  },
+  "source:tasksource/babi_nli/two-arg-relations": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.1442337930202484,
+   "brier": 0.03608086177698855,
+   "ece": 0.1343146562576294,
+   "mean_conf": 0.8656853437423706
+  },
+  "source:tasksource/babi_nli/two-supporting-facts": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.3720329999923706,
+   "brier": 1.1142531433910747,
+   "ece": 0.7464091181755066,
+   "mean_conf": 0.7464091181755066
+  },
+  "source:tasksource/banking77": {
+   "n": 16,
+   "acc": 0.75,
+   "nll": 0.7438206443403033,
+   "brier": 0.3211650971512331,
+   "ece": 0.12834562920033932,
+   "mean_conf": 0.7343739774078131
+  },
+  "source:tasksource/blog_authorship_corpus/age": {
+   "n": 3,
+   "acc": 0.6666666666666666,
+   "nll": 0.5095461457967758,
+   "brier": 0.3125067301350411,
+   "ece": 0.32139813899993896,
+   "mean_conf": 0.6620769103368124
+  },
+  "source:tasksource/breaking_nli": {
+   "n": 15,
+   "acc": 0.8,
+   "nll": 0.4427864052355289,
+   "brier": 0.24940419763930138,
+   "ece": 0.15702651341756182,
+   "mean_conf": 0.8298729419708252
+  },
+  "source:tasksource/circa": {
+   "n": 15,
+   "acc": 0.9333333333333333,
+   "nll": 0.44066190520922344,
+   "brier": 0.17245099607413447,
+   "ece": 0.25395251512527467,
+   "mean_conf": 0.6793808182080586
+  },
+  "source:tasksource/cladder": {
+   "n": 14,
+   "acc": 0.7142857142857143,
+   "nll": 0.6223020548267024,
+   "brier": 0.4333451085193457,
+   "ece": 0.3756779900618962,
+   "mean_conf": 0.687500753573009
+  },
+  "source:tasksource/clcd-english": {
+   "n": 8,
+   "acc": 1.0,
+   "nll": 0.07578305853530765,
+   "brier": 0.01224468460343535,
+   "ece": 0.0725183039903641,
+   "mean_conf": 0.9274816960096359
+  },
+  "source:tasksource/clinc_oos/plus": {
+   "n": 24,
+   "acc": 0.9166666666666666,
+   "nll": 0.22215126324590528,
+   "brier": 0.1267985678192451,
+   "ece": 0.08114735782146458,
+   "mean_conf": 0.9454966088136038
+  },
+  "source:tasksource/commonsense_qa_2.0": {
+   "n": 9,
+   "acc": 0.7777777777777778,
+   "nll": 0.602789007127285,
+   "brier": 0.4214621030169904,
+   "ece": 0.4110905395613776,
+   "mean_conf": 0.6698885824945238
+  },
+  "source:tasksource/corr2cause": {
+   "n": 26,
+   "acc": 0.5769230769230769,
+   "nll": 0.83970913119041,
+   "brier": 0.5199143135715322,
+   "ece": 0.19246687568151033,
+   "mean_conf": 0.5213655898204217,
+   "score_mae": 0.7107692062854767,
+   "score_spearman": NaN
+  },
+  "source:tasksource/cycic_classification": {
+   "n": 9,
+   "acc": 1.0,
+   "nll": 0.13085507767068016,
+   "brier": 0.0386736247345718,
+   "ece": 0.119719127813975,
+   "mean_conf": 0.880280872186025
+  },
+  "source:tasksource/dbpedia_14/dbpedia_14": {
+   "n": 8,
+   "acc": 1.0,
+   "nll": 0.0029113502023392357,
+   "brier": 1.9886265743040135e-05,
+   "ece": 0.0029047802090644836,
+   "mean_conf": 0.9970952197909355
+  },
+  "source:tasksource/defeasible-nli/atomic": {
+   "n": 7,
+   "acc": 0.5714285714285714,
+   "nll": 0.5749932687197413,
+   "brier": 0.400323477364787,
+   "ece": 0.1744562472615923,
+   "mean_conf": 0.6504748974527631
+  },
+  "source:tasksource/defeasible-nli/snli": {
+   "n": 4,
+   "acc": 0.75,
+   "nll": 0.3946917038410902,
+   "brier": 0.2672204949311118,
+   "ece": 0.08148816227912903,
+   "mean_conf": 0.7634643018245697
+  },
+  "source:tasksource/defeasible-nli/social": {
+   "n": 4,
+   "acc": 1.0,
+   "nll": 0.41599658504128456,
+   "brier": 0.24164285305543315,
+   "ece": 0.33292244374752045,
+   "mean_conf": 0.6670775562524796
+  },
+  "source:tasksource/discovery/discovery": {
+   "n": 12,
+   "acc": 0.08333333333333333,
+   "nll": 3.4129073123137155,
+   "brier": 1.024159565233938,
+   "ece": 0.29922816033164656,
+   "mean_conf": 0.38256149366497993
+  },
+  "source:tasksource/disrpt/eng.dep.scidtb.rels": {
+   "n": 19,
+   "acc": 0.2631578947368421,
+   "nll": 3.367206035475982,
+   "brier": 0.937081291306149,
+   "ece": 0.20568459990777466,
+   "mean_conf": 0.42694921007281855
+  },
+  "source:tasksource/dnd_style_intents": {
+   "n": 21,
+   "acc": 0.5238095238095238,
+   "nll": 1.8565116233768917,
+   "brier": 0.6493586537985503,
+   "ece": 0.16695779278164813,
+   "mean_conf": 0.4997362806683495,
+   "score_mae": 0.1859855093061924,
+   "score_spearman": NaN
+  },
+  "source:tasksource/doc-nli": {
+   "n": 58,
+   "acc": 0.5689655172413793,
+   "nll": 0.8025130223611305,
+   "brier": 0.5686974110549189,
+   "ece": 0.24381151435704065,
+   "mean_conf": 0.694367119464381,
+   "score_mae": 0.3114183358848095,
+   "score_spearman": NaN
+  },
+  "source:tasksource/docred": {
+   "n": 27,
+   "acc": 0.5185185185185185,
+   "nll": 1.8611318219315123,
+   "brier": 0.7305932016799142,
+   "ece": 0.27864478804447035,
+   "mean_conf": 0.658527159028583
+  },
+  "source:tasksource/equate": {
+   "n": 16,
+   "acc": 0.8125,
+   "nll": 0.4781258166767657,
+   "brier": 0.2628931108973269,
+   "ece": 0.2384641170501709,
+   "mean_conf": 0.6967190802097321
+  },
+  "source:tasksource/esci": {
+   "n": 6,
+   "acc": 0.16666666666666666,
+   "nll": 1.522589494784673,
+   "brier": 0.8230405666231366,
+   "ece": 0.29129016896088916,
+   "mean_conf": 0.45795683562755585
+  },
+  "source:tasksource/ethics/commonsense": {
+   "n": 4,
+   "acc": 0.75,
+   "nll": 0.39279085490852594,
+   "brier": 0.25769713556550033,
+   "ece": 0.2853579670190811,
+   "mean_conf": 0.7744615525007248
+  },
+  "source:tasksource/ethics/deontology": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 0.9574967622756958,
+   "brier": 0.7592754548139204,
+   "ece": 0.616147518157959,
+   "mean_conf": 0.616147518157959
+  },
+  "source:tasksource/ethics/justice": {
+   "n": 4,
+   "acc": 1.0,
+   "nll": 0.2604067623615265,
+   "brier": 0.1315962039967247,
+   "ece": 0.21701902151107788,
+   "mean_conf": 0.7829809784889221
+  },
+  "source:tasksource/ethics/virtue": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.2432091385126114,
+   "brier": 0.09742126582822153,
+   "ece": 0.21404963731765747,
+   "mean_conf": 0.7859503626823425
+  },
+  "source:tasksource/feasibilityQA": {
+   "n": 16,
+   "acc": 0.875,
+   "nll": 0.35292788431979716,
+   "brier": 0.22301362804293856,
+   "ece": 0.2501881308853626,
+   "mean_conf": 0.8078519068658352
+  },
+  "source:tasksource/fool-me-twice": {
+   "n": 10,
+   "acc": 0.8,
+   "nll": 0.3585511948913336,
+   "brier": 0.21796429515335863,
+   "ece": 0.2722442626953125,
+   "mean_conf": 0.760963773727417
+  },
+  "source:tasksource/github-issue-similarity": {
+   "n": 13,
+   "acc": 0.8461538461538461,
+   "nll": 0.445018191750233,
+   "brier": 0.24664357490869698,
+   "ece": 0.2939628454355093,
+   "mean_conf": 0.7267592411774856,
+   "score_mae": 2.0925086438655853,
+   "score_spearman": NaN
+  },
+  "source:tasksource/go_emotions/simplified": {
+   "n": 6,
+   "acc": 0.6666666666666666,
+   "nll": 1.1748799892763298,
+   "brier": 0.5135749966380289,
+   "ece": 0.4264244760076204,
+   "mean_conf": 0.4296288664142291
+  },
+  "source:tasksource/hate_speech18": {
+   "n": 15,
+   "acc": 0.8,
+   "nll": 0.43733933120965957,
+   "brier": 0.27854140012693873,
+   "ece": 0.184631601969401,
+   "mean_conf": 0.7602503935496012
+  },
+  "source:tasksource/headline_cause/en_simple": {
+   "n": 11,
+   "acc": 0.9090909090909091,
+   "nll": 0.25759645957838406,
+   "brier": 0.11425070568551893,
+   "ece": 0.198598482392051,
+   "mean_conf": 0.8118514364415949
+  },
+  "source:tasksource/health_fact": {
+   "n": 9,
+   "acc": 0.5555555555555556,
+   "nll": 1.2426845100190904,
+   "brier": 0.644162810668996,
+   "ece": 0.2910935713185204,
+   "mean_conf": 0.5521332985825009
+  },
+  "source:tasksource/hlgd": {
+   "n": 8,
+   "acc": 0.25,
+   "nll": 1.3384928442537785,
+   "brier": 0.9366754304998235,
+   "ece": 0.6412724107503891,
+   "mean_conf": 0.7463895529508591
+  },
+  "source:tasksource/hope_edi/english": {
+   "n": 13,
+   "acc": 0.6923076923076923,
+   "nll": 0.8136865508097869,
+   "brier": 0.4927203367165659,
+   "ece": 0.334249008160371,
+   "mean_conf": 0.6073319476384383
+  },
+  "source:tasksource/hover": {
+   "n": 6,
+   "acc": 0.5,
+   "nll": 0.7762268334627151,
+   "brier": 0.5390367551994681,
+   "ece": 0.38623865445454914,
+   "mean_conf": 0.7752460439999899
+  },
+  "source:tasksource/hyperpartisan_news": {
+   "n": 8,
+   "acc": 1.0,
+   "nll": 0.21444111410528421,
+   "brier": 0.09720557805103605,
+   "ece": 0.18337848037481308,
+   "mean_conf": 0.8166215196251869
+  },
+  "source:tasksource/it-support-tickets": {
+   "n": 16,
+   "acc": 0.4375,
+   "nll": 1.5167661951854825,
+   "brier": 0.7492843294309048,
+   "ece": 0.36255391407758,
+   "mean_conf": 0.5546810319647193
+  },
+  "source:tasksource/jigsaw_toxicity": {
+   "n": 10,
+   "acc": 1.0,
+   "nll": 0.13881503827869893,
+   "brier": 0.0536482092824455,
+   "ece": 0.12119869589805601,
+   "mean_conf": 0.878801304101944
+  },
+  "source:tasksource/lex_glue/ledgar": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 2.9817498922348022,
+   "brier": 0.9461527796964333,
+   "ece": 0.6245081275701523,
+   "mean_conf": 0.5544720441102982
+  },
+  "source:tasksource/lex_glue/unfair_tos": {
+   "n": 4,
+   "acc": 0.25,
+   "nll": 2.010492116212845,
+   "brier": 0.9100785465636302,
+   "ece": 0.3340441696345806,
+   "mean_conf": 0.39033083245158195
+  },
+  "source:tasksource/logical-entailment": {
+   "n": 8,
+   "acc": 0.375,
+   "nll": 0.8331646770238876,
+   "brier": 0.63347043956823,
+   "ece": 0.35669250786304474,
+   "mean_conf": 0.6656349003314972
+  },
+  "source:tasksource/lonli": {
+   "n": 14,
+   "acc": 0.9285714285714286,
+   "nll": 0.46863326749631334,
+   "brier": 0.15021026940941654,
+   "ece": 0.07343294790812904,
+   "mean_conf": 0.9440827284540448
+  },
+  "source:tasksource/mindgames": {
+   "n": 12,
+   "acc": 0.5833333333333334,
+   "nll": 0.7513468277951082,
+   "brier": 0.45457701435254383,
+   "ece": 0.2503527825077375,
+   "mean_conf": 0.6500872299075127,
+   "score_mae": 1.0576293468475342,
+   "score_spearman": NaN
+  },
+  "source:tasksource/monotonicity-entailment": {
+   "n": 11,
+   "acc": 0.6363636363636364,
+   "nll": 0.6937630745497617,
+   "brier": 0.4877696774541602,
+   "ece": 0.2828422080386769,
+   "mean_conf": 0.7261060422117059
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/amh": {
+   "n": 3,
+   "acc": 0.0,
+   "nll": 1.5594503084818523,
+   "brier": 1.0337612026881342,
+   "ece": 0.608732799688975,
+   "mean_conf": 0.608732799688975,
+   "score_mae": 1.5291933715343475,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/arq": {
+   "n": 2,
+   "acc": 1.0,
+   "nll": 0.2905690670013428,
+   "brier": 0.09773360017453683,
+   "ece": 0.25216051936149597,
+   "mean_conf": 0.747839480638504
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/ary": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 1.0843418091535568,
+   "brier": 0.6548284755359404,
+   "ece": 0.15010368824005127,
+   "mean_conf": 0.6501036882400513,
+   "score_mae": 0.9869754910469055,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/hau": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.0358576774597168,
+   "brier": 0.6325623545816699,
+   "ece": 0.38724470138549805,
+   "mean_conf": 0.38724470138549805,
+   "score_mae": 1.032322883605957,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/ibo": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 1.614273726940155,
+   "brier": 1.0488786241788874,
+   "ece": 0.5801592469215393,
+   "mean_conf": 0.5801592469215393
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/kin": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.7489176392555237,
+   "brier": 0.41871276613914366,
+   "ece": 0.527121901512146,
+   "mean_conf": 0.472878098487854
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/pcm": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.5059619545936584,
+   "brier": 0.2651325434637706,
+   "ece": 0.39707469940185547,
+   "mean_conf": 0.6029253005981445,
+   "score_mae": 0.7152575105428696,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/por": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 1.259747326374054,
+   "brier": 0.8058745601353701,
+   "ece": 0.502039909362793,
+   "mean_conf": 0.502039909362793
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/swa": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.534265398979187,
+   "brier": 0.9808436961288978,
+   "ece": 0.5624158382415771,
+   "mean_conf": 0.5624158382415771,
+   "score_mae": 0.34044569730758667,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/tso": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.47537961602211,
+   "brier": 0.222764619761189,
+   "ece": 0.37835097312927246,
+   "mean_conf": 0.6216490268707275,
+   "score_mae": 0.630931630730629,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/AfriSenti-twitter-sentiment/yor": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 1.2594797611236572,
+   "brier": 0.7026048925100393,
+   "ece": 0.47389712929725647,
+   "mean_conf": 0.5959096252918243,
+   "score_mae": 1.0510894805192947,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/MLMA_hate_speech": {
+   "n": 13,
+   "acc": 0.3076923076923077,
+   "nll": 1.510515034198761,
+   "brier": 0.7564605736063666,
+   "ece": 0.3086504615270174,
+   "mean_conf": 0.32431554794311523
+  },
+  "source:tasksource/multilingual/NusaX-senti/ban": {
+   "n": 3,
+   "acc": 0.0,
+   "nll": 1.0426306128501892,
+   "brier": 0.6564290602031425,
+   "ece": 0.442542423804601,
+   "mean_conf": 0.442542423804601
+  },
+  "source:tasksource/multilingual/NusaX-senti/bbc": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.4058603048324585,
+   "brier": 0.8840361816449915,
+   "ece": 0.4985666871070862,
+   "mean_conf": 0.4985666871070862
+  },
+  "source:tasksource/multilingual/NusaX-senti/bug": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.649273157119751,
+   "brier": 0.34563361078457255,
+   "ece": 0.4775746464729309,
+   "mean_conf": 0.5224253535270691
+  },
+  "source:tasksource/multilingual/NusaX-senti/mad": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.5457360744476318,
+   "brier": 0.30179379818339674,
+   "ece": 0.42058485746383667,
+   "mean_conf": 0.5794151425361633
+  },
+  "source:tasksource/multilingual/NusaX-senti/nij": {
+   "n": 3,
+   "acc": 1.0,
+   "nll": 0.3152255912621816,
+   "brier": 0.1261167237891128,
+   "ece": 0.2661789655685425,
+   "mean_conf": 0.7338210344314575,
+   "score_mae": 0.621105894446373,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/NusaX-senti/sun": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.35793742537498474,
+   "brier": 0.13595404793028765,
+   "ece": 0.3008831739425659,
+   "mean_conf": 0.6991168260574341
+  },
+  "source:tasksource/multilingual/americas_nli/all_languages": {
+   "n": 10,
+   "acc": 0.3,
+   "nll": 1.138353443145752,
+   "brier": 0.6932991592142962,
+   "ece": 0.2413849800825119,
+   "mean_conf": 0.49909516274929044
+  },
+  "source:tasksource/multilingual/disrpt/deu.rst.pcc.rels": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 2.974143862724304,
+   "brier": 1.0167851414712463,
+   "ece": 0.27660852670669556,
+   "mean_conf": 0.27660852670669556
+  },
+  "source:tasksource/multilingual/disrpt/eus.rst.ert.rels": {
+   "n": 3,
+   "acc": 0.0,
+   "nll": 4.126410961151123,
+   "brier": 1.2993218791977286,
+   "ece": 0.4445415809750557,
+   "mean_conf": 0.4445415809750557
+  },
+  "source:tasksource/multilingual/disrpt/fas.rst.prstc.rels": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 4.989321351051331,
+   "brier": 1.18613574045263,
+   "ece": 0.3521215245127678,
+   "mean_conf": 0.3521215245127678
+  },
+  "source:tasksource/multilingual/disrpt/fra.sdrt.annodis.rels": {
+   "n": 4,
+   "acc": 0.0,
+   "nll": 2.5812847018241882,
+   "brier": 0.9430548672961134,
+   "ece": 0.18524069339036942,
+   "mean_conf": 0.18524069339036942
+  },
+  "source:tasksource/multilingual/disrpt/nld.rst.nldt.rels": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 2.438804030418396,
+   "brier": 0.914144391903745,
+   "ece": 0.21471615135669708,
+   "mean_conf": 0.21471615135669708
+  },
+  "source:tasksource/multilingual/disrpt/por.rst.cstn.rels": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 1.4183158874511719,
+   "brier": 0.6102203318135256,
+   "ece": 0.7578785717487335,
+   "mean_conf": 0.24212142825126648
+  },
+  "source:tasksource/multilingual/disrpt/spa.rst.rststb.rels": {
+   "n": 2,
+   "acc": 0.0,
+   "nll": 2.4702095985412598,
+   "brier": 0.9607770124196079,
+   "ece": 0.4045465737581253,
+   "mean_conf": 0.4045465737581253
+  },
+  "source:tasksource/multilingual/disrpt/tha.pdtb.tdtb.rels": {
+   "n": 6,
+   "acc": 0.3333333333333333,
+   "nll": 1.644482970237732,
+   "brier": 0.7661739078919174,
+   "ece": 0.33742286016543704,
+   "mean_conf": 0.4359259729584058
+  },
+  "source:tasksource/multilingual/disrpt/zho.rst.gcdt.rels": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 3.425252914428711,
+   "brier": 1.040786979542653,
+   "ece": 0.2431608885526657,
+   "mean_conf": 0.2431608885526657
+  },
+  "source:tasksource/multilingual/klue/nli": {
+   "n": 7,
+   "acc": 0.8571428571428571,
+   "nll": 0.5993303166968482,
+   "brier": 0.30813439562999917,
+   "ece": 0.355550297669002,
+   "mean_conf": 0.680504994732993
+  },
+  "source:tasksource/multilingual/klue/sts": {
+   "n": 4,
+   "acc": 1.0,
+   "nll": 0.361669085919857,
+   "brier": 0.19570047362072757,
+   "ece": 0.2955150157213211,
+   "mean_conf": 0.7044849842786789
+  },
+  "source:tasksource/multilingual/klue/ynat": {
+   "n": 5,
+   "acc": 0.2,
+   "nll": 2.2988616824150085,
+   "brier": 1.0635566095969249,
+   "ece": 0.39761391282081604,
+   "mean_conf": 0.5515193164348602
+  },
+  "source:tasksource/multilingual/masakhanews/ibo": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.03292936831712723,
+   "brier": 0.0015107951666365781,
+   "ece": 0.03239309787750244,
+   "mean_conf": 0.9676069021224976
+  },
+  "source:tasksource/multilingual/masakhanews/orm": {
+   "n": 4,
+   "acc": 0.25,
+   "nll": 0.8573816455900669,
+   "brier": 0.5378249051984094,
+   "ece": 0.3790353909134865,
+   "mean_conf": 0.5637006238102913,
+   "score_mae": 0.2139178216457367,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/masakhanews/pcm": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.033023495227098465,
+   "brier": 0.001364346863601392,
+   "ece": 0.03248417377471924,
+   "mean_conf": 0.9675158262252808
+  },
+  "source:tasksource/multilingual/masakhanews/sna": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.824038565158844,
+   "brier": 0.4636085668699558,
+   "ece": 0.5613434612751007,
+   "mean_conf": 0.4386565387248993
+  },
+  "source:tasksource/multilingual/masakhanews/swa": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 1.275023341178894,
+   "brier": 0.6787325386894068,
+   "ece": 0.354017436504364,
+   "mean_conf": 0.354017436504364
+  },
+  "source:tasksource/multilingual/masakhanews/xho": {
+   "n": 4,
+   "acc": 0.5,
+   "nll": 1.1071658916771412,
+   "brier": 0.6064850767698118,
+   "ece": 0.4058597907423973,
+   "mean_conf": 0.6319473907351494,
+   "score_mae": 1.6369784772396088,
+   "score_spearman": NaN
+  },
+  "source:tasksource/multilingual/massive": {
+   "n": 27,
+   "acc": 0.9629629629629629,
+   "nll": 0.25945806234247154,
+   "brier": 0.11069956369548027,
+   "ece": 0.11704551952856554,
+   "mean_conf": 0.880931454676169
+  },
+  "source:tasksource/multilingual/miam": {
+   "n": 17,
+   "acc": 0.5882352941176471,
+   "nll": 1.434982285287012,
+   "brier": 0.5951921993391424,
+   "ece": 0.21469910442829135,
+   "mean_conf": 0.4742168424760594
+  },
+  "source:tasksource/multilingual/mtop": {
+   "n": 20,
+   "acc": 0.7,
+   "nll": 1.0131049290765077,
+   "brier": 0.436098884423478,
+   "ece": 0.1938092291355133,
+   "mean_conf": 0.6144831568002701
+  },
+  "source:tasksource/multilingual/multilingual-sentiments/all": {
+   "n": 10,
+   "acc": 0.7,
+   "nll": 0.66220035366714,
+   "brier": 0.38097960307357404,
+   "ece": 0.24608323574066163,
+   "mean_conf": 0.7499274373054504,
+   "score_mae": 0.24997233040630817,
+   "score_spearman": 0.6
+  },
+  "source:tasksource/multilingual/offenseval_dravidian/kannada": {
+   "n": 5,
+   "acc": 0.4,
+   "nll": 1.6472916305065155,
+   "brier": 0.9044760156862273,
+   "ece": 0.4705223262310028,
+   "mean_conf": 0.59205921292305
+  },
+  "source:tasksource/multilingual/offenseval_dravidian/malayalam": {
+   "n": 5,
+   "acc": 0.6,
+   "nll": 1.2959347009658813,
+   "brier": 0.6186053821240772,
+   "ece": 0.3281011670827865,
+   "mean_conf": 0.35814239680767057
+  },
+  "source:tasksource/multilingual/offenseval_dravidian/tamil": {
+   "n": 5,
+   "acc": 0.4,
+   "nll": 1.2770587801933289,
+   "brier": 0.6507361773220834,
+   "ece": 0.3897774994373322,
+   "mean_conf": 0.45998901724815366
+  },
+  "source:tasksource/multilingual/tweet_sentiment_multilingual": {
+   "n": 10,
+   "acc": 0.7,
+   "nll": 0.8364762634038925,
+   "brier": 0.46383655323508977,
+   "ece": 0.25291189551353455,
+   "mean_conf": 0.6499982893466949,
+   "score_mae": 0.43730260580778124,
+   "score_spearman": 0.8999999999999998
+  },
+  "source:tasksource/multilingual/x-stance": {
+   "n": 11,
+   "acc": 0.7272727272727273,
+   "nll": 0.5661571974104102,
+   "brier": 0.39298227008623404,
+   "ece": 0.30963271856307983,
+   "mean_conf": 0.7030800093304027
+  },
+  "source:tasksource/nan-nli": {
+   "n": 7,
+   "acc": 0.8571428571428571,
+   "nll": 0.26157641943011967,
+   "brier": 0.15152880721248427,
+   "ece": 0.16819280385971067,
+   "mean_conf": 0.8793137158666339
+  },
+  "source:tasksource/naturallogic": {
+   "n": 15,
+   "acc": 0.8666666666666667,
+   "nll": 0.5322837382555008,
+   "brier": 0.3253931018244759,
+   "ece": 0.2700069427490234,
+   "mean_conf": 0.6620110829671224
+  },
+  "source:tasksource/numer_sense": {
+   "n": 21,
+   "acc": 0.23809523809523808,
+   "nll": 1.677738484882173,
+   "brier": 0.7511230704597971,
+   "ece": 0.14902075841313317,
+   "mean_conf": 0.31935082588876995
+  },
+  "source:tasksource/patent-phrase-similarity": {
+   "n": 22,
+   "acc": 0.09090909090909091,
+   "nll": 2.412229272452268,
+   "brier": 0.9367650836692767,
+   "ece": 0.18953084607015958,
+   "mean_conf": 0.28043993697925046
+  },
+  "source:tasksource/poem_sentiment": {
+   "n": 5,
+   "acc": 0.6,
+   "nll": 1.258636510372162,
+   "brier": 0.7301481939197669,
+   "ece": 0.5834230124950409,
+   "mean_conf": 0.5317013323307037
+  },
+  "source:tasksource/probability_words_nli/reasoning_1hop": {
+   "n": 10,
+   "acc": 0.7,
+   "nll": 0.5778741028159857,
+   "brier": 0.32704229507283356,
+   "ece": 0.17186205089092255,
+   "mean_conf": 0.7120687335729599,
+   "score_mae": 1.1444944366812706,
+   "score_spearman": NaN
+  },
+  "source:tasksource/probability_words_nli/reasoning_2hop": {
+   "n": 5,
+   "acc": 0.2,
+   "nll": 0.6825548328459263,
+   "brier": 0.5186012767655246,
+   "ece": 0.4612205862998962,
+   "mean_conf": 0.645690381526947
+  },
+  "source:tasksource/prompt-injection-dataset": {
+   "n": 11,
+   "acc": 0.6363636363636364,
+   "nll": 0.6563450958241116,
+   "brier": 0.4775197162611148,
+   "ece": 0.3616437370126897,
+   "mean_conf": 0.7042561552741311
+  },
+  "source:tasksource/prompt-injections": {
+   "n": 6,
+   "acc": 1.0,
+   "nll": 0.2119530290365219,
+   "brier": 0.08469536517193639,
+   "ece": 0.18605243166287738,
+   "mean_conf": 0.8139475683371226
+  },
+  "source:tasksource/propsegment/nli": {
+   "n": 12,
+   "acc": 0.8333333333333334,
+   "nll": 0.5551534915963808,
+   "brier": 0.32983276878822826,
+   "ece": 0.22511509557565051,
+   "mean_conf": 0.6490888645251592
+  },
+  "source:tasksource/recast/recast_factuality": {
+   "n": 3,
+   "acc": 0.6666666666666666,
+   "nll": 0.7289929290612539,
+   "brier": 0.5060013255284738,
+   "ece": 0.15489214658737183,
+   "mean_conf": 0.8215588132540385
+  },
+  "source:tasksource/recast/recast_megaveridicality": {
+   "n": 1,
+   "acc": 0.0,
+   "nll": 0.7540490627288818,
+   "brier": 0.5608298995094856,
+   "ece": 0.5295422077178955,
+   "mean_conf": 0.5295422077178955
+  },
+  "source:tasksource/recast/recast_ner": {
+   "n": 3,
+   "acc": 1.0,
+   "nll": 0.1778009111682574,
+   "brier": 0.07226401652676806,
+   "ece": 0.15527063608169556,
+   "mean_conf": 0.8447293639183044
+  },
+  "source:tasksource/recast/recast_sentiment": {
+   "n": 4,
+   "acc": 1.0,
+   "nll": 0.28722235932946205,
+   "brier": 0.14281909560535377,
+   "ece": 0.2412756085395813,
+   "mean_conf": 0.7587243914604187
+  },
+  "source:tasksource/recast/recast_verbcorner": {
+   "n": 4,
+   "acc": 0.5,
+   "nll": 0.7835126370191574,
+   "brier": 0.5504488200163962,
+   "ece": 0.4598699063062668,
+   "mean_conf": 0.727557048201561
+  },
+  "source:tasksource/recast/recast_verbnet": {
+   "n": 1,
+   "acc": 1.0,
+   "nll": 0.08475662022829056,
+   "brier": 0.013207714267195636,
+   "ece": 0.08126413822174072,
+   "mean_conf": 0.9187358617782593
+  },
+  "source:tasksource/resnli": {
+   "n": 13,
+   "acc": 0.5384615384615384,
+   "nll": 0.7732935238343018,
+   "brier": 0.5306369948073907,
+   "ece": 0.3162876046620883,
+   "mean_conf": 0.7742628821959863
+  },
+  "source:tasksource/ruletaker": {
+   "n": 13,
+   "acc": 0.9230769230769231,
+   "nll": 0.2278837449848652,
+   "brier": 0.1221055126237671,
+   "ece": 0.1194538611632127,
+   "mean_conf": 0.8435950462634747
+  },
+  "source:tasksource/scinli": {
+   "n": 15,
+   "acc": 0.2,
+   "nll": 1.5157373110453287,
+   "brier": 0.8206888528805034,
+   "ece": 0.3649700005849203,
+   "mean_conf": 0.42916106383005775
+  },
+  "source:tasksource/scone": {
+   "n": 4,
+   "acc": 1.0,
+   "nll": 0.11882913345471025,
+   "brier": 0.047854577271533444,
+   "ece": 0.10397128760814667,
+   "mean_conf": 0.8960287123918533
+  },
+  "source:tasksource/sem_eval_2010_task_8": {
+   "n": 16,
+   "acc": 0.25,
+   "nll": 2.0843232767656446,
+   "brier": 0.8089958442996359,
+   "ece": 0.27490026224404573,
+   "mean_conf": 0.3726251134648919
+  },
+  "source:tasksource/shell-safety-v2": {
+   "n": 14,
+   "acc": 0.5,
+   "nll": 0.9779744574001857,
+   "brier": 0.6091191457311452,
+   "ece": 0.2546408282858985,
+   "mean_conf": 0.5013214328459331
+  },
+  "source:tasksource/sherliic": {
+   "n": 15,
+   "acc": 0.7333333333333333,
+   "nll": 0.8180850386619568,
+   "brier": 0.545597979448104,
+   "ece": 0.277712098757426,
+   "mean_conf": 0.7513009786605835
+  },
+  "source:tasksource/silicone/maptask": {
+   "n": 3,
+   "acc": 0.6666666666666666,
+   "nll": 1.512210588902235,
+   "brier": 0.5542688253625355,
+   "ece": 0.32718277970949805,
+   "mean_conf": 0.4609823524951935
+  },
+  "source:tasksource/sms_spam": {
+   "n": 16,
+   "acc": 0.9375,
+   "nll": 0.43624607659876347,
+   "brier": 0.2585780962511123,
+   "ece": 0.2733115963637829,
+   "mean_conf": 0.6641884036362171
+  },
+  "source:tasksource/snips_built_in_intents": {
+   "n": 10,
+   "acc": 0.8,
+   "nll": 0.802391628921032,
+   "brier": 0.3620033525342593,
+   "ece": 0.22416890859603886,
+   "mean_conf": 0.9358087420463562
+  },
+  "source:tasksource/snli": {
+   "n": 18,
+   "acc": 0.8888888888888888,
+   "nll": 0.5028992351144552,
+   "brier": 0.20351626548709945,
+   "ece": 0.16959896518124476,
+   "mean_conf": 0.8497922105921639
+  },
+  "source:tasksource/spartqa-yn": {
+   "n": 23,
+   "acc": 0.4782608695652174,
+   "nll": 1.0956222528348798,
+   "brier": 0.626302247469719,
+   "ece": 0.31433236728543823,
+   "mean_conf": 0.6381027193173118,
+   "score_mae": 1.1183674037456512,
+   "score_spearman": NaN
+  },
+  "source:tasksource/stackoverflow-questions": {
+   "n": 10,
+   "acc": 0.2,
+   "nll": 1.3273121237754821,
+   "brier": 0.7213203607541188,
+   "ece": 0.22567238211631774,
+   "mean_conf": 0.2962369382381439,
+   "score_mae": 0.9608476658662161,
+   "score_spearman": 0.2571428571428572
+  },
+  "source:tasksource/starcon": {
+   "n": 12,
+   "acc": 0.3333333333333333,
+   "nll": 0.7216820046305656,
+   "brier": 0.5346025089906801,
+   "ece": 0.3760962982972463,
+   "mean_conf": 0.6460578739643097
+  },
+  "source:tasksource/stepgame": {
+   "n": 8,
+   "acc": 0.125,
+   "nll": 2.02669670432806,
+   "brier": 0.8302269770723583,
+   "ece": 0.27563914097845554,
+   "mean_conf": 0.31897290982306004
+  },
+  "source:tasksource/subjectivity": {
+   "n": 9,
+   "acc": 0.5555555555555556,
+   "nll": 0.6334077989061674,
+   "brier": 0.4297287446634789,
+   "ece": 0.24653486741913685,
+   "mean_conf": 0.7060589293638865,
+   "score_mae": 1.5036795288324356,
+   "score_spearman": NaN
+  },
+  "source:tasksource/syntactic-augmentation-nli": {
+   "n": 11,
+   "acc": 0.6363636363636364,
+   "nll": 0.8867103670808402,
+   "brier": 0.5372354439455262,
+   "ece": 0.2814274050972678,
+   "mean_conf": 0.8006602417338978
+  },
+  "source:tasksource/temporal-nli": {
+   "n": 18,
+   "acc": 0.9444444444444444,
+   "nll": 0.3588681450734536,
+   "brier": 0.16526752538336476,
+   "ece": 0.25396669573254055,
+   "mean_conf": 0.7302908665604062
+  },
+  "source:tasksource/tracie": {
+   "n": 10,
+   "acc": 0.7,
+   "nll": 0.4891541890799999,
+   "brier": 0.3273867403126534,
+   "ece": 0.19744876623153687,
+   "mean_conf": 0.7147268533706665
+  },
+  "source:tasksource/twitter-financial-news-sentiment": {
+   "n": 13,
+   "acc": 0.7692307692307693,
+   "nll": 0.569557867371119,
+   "brier": 0.33400880254154075,
+   "ece": 0.16068196296691897,
+   "mean_conf": 0.6909254789352417
+  },
+  "source:tasksource/utilitarianism": {
+   "n": 5,
+   "acc": 0.8,
+   "nll": 0.48693930804729463,
+   "brier": 0.3158372052667441,
+   "ece": 0.21798719167709352,
+   "mean_conf": 0.6846307396888733
+  },
+  "source:tasksource/vitaminc": {
+   "n": 10,
+   "acc": 0.7,
+   "nll": 0.6304033197462559,
+   "brier": 0.3395421534044118,
+   "ece": 0.27679825127124785,
+   "mean_conf": 0.7446531802415848
+  },
+  "source:tasksource/wice": {
+   "n": 12,
+   "acc": 0.6666666666666666,
+   "nll": 0.673041794449091,
+   "brier": 0.39684142081915225,
+   "ece": 0.1075178359945615,
+   "mean_conf": 0.6162169103821119
+  },
+  "source:tasksource/wildguardmix-cleaned/prompt_harm": {
+   "n": 3,
+   "acc": 1.0,
+   "nll": 0.10345831513404846,
+   "brier": 0.0277394602884394,
+   "ece": 0.09557032585144043,
+   "mean_conf": 0.9044296741485596
+  },
+  "source:tasksource/wildguardmix-cleaned/response_harm": {
+   "n": 4,
+   "acc": 0.75,
+   "nll": 0.4810797011014074,
+   "brier": 0.3550283484713187,
+   "ece": 0.30763211846351624,
+   "mean_conf": 0.804053395986557
+  },
+  "source:tasksource/wildguardmix-cleaned/response_refusal": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 0.6120340377092361,
+   "brier": 0.4209899554802967,
+   "ece": 0.4524259865283966,
+   "mean_conf": 0.5761952102184296
+  },
+  "source:tasksource/winowhy": {
+   "n": 9,
+   "acc": 0.5555555555555556,
+   "nll": 0.6037608550654517,
+   "brier": 0.4252422681691142,
+   "ece": 0.3425825569364759,
+   "mean_conf": 0.7041751278771294
+  },
+  "source:bekko/aqua_rat": {
+   "n": 46,
+   "acc": 0.43478260869565216,
+   "nll": 1.1991154477000237,
+   "brier": 0.6172953688322562,
+   "ece": 0.1102081731609676,
+   "mean_conf": 0.46363891596379486
+  },
+  "lang:en": {
+   "n": 2036,
+   "acc": 0.7028487229862476,
+   "nll": 0.796077483902791,
+   "brier": 0.339969225293261,
+   "ece": 0.020973763412161058,
+   "mean_conf": 0.6960371062635263,
+   "score_mae": 0.6466222843857227,
+   "score_spearman": 0.6822704749297358
+  },
+  "source:bekko/babi_nli": {
+   "n": 48,
+   "acc": 0.8958333333333334,
+   "nll": 0.27401538375609863,
+   "brier": 0.16690547197219074,
+   "ece": 0.13123770306507745,
+   "mean_conf": 0.8270118857423464
+  },
+  "source:bekko/boardgameqa": {
+   "n": 51,
+   "acc": 0.5686274509803921,
+   "nll": 0.9019377560299986,
+   "brier": 0.5534334671722982,
+   "ece": 0.14232104841400595,
+   "mean_conf": 0.646525065688526
+  },
+  "source:bekko/civil_comments": {
+   "n": 100,
+   "acc": 0.77,
+   "nll": 0.6147257659676694,
+   "brier": 0.17682881443848203,
+   "ece": 0.054752671718597413,
+   "mean_conf": 0.7364656114578247
+  },
+  "source:bekko/copa": {
+   "n": 54,
+   "acc": 0.9814814814814815,
+   "nll": 0.10880739657053103,
+   "brier": 0.04210744366736022,
+   "ece": 0.094677131485056,
+   "mean_conf": 0.9057335908766146
+  },
+  "source:bekko/defeasible_nli": {
+   "n": 57,
+   "acc": 0.8245614035087719,
+   "nll": 0.4007107088783462,
+   "brier": 0.22987058528769092,
+   "ece": 0.15345912544350876,
+   "mean_conf": 0.8445010174784744
+  },
+  "source:bekko/few_nerd": {
+   "n": 100,
+   "acc": 0.8,
+   "nll": 0.6584711873158813,
+   "brier": 0.30420050650733027,
+   "ece": 0.10938657209277153,
+   "mean_conf": 0.7215627391636371
+  },
+  "source:bekko/hans": {
+   "n": 44,
+   "acc": 0.9545454545454546,
+   "nll": 0.14486265753988514,
+   "brier": 0.06983174251895273,
+   "ece": 0.07838662104173144,
+   "mean_conf": 0.907954906875437
+  },
+  "source:bekko/helpsteer": {
+   "n": 100,
+   "acc": 0.57,
+   "nll": 1.1214010989665986,
+   "brier": 0.5925431823655974,
+   "ece": 0.1200096693634987,
+   "mean_conf": 0.5227145734429359,
+   "score_mae": 0.5189753491579904,
+   "score_spearman": 0.7005580558055805
+  },
+  "source:bekko/hwu64": {
+   "n": 50,
+   "acc": 0.8,
+   "nll": 0.61537333844346,
+   "brier": 0.3040174078823197,
+   "ece": 0.11711570411920544,
+   "mean_conf": 0.8471252635121346
+  },
+  "source:bekko/mtop": {
+   "n": 100,
+   "acc": 0.89,
+   "nll": 0.4909311940829502,
+   "brier": 0.1715855616445023,
+   "ece": 0.05769260913133619,
+   "mean_conf": 0.8478324726223946
+  },
+  "source:bekko/patent_similarity": {
+   "n": 41,
+   "acc": 0.3902439024390244,
+   "nll": 1.4371107853040463,
+   "brier": 0.7311843665699631,
+   "ece": 0.056667902847615706,
+   "mean_conf": 0.3569468921277581,
+   "score_mae": 0.8784934597589621,
+   "score_spearman": 0.5968641114982579
+  },
+  "source:bekko/piqa": {
+   "n": 52,
+   "acc": 0.8653846153846154,
+   "nll": 0.307255120921092,
+   "brier": 0.178705943537995,
+   "ece": 0.13526470844562238,
+   "mean_conf": 0.8212971458068261
+  },
+  "source:bekko/qasper": {
+   "n": 2,
+   "acc": 0.5,
+   "nll": 1.0714241340756416,
+   "brier": 0.7660412593436912,
+   "ece": 0.3461151719093323,
+   "mean_conf": 0.8461151719093323
+  },
+  "source:bekko/scitail": {
+   "n": 38,
+   "acc": 0.9210526315789473,
+   "nll": 0.1829232339391877,
+   "brier": 0.10472879747497625,
+   "ece": 0.1347683668136597,
+   "mean_conf": 0.8969143283994574
+  },
+  "source:bekko/sdoh_nli": {
+   "n": 40,
+   "acc": 0.975,
+   "nll": 0.16166151319630445,
+   "brier": 0.07563447666593943,
+   "ece": 0.12804184705018995,
+   "mean_conf": 0.8865841135382653
+  },
+  "source:bekko/snips": {
+   "n": 44,
+   "acc": 0.9772727272727273,
+   "nll": 0.09806914487721356,
+   "brier": 0.037550684871602465,
+   "ece": 0.07364396344531662,
+   "mean_conf": 0.9240133342417803
+  },
+  "source:bekko/squad2": {
+   "n": 75,
+   "acc": 0.92,
+   "nll": 0.23561164843539398,
+   "brier": 0.1338142878909368,
+   "ece": 0.05898748954137167,
+   "mean_conf": 0.8749014210700988
+  },
+  "source:bekko/stepgame": {
+   "n": 39,
+   "acc": 0.38461538461538464,
+   "nll": 1.8726928304785337,
+   "brier": 0.7562542562373157,
+   "ece": 0.19219879691417402,
+   "mean_conf": 0.5216133365264306
+  },
+  "source:bekko/ud_ewt": {
+   "n": 100,
+   "acc": 0.68,
+   "nll": 1.1039027657383123,
+   "brier": 0.40282051983746475,
+   "ece": 0.09367220051586629,
+   "mean_conf": 0.7193356899172068
+  },
+  "source:localllama/agent_trace_observability": {
+   "n": 70,
+   "acc": 0.4,
+   "nll": 1.1797015299846205,
+   "brier": 0.16147161032604657,
+   "ece": 0.24178932436874936,
+   "mean_conf": 0.5763719426734107,
+   "score_mae": 0.39891411539089855,
+   "score_spearman": 0.8297755883962781
+  },
+  "source:localllama/customer_service": {
+   "n": 55,
+   "acc": 0.7272727272727273,
+   "nll": 0.935873198976924,
+   "brier": 0.10372165246110131,
+   "ece": 0.11416223645210268,
+   "mean_conf": 0.6810560708696192,
+   "score_mae": 0.24612319887594572,
+   "score_spearman": 0.8328627893845286
+  },
+  "source:localllama/invoice_processing": {
+   "n": 50,
+   "acc": 0.62,
+   "nll": 0.9657728962490454,
+   "brier": 0.24033076873513695,
+   "ece": 0.14732455790042878,
+   "mean_conf": 0.5978383165597916,
+   "score_mae": 0.41298627456214226,
+   "score_spearman": 0.7488721804511278
+  },
+  "source:localllama/security_incidents": {
+   "n": 80,
+   "acc": 0.6875,
+   "nll": 1.1614520186756436,
+   "brier": 0.13667679672501515,
+   "ece": 0.14181182458996774,
+   "mean_conf": 0.6188402973115444,
+   "score_mae": 0.33738282180449397,
+   "score_spearman": 0.8189149560117301
+  },
+  "source:massive/da-DK": {
+   "n": 100,
+   "acc": 0.92,
+   "nll": 0.20987785092787817,
+   "brier": 0.10134063987187605,
+   "ece": 0.06120029598474502,
+   "mean_conf": 0.9008955845236778
+  },
+  "lang:da": {
+   "n": 100,
+   "acc": 0.92,
+   "nll": 0.20987785092787817,
+   "brier": 0.10134063987187605,
+   "ece": 0.06120029598474502,
+   "mean_conf": 0.9008955845236778
+  },
+  "source:massive/en-US": {
+   "n": 100,
+   "acc": 0.9,
+   "nll": 0.2553028013254516,
+   "brier": 0.1370611438491286,
+   "ece": 0.07824506908655167,
+   "mean_conf": 0.8844109043478966
+  },
+  "source:massive/sv-SE": {
+   "n": 100,
+   "acc": 0.87,
+   "nll": 0.33109194788848983,
+   "brier": 0.16305750841888275,
+   "ece": 0.0797784408926964,
+   "mean_conf": 0.8433598437905312
+  },
+  "lang:sv": {
+   "n": 100,
+   "acc": 0.87,
+   "nll": 0.33109194788848983,
+   "brier": 0.16305750841888275,
+   "ece": 0.0797784408926964,
+   "mean_conf": 0.8433598437905312
+  },
+  "source:massive/de-DE": {
+   "n": 100,
+   "acc": 0.89,
+   "nll": 0.3335344105481636,
+   "brier": 0.14107955709424988,
+   "ece": 0.05997490078210836,
+   "mean_conf": 0.8923500308394432
+  },
+  "lang:de": {
+   "n": 100,
+   "acc": 0.89,
+   "nll": 0.3335344105481636,
+   "brier": 0.14107955709424988,
+   "ece": 0.05997490078210836,
+   "mean_conf": 0.8923500308394432
+  },
+  "source:helpsteer2/helpfulness": {
+   "n": 100,
+   "acc": 0.38,
+   "nll": 1.386088141053915,
+   "brier": 0.7151670983356831,
+   "ece": 0.15346787124872205,
+   "mean_conf": 0.5197888657450676,
+   "score_mae": 0.923982228031382,
+   "score_spearman": 0.2539213921392139
+  },
+  "source:helpsteer2/correctness": {
+   "n": 100,
+   "acc": 0.51,
+   "nll": 1.3481193879246711,
+   "brier": 0.6495777432707855,
+   "ece": 0.0959637014567852,
+   "mean_conf": 0.5231257311999797,
+   "score_mae": 0.9978472164040432,
+   "score_spearman": 0.36946894689468945
+  },
+  "source:helpsteer2/coherence": {
+   "n": 100,
+   "acc": 0.77,
+   "nll": 0.7518403008580208,
+   "brier": 0.3757688291127758,
+   "ece": 0.1391028378903866,
+   "mean_conf": 0.6402003242075444,
+   "score_mae": 0.6349860609858297,
+   "score_spearman": 0.09917791779177917
+  },
+  "source:helpsteer2/complexity": {
+   "n": 100,
+   "acc": 0.5,
+   "nll": 1.0503513258695603,
+   "brier": 0.5953583739750951,
+   "ece": 0.06787283957004545,
+   "mean_conf": 0.5630117064714432,
+   "score_mae": 0.5272926907986403,
+   "score_spearman": 0.463066306630663
+  },
+  "source:helpsteer2/verbosity": {
+   "n": 100,
+   "acc": 0.63,
+   "nll": 1.0179367615282535,
+   "brier": 0.528550890471869,
+   "ece": 0.12744952231645584,
+   "mean_conf": 0.6353651008009911,
+   "score_mae": 0.4847348951548338,
+   "score_spearman": 0.29958595859585957
+  }
+ },
+ "sources_seen_by_mimir": [
+  "bekko/aqua_rat",
+  "bekko/babi_nli",
+  "bekko/boardgameqa",
+  "bekko/civil_comments",
+  "bekko/copa",
+  "bekko/defeasible_nli",
+  "bekko/few_nerd",
+  "bekko/hans",
+  "bekko/helpsteer",
+  "bekko/hwu64",
+  "bekko/mtop",
+  "bekko/patent_similarity",
+  "bekko/piqa",
+  "bekko/qasper",
+  "bekko/scitail",
+  "bekko/sdoh_nli",
+  "bekko/snips",
+  "bekko/squad2",
+  "bekko/stepgame",
+  "bekko/ud_ewt",
+  "helpsteer2/coherence",
+  "helpsteer2/complexity",
+  "helpsteer2/correctness",
+  "helpsteer2/helpfulness",
+  "helpsteer2/verbosity",
+  "massive/da-DK",
+  "massive/de-DE",
+  "massive/en-US",
+  "massive/sv-SE",
+  "tasksource/CONDAQA",
+  "tasksource/CREAK",
+  "tasksource/FLUTE",
+  "tasksource/FOL-nli",
+  "tasksource/HatemojiBuild",
+  "tasksource/HelpSteer/coherence",
+  "tasksource/HelpSteer/complexity",
+  "tasksource/HelpSteer/correctness",
+  "tasksource/HelpSteer/helpfulness",
+  "tasksource/HelpSteer/verbosity",
+  "tasksource/HelpSteer2/coherence",
+  "tasksource/HelpSteer2/complexity",
+  "tasksource/HelpSteer2/correctness",
+  "tasksource/HelpSteer2/helpfulness",
+  "tasksource/HelpSteer2/verbosity",
+  "tasksource/HelpSteer3/edit_quality",
+  "tasksource/HelpSteer3/feedback",
+  "tasksource/HelpSteer3/preference",
+  "tasksource/HelpSteer3/preference_strength",
+  "tasksource/HelpSteer3/principle",
+  "tasksource/I2D2",
+  "tasksource/MSciNLI",
+  "tasksource/MedQA-USMLE-4-options-hf",
+  "tasksource/PARADISE",
+  "tasksource/PARARULE-Plus",
+  "tasksource/Prompt-injection-dataset/full",
+  "tasksource/PromptShield",
+  "tasksource/SDOH-NLI",
+  "tasksource/SpaceNLI",
+  "tasksource/Touche23-ValueEval",
+  "tasksource/TuringBench",
+  "tasksource/UNLI",
+  "tasksource/UltraFeedback-paired",
+  "tasksource/WANLI",
+  "tasksource/acceptability-prediction/binary_votes",
+  "tasksource/acceptability-prediction/rating_votes",
+  "tasksource/agent_action_safety",
+  "tasksource/ai2_arc/ARC-Challenge/challenge",
+  "tasksource/ai2_arc/ARC-Easy/challenge",
+  "tasksource/amazon_counterfactual/en",
+  "tasksource/amazon_polarity/amazon_polarity",
+  "tasksource/arct",
+  "tasksource/args_me",
+  "tasksource/autotnli",
+  "tasksource/babi_nli/basic-coreference",
+  "tasksource/babi_nli/basic-induction",
+  "tasksource/babi_nli/conjunction",
+  "tasksource/babi_nli/counting",
+  "tasksource/babi_nli/indefinite-knowledge",
+  "tasksource/babi_nli/lists-sets",
+  "tasksource/babi_nli/path-finding",
+  "tasksource/babi_nli/positional-reasoning",
+  "tasksource/babi_nli/simple-negation",
+  "tasksource/babi_nli/single-supporting-fact",
+  "tasksource/babi_nli/size-reasoning",
+  "tasksource/babi_nli/three-arg-relations",
+  "tasksource/babi_nli/two-arg-relations",
+  "tasksource/babi_nli/two-supporting-facts",
+  "tasksource/balanced-copa",
+  "tasksource/banking77",
+  "tasksource/blog_authorship_corpus/age",
+  "tasksource/breaking_nli",
+  "tasksource/cicero",
+  "tasksource/circa",
+  "tasksource/civil_comments/identity_attack_share",
+  "tasksource/civil_comments/insult_share",
+  "tasksource/civil_comments/obscene_share",
+  "tasksource/civil_comments/severe_toxicity_share",
+  "tasksource/civil_comments/sexual_explicit_share",
+  "tasksource/civil_comments/threat_share",
+  "tasksource/civil_comments/toxicity_share",
+  "tasksource/cladder",
+  "tasksource/clcd-english",
+  "tasksource/clinc_oos/plus",
+  "tasksource/cloth",
+  "tasksource/codah/codah",
+  "tasksource/commonsense_qa",
+  "tasksource/commonsense_qa_2.0",
+  "tasksource/corr2cause",
+  "tasksource/cosmos_qa",
+  "tasksource/cycic_classification",
+  "tasksource/cycic_multiplechoice",
+  "tasksource/dbpedia_14/dbpedia_14",
+  "tasksource/defeasible-nli/atomic",
+  "tasksource/defeasible-nli/snli",
+  "tasksource/defeasible-nli/social",
+  "tasksource/dgen",
+  "tasksource/discovery/discovery",
+  "tasksource/disrpt/eng.dep.scidtb.rels",
+  "tasksource/dnd_style_intents",
+  "tasksource/doc-nli",
+  "tasksource/docred",
+  "tasksource/dynasent/r1_votes",
+  "tasksource/dynasent/r2_votes",
+  "tasksource/e-CARE",
+  "tasksource/equate",
+  "tasksource/esci",
+  "tasksource/ethics/commonsense",
+  "tasksource/ethics/deontology",
+  "tasksource/ethics/justice",
+  "tasksource/ethics/virtue",
+  "tasksource/feasibilityQA",
+  "tasksource/fig-qa",
+  "tasksource/fool-me-twice",
+  "tasksource/github-issue-similarity",
+  "tasksource/go_emotions/simplified",
+  "tasksource/goal-step-wikihow/goal",
+  "tasksource/goal-step-wikihow/order",
+  "tasksource/goal-step-wikihow/step",
+  "tasksource/google_wellformed_query",
+  "tasksource/hate_speech18",
+  "tasksource/headline_cause/en_simple",
+  "tasksource/health_fact",
+  "tasksource/hh-rlhf/harmless-base",
+  "tasksource/hh-rlhf/helpful-base",
+  "tasksource/hh-rlhf/helpful-online",
+  "tasksource/hh-rlhf/helpful-rejection-sampled",
+  "tasksource/hlgd",
+  "tasksource/hope_edi/english",
+  "tasksource/hover",
+  "tasksource/hyperpartisan_news",
+  "tasksource/it-support-tickets",
+  "tasksource/jigsaw_toxicity",
+  "tasksource/lex_glue/case_hold",
+  "tasksource/lex_glue/ledgar",
+  "tasksource/lex_glue/unfair_tos",
+  "tasksource/logical-entailment",
+  "tasksource/lonli",
+  "tasksource/math_qa",
+  "tasksource/medmcqa",
+  "tasksource/mindgames",
+  "tasksource/monotonicity-entailment",
+  "tasksource/moral_stories/full",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/amh",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/arq",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/ary",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/hau",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/ibo",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/kin",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/pcm",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/por",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/swa",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/tso",
+  "tasksource/multilingual/AfriSenti-twitter-sentiment/yor",
+  "tasksource/multilingual/MLMA_hate_speech",
+  "tasksource/multilingual/NusaX-senti/ban",
+  "tasksource/multilingual/NusaX-senti/bbc",
+  "tasksource/multilingual/NusaX-senti/bug",
+  "tasksource/multilingual/NusaX-senti/mad",
+  "tasksource/multilingual/NusaX-senti/nij",
+  "tasksource/multilingual/NusaX-senti/sun",
+  "tasksource/multilingual/americas_nli/all_languages",
+  "tasksource/multilingual/disrpt/deu.rst.pcc.rels",
+  "tasksource/multilingual/disrpt/eus.rst.ert.rels",
+  "tasksource/multilingual/disrpt/fas.rst.prstc.rels",
+  "tasksource/multilingual/disrpt/fra.sdrt.annodis.rels",
+  "tasksource/multilingual/disrpt/nld.rst.nldt.rels",
+  "tasksource/multilingual/disrpt/por.rst.cstn.rels",
+  "tasksource/multilingual/disrpt/spa.rst.rststb.rels",
+  "tasksource/multilingual/disrpt/tha.pdtb.tdtb.rels",
+  "tasksource/multilingual/disrpt/zho.rst.gcdt.rels",
+  "tasksource/multilingual/exams/multilingual",
+  "tasksource/multilingual/klue/nli",
+  "tasksource/multilingual/klue/sts",
+  "tasksource/multilingual/klue/ynat",
+  "tasksource/multilingual/masakhanews/ibo",
+  "tasksource/multilingual/masakhanews/orm",
+  "tasksource/multilingual/masakhanews/pcm",
+  "tasksource/multilingual/masakhanews/sna",
+  "tasksource/multilingual/masakhanews/swa",
+  "tasksource/multilingual/masakhanews/xho",
+  "tasksource/multilingual/massive",
+  "tasksource/multilingual/miam",
+  "tasksource/multilingual/mtop",
+  "tasksource/multilingual/multilingual-sentiments/all",
+  "tasksource/multilingual/offenseval_dravidian/kannada",
+  "tasksource/multilingual/offenseval_dravidian/malayalam",
+  "tasksource/multilingual/offenseval_dravidian/tamil",
+  "tasksource/multilingual/tweet_sentiment_multilingual",
+  "tasksource/multilingual/x-stance",
+  "tasksource/multilingual/xcopa/et",
+  "tasksource/multilingual/xcopa/id",
+  "tasksource/multilingual/xcopa/it",
+  "tasksource/multilingual/xcopa/qu",
+  "tasksource/multilingual/xcopa/sw",
+  "tasksource/multilingual/xcopa/ta",
+  "tasksource/multilingual/xcopa/th",
+  "tasksource/multilingual/xcopa/tr",
+  "tasksource/multilingual/xcopa/translation-ht",
+  "tasksource/multilingual/xcopa/translation-id",
+  "tasksource/multilingual/xcopa/translation-sw",
+  "tasksource/multilingual/xcopa/translation-ta",
+  "tasksource/multilingual/xcopa/translation-tr",
+  "tasksource/multilingual/xcopa/translation-vi",
+  "tasksource/multilingual/xcopa/translation-zh",
+  "tasksource/multilingual/xcopa/vi",
+  "tasksource/multilingual/xcopa/zh",
+  "tasksource/multilingual/xcsr/X-CSQA-ar",
+  "tasksource/multilingual/xcsr/X-CSQA-en",
+  "tasksource/multilingual/xcsr/X-CSQA-fr",
+  "tasksource/multilingual/xcsr/X-CSQA-hi",
+  "tasksource/multilingual/xcsr/X-CSQA-it",
+  "tasksource/multilingual/xcsr/X-CSQA-jap",
+  "tasksource/multilingual/xcsr/X-CSQA-pt",
+  "tasksource/multilingual/xcsr/X-CSQA-sw",
+  "tasksource/multilingual/xcsr/X-CSQA-ur",
+  "tasksource/multilingual/xcsr/X-CSQA-zh",
+  "tasksource/multilingual/xstory_cloze/ar",
+  "tasksource/multilingual/xstory_cloze/en",
+  "tasksource/multilingual/xstory_cloze/es",
+  "tasksource/multilingual/xstory_cloze/eu",
+  "tasksource/multilingual/xstory_cloze/hi",
+  "tasksource/multilingual/xstory_cloze/id",
+  "tasksource/multilingual/xstory_cloze/my",
+  "tasksource/multilingual/xstory_cloze/ru",
+  "tasksource/multilingual/xstory_cloze/sw",
+  "tasksource/multilingual/xstory_cloze/zh",
+  "tasksource/nan-nli",
+  "tasksource/naturallogic",
+  "tasksource/numer_sense",
+  "tasksource/onestop_qa",
+  "tasksource/patent-phrase-similarity",
+  "tasksource/poem_sentiment",
+  "tasksource/prm800k_dpo/solution",
+  "tasksource/prm800k_dpo/step",
+  "tasksource/probability_words_nli/reasoning_1hop",
+  "tasksource/probability_words_nli/reasoning_2hop",
+  "tasksource/procedural-typed-decisions/arithmetic",
+  "tasksource/procedural-typed-decisions/entity_belief_tracking",
+  "tasksource/procedural-typed-decisions/event_state_reconstruction",
+  "tasksource/procedural-typed-decisions/evidence_sufficiency",
+  "tasksource/procedural-typed-decisions/multi_view_adjudication",
+  "tasksource/procedural-typed-decisions/needle_retrieval",
+  "tasksource/procedural-typed-decisions/partial_observation_calibration",
+  "tasksource/procedural-typed-decisions/policy_applicability",
+  "tasksource/procedural-typed-decisions/policy_under_uncertainty",
+  "tasksource/procedural-typed-decisions/record_aggregation",
+  "tasksource/procedural-typed-decisions/state_perturbation",
+  "tasksource/procedural-typed-decisions/table_lookup",
+  "tasksource/procedural-typed-decisions/taxonomy_routing",
+  "tasksource/prompt-injection-dataset",
+  "tasksource/prompt-injections",
+  "tasksource/propsegment/nli",
+  "tasksource/prost",
+  "tasksource/proto_qa/proto_qa",
+  "tasksource/qasc",
+  "tasksource/quartz",
+  "tasksource/recast/recast_factuality",
+  "tasksource/recast/recast_megaveridicality",
+  "tasksource/recast/recast_ner",
+  "tasksource/recast/recast_sentiment",
+  "tasksource/recast/recast_verbcorner",
+  "tasksource/recast/recast_verbnet",
+  "tasksource/resnli",
+  "tasksource/ruletaker",
+  "tasksource/scinli",
+  "tasksource/scone",
+  "tasksource/sem_eval_2010_task_8",
+  "tasksource/shell-safety-v2",
+  "tasksource/sherliic",
+  "tasksource/silicone/maptask",
+  "tasksource/sms_spam",
+  "tasksource/snips_built_in_intents",
+  "tasksource/snli",
+  "tasksource/social_i_qa",
+  "tasksource/spartqa-mchoice",
+  "tasksource/spartqa-yn",
+  "tasksource/stackoverflow-questions",
+  "tasksource/starcon",
+  "tasksource/stepgame",
+  "tasksource/sts-companion",
+  "tasksource/subjectivity",
+  "tasksource/syntactic-augmentation-nli",
+  "tasksource/temporal-nli",
+  "tasksource/tracie",
+  "tasksource/twitter-financial-news-sentiment",
+  "tasksource/utilitarianism",
+  "tasksource/vitaminc",
+  "tasksource/wice",
+  "tasksource/wiki_hop/original",
+  "tasksource/wikimedqa/medwiki",
+  "tasksource/wildguardmix-cleaned/prompt_harm",
+  "tasksource/wildguardmix-cleaned/response_harm",
+  "tasksource/wildguardmix-cleaned/response_refusal",
+  "tasksource/winodict",
+  "tasksource/winowhy",
+  "tasksource/wnut_17/wnut_17"
+ ]
+}
