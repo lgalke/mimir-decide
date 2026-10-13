@@ -25,6 +25,8 @@ The fine-tuned baseline and the slot model are tied ([O14](/observations/o14-fir
 
 Most of it. The untrained Mimir v1.5 with the letter prompt reaches 0.669 validation accuracy; the fine-tuned baseline reaches 0.835, a gain of 16.6 points (Score +30, noul +15, choice +14). On the held-out MASSIVE task the gain is about 6 points (0.895 to 0.952). Part of the gain is learning task formats and label conventions, and the zero-shot number is a lower bound because the prompt is ours ([O16](/observations/o16-zero-shot-baseline-fine-tuning-adds-16-points.md)).
 
+**Refinement (2026-10-13):** a head trained alone on the frozen backbone recovers about 20% of the gap (validation accuracy 0.703 against 0.669 and 0.835); the rest needs the backbone to change ([O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md)).
+
 ## Decision impact
 
 Wording of the conclusions in O14 and the interpretation of E03 and E11.

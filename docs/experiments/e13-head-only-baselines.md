@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E13: Head-only baselines (frozen backbone)'
 description: Train only the output head on the frozen Mimir backbone, for the letter readout (head initialised from the LM head) and for the slot readout. Shows how much of the fine-tuning gain a readout alone can reach.
-status: planned
+status: running
 answers: [q04, q14]
 depends_on: [e10]
 tags: [baseline, probe, frozen-backbone]
@@ -61,8 +61,8 @@ One seed. The marker vector of the slot probe is not trained, which handicaps it
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_. The code is implemented and tested on a tiny model (`freeze_backbone`, `train_letter_head`).
+Status: **running**. The letter probe is done: R = 0.20, so the gain comes mostly from the backbone ([O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md)). The slot probe has not been run yet; it decides the second question (slot against letter probe on the same frozen features).
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-13 | `runs/letter-probe` | `freeze_backbone=true train_letter_head=true lr_head=1.0e-3`, pilot settings | validation accuracy 0.703 (zero-shot 0.669, fine-tuned 0.835), R = 0.20; benchmark accuracy 0.611 (zero-shot 0.607); 3.6 h, 9.04 GB | [O23](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md) |

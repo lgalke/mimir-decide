@@ -8,7 +8,7 @@ Read this file fully, then `docs/index.md`. Everything the previous agent knew t
 
 Done and tested (80 tests: 73 offline, 7 need network):
 - Dataset converters for 5 sources, mixture builder with leakage guards and licence policy, Mimir overlap audit, slot-readout model and letter-logit baseline, training loop, calibration, evaluation, comparison, latency benchmark, zero-shot reference (`mimir_decide.zeroshot`).
-- Documentation as an OKF bundle in `docs/`: 28 decision records, 15 open questions, 14 experiments, 22 observations, update log.
+- Documentation as an OKF bundle in `docs/`: 28 decision records, 15 open questions, 14 experiments, 23 observations, update log.
 
 Run by the owner on the GPU server (NVIDIA RTX PRO 6000 Blackwell Server Edition): the smoke test (E02) and the first pilot (E03, one seed, defaults). Result: the slot model and the letter baseline are tied (validation accuracy 0.831 vs 0.835, NLL 0.455 vs 0.456), and 96% of validation comes from sources Mimir saw ([O14](docs/observations/o14-first-pilot-results-slot-and-baseline-tie.md)). Training fits in 33.6 GB at 6.15 examples per second ([O15](docs/observations/o15-pilot-training-memory-and-speed.md)). The small eval files are in `runs/`.
 
@@ -18,7 +18,7 @@ E04 and E05 are done on the pilot checkpoints: temperature scaling changes the f
 
 E11 is done (letter baseline with a trainable output head): it ties with the frozen-head baseline and the slot model ([O20](docs/observations/o20-trainable-output-head-ties-with-the-frozen-head-baseline.md)).
 
-**TOP PRIORITY (owner, 2026-10-12): [E14](docs/experiments/e14-typed-decisions-benchmark.md)**, scoring our models on the Typed Decisions benchmark test split to compare with a PhD student's approach (the scorer is `mimir_decide.typed_decisions`; D28). First batch done ([O22](docs/observations/o22-typed-decisions-benchmark-results.md)): zero-shot 0.607 accuracy / KL 0.295; slot, frozen-head and trainable-head baselines 0.788 / 0.788 / 0.779 and KL 0.086-0.087, tied. Still to do: score the other approach's predictions with `--score_predictions` (page E14), and the probes of E13.
+**TOP PRIORITY (owner, 2026-10-12): [E14](docs/experiments/e14-typed-decisions-benchmark.md)**, scoring our models on the Typed Decisions benchmark test split to compare with a PhD student's approach (the scorer is `mimir_decide.typed_decisions`; D28). First batch done ([O22](docs/observations/o22-typed-decisions-benchmark-results.md)): zero-shot 0.607 accuracy / KL 0.295; slot, frozen-head and trainable-head baselines 0.788 / 0.788 / 0.779 and KL 0.086-0.087, tied. The letter probe of E13 is done (recovers 20% of the fine-tuning gain, no help on the benchmark; [O23](docs/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md)). Still to do: the slot probe of E13, and scoring the other approach's predictions with `--score_predictions` (page E14).
 
 **Then, in the owner's order:** [E13](docs/experiments/e13-head-only-baselines.md) (head-only probes on the frozen backbone; cheaper than a full run; code is ready), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)); the tool is ready: `mimir_decide.build_extra_eval` (see the E12 page for the commands; commit the source list before evaluating).
 
@@ -55,7 +55,7 @@ In this file, `python` means the Python of the active environment. Run all comma
 
 Each step has a page in `docs/experiments/` with exact commands, metrics and a **decision rule written before running**. Follow the page; do not improvise the rule afterwards.
 
-0. **[E14 Typed Decisions benchmark](docs/experiments/e14-typed-decisions-benchmark.md)** — top priority; first batch done; next: the other approach's predictions and the E13 probes (score each model once with `--final`).
+0. **[E14 Typed Decisions benchmark](docs/experiments/e14-typed-decisions-benchmark.md)** — top priority; first batch done; next: the other approach's predictions and the slot probe of E13 (score each model once with `--final`).
 1. **[E13 head-only baselines](docs/experiments/e13-head-only-baselines.md)** (frozen backbone; cheaper than a full run). (E10 and E11 are done.)
 2. **[E12 unseen label sets](docs/experiments/e12-unseen-label-sets.md)**: evaluation of all models on extra tasks. Task sources are decided (D26, option A, evaluation only); build them with `build_extra_eval` and commit `configs/extra_eval_sources.yaml` before any evaluation. `select_heldout` and `derive_mixture` are the fallback design (D25, superseded).
 3. E07 seen-vs-unflagged analysis (from the pilot runs); E06 `L_bp_cycles`; E08 latency. E09 is exploratory and needs code. (E04 and E05 are done.)
