@@ -20,7 +20,7 @@ A synthetic benchmark of four workflows (agent traces, customer service, invoice
 ## Where our models belong
 
 - **Untrained Mimir with the letter prompt** (`letter-zeroshot`): general, zero-shot. It has never seen these workflows.
-- **Our fine-tuned models** (`slot-v0`, `baseline-v0`, `baseline-lmhead`, later the probes): trained on a broad mixture that **includes this benchmark's train split** (by design about 90% of its 6,000 decisions; the other 10% is our validation set; the exact number is in the server's `mixture_manifest.json`) among about 330 other sources. The test split was never used for training or calibration. They belong to the second table, 'trained on `train` and other data', like the Bekko rows.
+- **Our fine-tuned models** (`slot-v0`, `baseline-v0`, `baseline-lmhead`, later the probes): trained on a broad mixture that **includes this benchmark's train split** (planned: about 90% of its 6,000 decisions; the other 10% is our validation set. The build dropped 2,066 LocalLLaMA rows as duplicates or n-gram leaks, so at most about 3,300 decisions remain; exact number open, see [O25](/observations/o25-full-mixture-build-counts-and-drops.md)) among about 330 other sources. The test split was never used for training or calibration. They belong to the second table, 'trained on `train` and other data', like the Bekko rows.
 - Anna's approach: she knows what it was trained on. The tables must not be mixed.
 
 ## Mode

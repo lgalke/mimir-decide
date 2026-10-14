@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E01: Full mixture build'
 description: Build the real mixture and record what survives licences, leakage guards and caps.
-status: planned
+status: running
 answers: [q06, q08]
 depends_on: []
 tags: []
@@ -40,10 +40,10 @@ Proceed to E02 if train >= 300k decisions, `heldout_patterns_unmatched` is empty
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **running**. The pilot built the full mixture; counts and drops are recorded in [O25](/observations/o25-full-mixture-build-counts-and-drops.md): train 371,275 (above 300k), `heldout_patterns_unmatched` empty. Still open: `train_by_kind`, `train_by_dataset`, `train_sources`, the manual inspection of 20 n-gram examples, and `reports/mimir_overlap.md`.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-14 | `mixture-v0` (server) | `configs/data.yaml` | train 371,275; validation 6,127; calib 6,189; heldout 600; test 11,674 | [O25](/observations/o25-full-mixture-build-counts-and-drops.md) |
 
 When run: fill this table, create an observation page (copy the template) with the numbers, set `status` in the frontmatter, add a line to the update log, and regenerate the indexes.

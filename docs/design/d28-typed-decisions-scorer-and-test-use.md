@@ -18,7 +18,7 @@ A PhD student of the owner works on a Mimir-Decide approach and evaluates on the
 - Our models are scored on the full test split (2,000 decisions) with `mimir_decide.typed_decisions`; the access needs `--final` and is logged.
 - **One pass per model:** the call computes the logits once and writes the calibrated and the raw version. Nothing is selected on these scores.
 - The scorer's definitions are fixed and written into every result file ([O21](/observations/o21-benchmark-scorer-matches-the-published-uniform-row-only-for-kl-and-brier.md)). The per-decision probabilities are saved (`*_predictions.json`) so that other approaches can be rescored with the same code.
-- Our rows are labelled 'trained on `train` and other data' (our mixture contains the benchmark's train split, by design about 90% of it); the zero-shot model is the only 'general, zero-shot' row.
+- Our rows are labelled 'trained on `train` and other data' (our mixture contains the benchmark's train split, planned about 90% of it; after the build's drops at most about 56%, see [O25](/observations/o25-full-mixture-build-counts-and-drops.md)); the zero-shot model is the only 'general, zero-shot' row.
 - Nothing is submitted to the benchmark's discussion board without the owner's decision.
 
 ## Consequences

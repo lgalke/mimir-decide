@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-10-14
+* **Finding**: E01 numbers recorded ([O25](/observations/o25-full-mixture-build-counts-and-drops.md)): train 371,275, validation 6,127, calib 6,189, heldout 600, test 11,674; `heldout_patterns_unmatched` empty. Tasksource loses 455,787 rows to the licence policy and 21,204 to n-gram leaks. **Correction**: LocalLLaMA lost 2,066 rows (1,606 duplicates, 460 n-gram leaks), so at most about 3,300 of the benchmark's 6,000 train decisions are in the mixture, not about 90% (E14 and D28 text updated). E01 stays `running` until the per-source counts and the manual n-gram inspection are done.
 * **Finding**: E13 slot probe ([O24](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md)): slot head on the frozen backbone reaches validation accuracy 0.446 (NLL 1.302), against 0.703 for the letter probe and 0.669 for the untrained letter readout; the validation curve is flat from step 1,000. By the pre-set rule (2-point margin) the letter readout extracts more from the same frozen features. Benchmark: accuracy 0.504, KL 0.369, Brier 0.201 (untrained 0.607 / 0.295 / 0.166). Held-out nb-NO ECE 0.221 (under-confident). Cost: 3.0 h, 9.22 GB. The slot design needs a trained backbone; this is no evidence against the fine-tuned slot model. Limits: one seed, untuned rate, fixed marker vector. E13 is done.
 
 ## 2026-10-13

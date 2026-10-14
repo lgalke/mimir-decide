@@ -28,6 +28,7 @@ Dated, evidence-backed things seen so far; add new ones with the template.
 * [O22: On the Typed Decisions test split the fine-tuned models reach accuracy 0.788 and KL 0.086, level with fine-tuned LoRA models](/observations/o22-typed-decisions-benchmark-results.md) - First benchmark results of our four models (full test split, 2,000 decisions). The three fine-tuned models are tied; the untrained model reaches 0.607.
 * [O23: The letter probe (head only, frozen backbone) recovers about a fifth of the fine-tuning gain](/observations/o23-letter-probe-recovers-a-fifth-of-the-fine-tuning-gain.md) - Training only the output head, started from the language-model head, lifts validation accuracy from 0.669 to 0.703, mostly on score questions, and does not help on the Typed Decisions benchmark. The fine-tuning gain comes from the backbone.
 * [O24: The slot probe extracts little from a frozen backbone and is far worse than the letter probe](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md) - A slot head trained on the frozen Mimir backbone reaches 0.446 validation accuracy, below the untrained letter readout (0.669) and the letter probe (0.703). The slot readout needs a trained backbone.
+* [O25: Full mixture build, counts and drops](/observations/o25-full-mixture-build-counts-and-drops.md) - The pilot mixture has 371,275 train decisions. Licence policy removes about 456k tasksource rows, n-gram guards about 27k. LocalLLaMA lost 2,066 rows, so less of its train split is in the mixture than planned.
 
 ## Template
 

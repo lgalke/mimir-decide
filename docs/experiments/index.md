@@ -4,7 +4,7 @@ Prefilled experiment plans: hypothesis, exact commands, metrics, decision rule, 
 
 ## Experiment
 
-* [E01: Full mixture build](/experiments/e01-full-mixture-build.md) - [planned] Build the real mixture and record what survives licences, leakage guards and caps.
+* [E01: Full mixture build](/experiments/e01-full-mixture-build.md) - [running] Build the real mixture and record what survives licences, leakage guards and caps.
 * [E02: Smoke run on the real model](/experiments/e02-smoke-run-real-model.md) - [done] Load Mimir v1.5, train 50 steps, measure memory and throughput, confirm loss decreases and checkpoints reload.
 * [E03: Slot readout vs letter baseline (pilot)](/experiments/e03-slot-vs-letter-pilot.md) - [done] The central comparison: same data, backbone, loss and calibration; only the readout differs.
 * [E04: Effect of temperature calibration](/experiments/e04-calibration-effect.md) - [done] Quantify ECE before and after per-kind temperature scaling, on validation and held-out tasks.
