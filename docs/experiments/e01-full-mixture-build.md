@@ -40,7 +40,7 @@ Proceed to E02 if train >= 300k decisions, `heldout_patterns_unmatched` is empty
 
 ## Status and results
 
-Status: **running**. The pilot built the full mixture; counts and drops are recorded in [O25](/observations/o25-full-mixture-build-counts-and-drops.md): train 371,275 (above 300k), `heldout_patterns_unmatched` empty. Still open: `train_by_kind`, `train_by_dataset`, `train_sources`, the manual inspection of 20 n-gram examples, and `reports/mimir_overlap.md`.
+Status: **running**. The pilot built the full mixture; counts and drops are recorded in [O25](/observations/o25-full-mixture-build-counts-and-drops.md): train 371,275 (above 300k), `heldout_patterns_unmatched` empty. Counts by dataset and kind and the source count (366) are in O25. Still open: the manual inspection of 20 n-gram examples, and `reports/mimir_overlap.md`.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|

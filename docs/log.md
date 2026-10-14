@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-10-15
+* **Finding**: Composition of `train.parquet` counted on the server ([O25](/observations/o25-full-mixture-build-counts-and-drops.md)): 371,275 decisions from 366 sources (earlier notes said about 329-330): tasksource 78.8%, bekko 15.4%, helpsteer2 2.7%, massive 2.2%, localllama 3,404 (0.9%); choice 73.1%, noul 16.7%, score 10.2%. LocalLLaMA has 3,404 of its about 6,000 train decisions (56.7%), confirming the correction (drops 2,066 explain it); E14 and D28 updated. The 15 largest sources sit exactly at the cap of 2,000 per source. E01 only lacks the manual n-gram inspection and the Mimir overlap report.
 * **Decision**: The owner defers the Decision Index ([E15](/experiments/e15-decision-index-public-suite.md)): it is unclear that the effort is worth it, so the focus stays on Typed Decisions. The adapter ([D29](/design/d29-decision-index-adapter.md)) and the plan stay in the repository, unused; E15 remains `planned` and marked deferred.
 
 ## 2026-10-14
