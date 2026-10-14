@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E12: Unseen label sets (evaluation on additional tasks)'
 description: Evaluate all existing models, without retraining, on extra tasks whose label sets never occur in the training mixture.
-status: planned
+status: running
 answers: [q04, q01]
 depends_on: [e11, e10]
 tags: [generalisation, label-sets, slot, baseline]
@@ -70,6 +70,10 @@ Written before any model is evaluated on the extra tasks (revised on 2026-10-11 
 - If `P_task` has fewer than 5 sources, the rule uses `P_all` alone and says so.
 
 The 2-point margin is about two standard errors for roughly 3,000 pooled decisions. It is a proposal; the owner may change it before the evaluation.
+
+## Pre-registration (2026-10-15)
+
+The owner built the set on the server and committed `configs/extra_eval_sources.yaml` (commit `50dd7f5`) before any model was evaluated on it: **32 sources, 7,323 rows, all from bekko** (`held_out_sources`); **23** of them have no same-name task in training (`task_novel_sources`). The audit flags **32 of 32 as seen by Mimir by name**, so there is no source that is unseen for Mimir, only for our fine-tuning. 18 of the 32 sources are `bekko/open_jev__*` control tasks (synthetic, many small tasks). Four of them (`workflow-controls-v1__agent_trace_observability`, `__customer_service`, `__invoice_processing`, `__security_incidents`) carry the names of the four workflows of the Typed Decisions benchmark. Their relation to that benchmark was not checked; the exact and n-gram guards compared them with `train.parquet`, not with the benchmark's test rows. Read their results with that in mind.
 
 ## Limits
 
