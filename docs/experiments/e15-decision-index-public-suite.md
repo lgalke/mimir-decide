@@ -60,7 +60,7 @@ One seed per model. The public suite is 20% of the Full score; the private 80% c
 
 ## Status and results
 
-Status: **planned**. The adapter is written and tested offline; nothing is run on the real suite.
+Status: **planned, deferred** by the owner on 2026-10-15 ("not sure if it's worth it"; the focus stays on Typed Decisions, [E14](/experiments/e14-typed-decisions-benchmark.md)). Do not start it without the owner's word. The adapter is written and tested offline; nothing is run on the real suite.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
