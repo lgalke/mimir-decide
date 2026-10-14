@@ -18,6 +18,7 @@ Prefilled experiment plans: hypothesis, exact commands, metrics, decision rule, 
 * [E12: Unseen label sets (evaluation on additional tasks)](/experiments/e12-unseen-label-sets.md) - [planned] Evaluate all existing models, without retraining, on extra tasks whose label sets never occur in the training mixture.
 * [E13: Head-only baselines (frozen backbone)](/experiments/e13-head-only-baselines.md) - [done] Train only the output head on the frozen Mimir backbone, for the letter readout (head initialised from the LM head) and for the slot readout. Shows how much of the fine-tuning gain a readout alone can reach.
 * [E14: Typed Decisions benchmark (comparison with Anna's approach)](/experiments/e14-typed-decisions-benchmark.md) - [done] Score our models on the full test split of LocalLLaMA/typed-decisions (400 cases, 2,000 decisions) with accuracy, KL from gold, Brier and ECE, to compare with a second approach on the same data.
+* [E15: Decision Index public suite](/experiments/e15-decision-index-public-suite.md) - [planned] Run our models through the public suite of the Decision Index (37 benchmarks, about 140k requests) with the kit's own scorer, after checking for overlap with our training mixture.
 
 ## Template
 
