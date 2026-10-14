@@ -1,7 +1,7 @@
 ---
 type: Observation
 title: 'O25: Full mixture build, counts and drops'
-description: The pilot mixture has 371,275 train decisions. Licence policy removes about 456k tasksource rows, n-gram guards about 27k. LocalLLaMA lost 2,066 rows, so less of its train split is in the mixture than planned.
+description: 'The pilot mixture has 371,275 train decisions. Licence policy removes about 456k tasksource rows, n-gram guards about 27k. LocalLLaMA lost 2,066 rows, so 3,404 of its about 6,000 train decisions (56.7%) are in the mixture, not 90%. 366 sources, 79% from tasksource.'
 date: '2026-10-14'
 confidence: medium
 tags: [e01, mixture, drops, leakage]
@@ -30,13 +30,25 @@ Source: `mixture_manifest.json` of `mixture-v0` on the server, pasted by the own
 | massive | held-out task 11,514; state hash leak 992 |
 | helpsteer2 | n-gram leak 2,517; group leak 580; duplicate 30; state hash leak 5 |
 
+**Composition of `train.parquet`** (counted by the owner on the server, 2026-10-14):
+
+| By dataset | Decisions | Share |
+|---|---|---|
+| tasksource | 292,608 | 78.8% |
+| bekko | 57,263 | 15.4% |
+| helpsteer2 | 10,000 | 2.7% |
+| massive | 8,000 | 2.2% |
+| localllama | 3,404 | 0.9% |
+
+By kind: choice 271,340 (73.1%), noul 61,931 (16.7%), score 38,004 (10.2%). 366 sources. The 15 largest sources all have exactly 2,000 decisions, the per-source cap (`per_source_cap: 2000`), so the cap, not the data, sets the mixture size. MASSIVE has 8,000 = 4 locales (da, en, sv, de) x 2,000; nb-NO is held out. Among the largest sources are `bekko/laya__typed_decisions` and `tasksource/procedural-typed-decisions/*`; their relation to the Typed Decisions benchmark was not checked (the n-gram guard compares them with the benchmark's eval rows, so exact copies are excluded, but similar generators could share style).
+
 ## Interpretation
 
 - **E01 rule:** train 371,275 is above the 300k threshold and `heldout_patterns_unmatched` is empty. The third condition (manual inspection of 20 `ngram_leak_examples.jsonl` rows) is not done.
 - **Licences dominate the loss in tasksource:** 455,787 rows (88% of its recorded drops) fall to the licence policy ([D02](/design/d02-permissive-licences-only.md)). Unknown licences alone are 304k. Admitting them would more than double the mixture, but that is the owner's decision (Q06).
 - **Guards:** 26,857 rows fell to n-gram leaks and 1,596 to exact state hashes across all sources; no guard drop looks like a bug by size, but the n-gram rate for helpsteer2 (2,517) deserves the manual check.
 - **bekko `read_limit_per_source` (1.9M) is a read cap, not a quality loss;** the per-source cap of the mixture builder applies after it.
-- **Correction for E14:** LocalLLaMA lost 2,066 rows (1,606 duplicates, 460 n-gram) from a train split of about 6,000 decisions of which about 90% were planned. So at most about 3,300 (56%) of the benchmark's train decisions are in the mixture, not 90%. The exact number needs `train_by_dataset` or `train_sources`. The duplicates are probably identical state, question and options across cases of a synthetic dataset; this was not checked. The 'trained on train and other data' label of E14 still holds, with a smaller share.
+- **Correction for E14:** LocalLLaMA lost 2,066 rows (1,606 duplicates, 460 n-gram) from a train split of about 6,000 decisions of which about 90% (5,400) were planned. The count in `train.parquet` is 3,404 (56.7%), not 90%; 3,404 + 2,066 = 5,470, so the drops explain the gap. The duplicates are probably identical state, question and options across cases of a synthetic dataset; this was not checked. The 'trained on train and other data' label of E14 still holds, with a smaller share.
 - **Test rows:** 11,674 test decisions exist in the mixture's `eval/test`; these are the upstream tests (HelpSteer2 validation, MASSIVE, tasksource, bekko).
 
 ## Reproduce
