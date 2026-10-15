@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E12: Unseen label sets (evaluation on additional tasks)'
 description: Evaluate all existing models, without retraining, on extra tasks whose label sets never occur in the training mixture.
-status: running
+status: done
 answers: [q04, q01]
 depends_on: [e11, e10]
 tags: [generalisation, label-sets, slot, baseline]
@@ -81,8 +81,8 @@ One seed per model. Per-source n is limited. Sources flagged by name may be fami
 
 ## Status and results
 
-Status: **planned**. Results: _not run yet_.
+Status: **done**. By the pre-set rule slot and baseline **tie** ([O26](/observations/o26-unseen-label-sets-slot-and-baseline-tie.md)): slot gain over zero-shot +8.2 points, frozen-head baseline +8.9, trainable-head baseline +8.0 (32 sources); slot wins on 11 of 32 sources against the frozen-head baseline. On the 23 task-novel sources the slot gain is +6.2 against +7.2 (reversed, not significant). The simpler baseline is preferred.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-16 | `runs/{letter-zeroshot,letter-probe,slot-probe,baseline-v0,baseline-lmhead,slot-v0}/eval/extra.json` | `evaluate --split extra`, existing temperatures, 32 sources / 7,323 decisions | gain vs zero-shot: slot +8.2, baseline +8.9, trainable-head baseline +8.0, letter probe +1.3, slot probe -34.8; rule: tie | [O26](/observations/o26-unseen-label-sets-slot-and-baseline-tie.md) |

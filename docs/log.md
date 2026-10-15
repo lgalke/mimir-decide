@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-10-16
+* **Finding**: E12 done ([O26](/observations/o26-unseen-label-sets-slot-and-baseline-tie.md)): on 32 evaluation-only bekko sources (7,323 decisions; all flagged as seen by Mimir) the gain over the untrained model is +8.2 (slot), +8.9 (frozen-head baseline), +8.0 (trainable-head baseline), +1.3 (letter probe), -34.8 (slot probe). By the pre-set rule: tie (difference -0.7 points, slot wins on 11 of 32 sources against the frozen-head baseline); on the 23 task-novel sources +6.2 against +7.2. The simpler baseline is preferred. Score questions are the one lead for the slot model (ECE 0.050 against 0.107), not pre-registered. Q04 and D05 carry update notes.
+
 ## 2026-10-15
 * **Create**: E12 extra evaluation set built on the server and pre-registered (`configs/extra_eval_sources.yaml`, commit `50dd7f5`): 32 bekko sources, 7,323 rows, 23 task-novel; the audit flags all 32 as seen by Mimir by name. Four sources are named like the workflows of the Typed Decisions benchmark (not checked against its test rows). No model was evaluated on it yet. E12 is `running`.
 * **Finding**: Composition of `train.parquet` counted on the server ([O25](/observations/o25-full-mixture-build-counts-and-drops.md)): 371,275 decisions from 366 sources (earlier notes said about 329-330): tasksource 78.8%, bekko 15.4%, helpsteer2 2.7%, massive 2.2%, localllama 3,404 (0.9%); choice 73.1%, noul 16.7%, score 10.2%. LocalLLaMA has 3,404 of its about 6,000 train decisions (56.7%), confirming the correction (drops 2,066 explain it); E14 and D28 updated. The 15 largest sources sit exactly at the cap of 2,000 per source. E01 only lacks the manual n-gram inspection and the Mimir overlap report.
