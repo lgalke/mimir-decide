@@ -25,5 +25,6 @@ What is known about decision models, Jev, Mimir and HRM-Text, with sources.
 * [RLCD and calibration training](/research/calibration-training.md) - Training objectives for calibrated decisions: RLCD (Jev), RLCR, Brier-score rewards, temperature scaling, RLHV.
 * [Colleague recommendations (Mimir training lead)](/research/colleague-recommendations.md) - What the colleague who has been training Mimir recommended for turning it into a decision model, and which parts we adopted.
 * [Decision Index (community leaderboard for Jev reproductions)](/research/decision-index.md) - What the Decision Index is, how it scores, what is public and private, and what it needs from an entrant. Read on 2026-10-14 from the Space and the kit.
+* [How open Jev reproductions read out decisions, and what that says about frozen backbones](/research/frozen-and-adapted-backbones.md) - Model cards of four open reproductions (read 2026-10-16) show trained or LoRA-adapted backbones with encoder slots or per-option heads; none documents a frozen backbone. Notes what this means for our slot probe.
 * [Open questions](/research/open-questions.md) - Unknowns about Jev and about adapting Mimir; things to verify.
 * [Sources](/research/sources.md) - Sources consulted on 2026-10-03 and the depth of verification for each.

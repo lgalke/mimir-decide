@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-10-17
+* **Create**: Research page on how open Jev reproductions read out decisions ([frozen-and-adapted-backbones](/research/frozen-and-adapted-backbones.md)): the Qwen scorer (LoRA + per-option last-token head), Verdict (ModernBERT slots), Bekko (encoder heads), GLiNER2.5-Decide; none of the four cards documents a frozen backbone. The early research had no such survey. Candidate experiments listed, not run.
+
 ## 2026-10-16
 * **Finding**: E12 done ([O26](/observations/o26-unseen-label-sets-slot-and-baseline-tie.md)): on 32 evaluation-only bekko sources (7,323 decisions; all flagged as seen by Mimir) the gain over the untrained model is +8.2 (slot), +8.9 (frozen-head baseline), +8.0 (trainable-head baseline), +1.3 (letter probe), -34.8 (slot probe). By the pre-set rule: tie (difference -0.7 points, slot wins on 11 of 32 sources against the frozen-head baseline); on the 23 task-novel sources +6.2 against +7.2. The simpler baseline is preferred. Score questions are the one lead for the slot model (ECE 0.050 against 0.107), not pre-registered. Q04 and D05 carry update notes.
 
