@@ -483,9 +483,13 @@ def main(argv=None):
     ap.add_argument("--set", nargs="*", default=[], help="top-level overrides key=value (YAML-parsed), for trial builds")
     a = ap.parse_args(argv)
     cfg = paths.load_config(a.config)
-    for kv in a.set:
+    for kv in a.set:  # dotted keys reach into sections: sampling.total=1000000
         k, v = kv.split("=", 1)
-        cfg[k] = paths.resolve(yaml.safe_load(v))
+        node = cfg
+        *parents, leaf = k.split(".")
+        for part in parents:
+            node = node.setdefault(part, {})
+        node[leaf] = paths.resolve(yaml.safe_load(v))
     if a.output_dir:
         cfg["output_dir"] = a.output_dir
     if a.sources:

@@ -127,3 +127,14 @@ def test_infeasible_floor_is_reported_not_hidden(tmp_path, monkeypatch, capsys):
     _patch(monkeypatch, {("A", "train"): pool, ("A", "validation"): [], ("A", "test"): []})
     m = bm.build(_cfg(tmp_path, sampling={"total": 400, "kind_floors": {"noul": 0.5}}))
     assert m["sampling"]["converged"] is False and "WARNING" in capsys.readouterr().out
+
+
+def test_set_overrides_reach_into_sections(tmp_path, monkeypatch):
+    import yaml
+    _patch(monkeypatch, {("A", "train"): _pool(), ("A", "validation"): [], ("A", "test"): []})
+    base = _cfg(tmp_path, sampling=dict(SAMPLING))
+    (tmp_path / "c.yaml").write_text(yaml.safe_dump(base))
+    bm.main(["--config", str(tmp_path / "c.yaml"), "--set", "sampling.total=500", "per_source_cap=800",
+             "sampling.sizes={small: 200}"])
+    full = read_parquet(tmp_path / "out" / "train.parquet")
+    assert len(full) <= 500 and (tmp_path / "out" / "train_small.parquet").exists()

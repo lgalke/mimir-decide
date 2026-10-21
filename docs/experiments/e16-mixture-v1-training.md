@@ -48,6 +48,10 @@ done
 
 The larger run (`--set train_file=train_v1-1M.parquet run_dir=runs/slot-v1-1M`, or `train.parquet` for the full set) is chosen after the throughput is known. `validation` and `calib` come from `mixture-v1`, which equals `mixture-v0`.
 
+## Fast path (owner's priority, 2026-10-21)
+
+The owner wants a good model soon and accepts weaker attribution. Build the 1M mixture directly (`--set sampling.total=1000000 per_source_cap=12000`; `train.parquet` is then the 1M set and `train_v1-371k.parquet` comes for free) and train one model on it at `max_len: 4096`, the letter baseline first (the simpler model under the tie rules; the slot model can follow on the same data). The composition-only run on `v1-371k` stays available later; the decision rule below then applies only to what was actually run.
+
 ## Metrics to record
 
 Validation, heldout, E12 pooled accuracy and gain over zero-shot (both source lists), Typed Decisions accuracy, KL, Brier (calibrated), ECE; the diversity report of every mixture used; examples per second and peak memory at 4096; sequence-length statistics (rows cut by the formatter).
