@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-10-21
+* **Create**: Galke-Poech learning-rate dividers ([D30](/design/d30-galke-poech-lr-dividers.md)), the owner's rule: base LR divided by how often each recurrent stack is applied with gradient (L by 6, H by 2 for full backprop). New flag `lr_cycle_dividers`, default `false`, so the pilot, E11 and the probes stay reproducible (flag off builds the earlier single backbone group). With the flag the log gets `lr_groups` and the checkpoint metadata `lr_dividers`. For truncated backprop (`L_bp_cycles=[0,3]`) `dL` is 3, my extension of the rule. 5 unit tests and a 3-step smoke training with the flag on and off on a tiny model; not run on the real model, no experiment planned yet. All runs so far used two groups only (backbone 1e-5, head 1e-4), with no per-module scaling.
+
 ## 2026-10-17
 * **Create**: Research page on how open Jev reproductions read out decisions ([frozen-and-adapted-backbones](/research/frozen-and-adapted-backbones.md)): the Qwen scorer (LoRA + per-option last-token head), Verdict (ModernBERT slots), Bekko (encoder heads), GLiNER2.5-Decide; none of the four cards documents a frozen backbone. The early research had no such survey. Candidate experiments listed, not run.
 

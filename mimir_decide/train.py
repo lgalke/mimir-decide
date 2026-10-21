@@ -76,6 +76,38 @@ def lr_factor(step: int, total: int, warmup: int, floor: float = 0.1) -> float:
     return floor + (1 - floor) * 0.5 * (1 + math.cos(math.pi * min(1.0, prog)))
 
 
+def cycle_dividers(lm) -> dict:
+    """Learning-rate dividers per recurrent module ("Galke Poech dividers", D30).
+
+    A module that is applied n times per forward pass, with gradients flowing through all applications, receives n
+    summed gradient contributions, so its base learning rate is divided by n: L by the number of L-stack applications
+    that carry gradients (sum of `L_bp_cycles`; 6 for H_cycles=2, L_cycles=3, L_bp_cycles=[3,3]), H by `H_cycles` (2).
+    """
+    inner = lm.model
+    H = lm.config.H_cycles
+    return {"L": max(1, sum(inner.L_bp_cycles_padded[:H])), "H": max(1, H)}
+
+
+def backbone_groups(lm, cfg: dict):
+    """AdamW parameter groups for the backbone. Default (flag off) is one group, exactly as in the earlier runs.
+    With `lr_cycle_dividers: true` the L stack, the H stack and the remaining trainable weights get their own group.
+    Returns (groups, dividers or None)."""
+    lr, wd = float(cfg["lr_backbone"]), cfg.get("weight_decay", 0.01)
+    trainable = [p for p in lm.parameters() if p.requires_grad]
+    if not trainable:
+        return [], None
+    if not cfg.get("lr_cycle_dividers", False):
+        return [{"params": trainable, "lr": lr, "weight_decay": wd}], None
+    div = cycle_dividers(lm)
+    in_L = [p for p in lm.model.L_module.parameters() if p.requires_grad]
+    in_H = [p for p in lm.model.H_module.parameters() if p.requires_grad]
+    taken = {id(p) for p in in_L + in_H}
+    rest = [p for p in trainable if id(p) not in taken]
+    groups = [{"params": ps, "lr": lr / d, "weight_decay": wd, "name": n}
+              for ps, d, n in ((in_L, div["L"], "L"), (in_H, div["H"], "H"), (rest, 1, "other")) if ps]
+    return groups, div
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True)
@@ -122,10 +154,13 @@ def main(argv=None):
     meta = {"model_type": cfg["model_type"], "max_len": max_len, "marker_id": marker_id,
             "base_model": cfg["base_model"], "revision": cfg.get("revision")}
 
-    backbone = [p for p in model.lm.parameters() if p.requires_grad]
+    groups, dividers = backbone_groups(model.lm, cfg)  # empty for head-only probes (freeze_backbone)
+    backbone = [p for g in groups for p in g["params"]]
+    if dividers:
+        meta["lr_dividers"] = dividers
+        print(f"lr_cycle_dividers: L / {dividers['L']}, H / {dividers['H']} -> lr "
+              + ", ".join(f"{g['name']}={g['lr']:.3g}" for g in groups))
     new = model.new_parameters()
-    groups = ([{"params": backbone, "lr": float(cfg["lr_backbone"]), "weight_decay": cfg.get("weight_decay", 0.01)}]
-              if backbone else [])  # empty for head-only probes (freeze_backbone)
     if new:
         groups.append({"params": new, "lr": float(cfg["lr_head"]), "weight_decay": 0.0})
     opt = torch.optim.AdamW(groups, betas=(0.9, 0.95), fused=(device == "cuda"))
@@ -186,7 +221,8 @@ def main(argv=None):
             step += 1
             if step % cfg.get("log_every", 10) == 0 or step == 1:
                 rec = {"step": step, "loss": loss.item(), "ce": ce.mean().item(), "grad_norm": float(gn),
-                       "lr": opt.param_groups[0]["lr"], "elapsed_s": round(time.time() - t0, 1), "skipped": skipped,
+                       "lr": opt.param_groups[0]["lr"], **({"lr_groups": [g["lr"] for g in opt.param_groups]} if dividers else {}),
+                       "elapsed_s": round(time.time() - t0, 1), "skipped": skipped,
                        "ex_per_s": round(seen / max(1e-9, time.time() - t0), 2),
                        "peak_mem_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2) if device == "cuda" else None}
                 print(rec)
