@@ -1,0 +1,30 @@
+# Slot-head decision model on mixture-v1 (E16) on Mimir v1.5. Single GPU (>=40 GB recommended; ~80 GB comfortable).
+model_type: slot
+base_model: danish-foundation-models/DFM-Mimir-v1.5
+revision: 521b40b36a79918014544b970d4c2669ff1530eb
+data_dir: "{DATA_ROOT}/mixture-v1"   # DATA_ROOT = $MIMIR_DECIDE_DATA, default ~/mimir-decide-data
+run_dir: runs/slot-v1-371k   # relative to the repository root; git tracks only the small result files (see .gitignore)
+
+train_file: train_v1-371k.parquet   # nested subset of mixture-v1; train.parquet is the full set
+max_len: 4096                # v1: the model's limit (v0 used 2048)
+batch_size: 8
+grad_accum: 4
+epochs: 1
+max_steps: null
+lr_backbone: 1.0e-5          # v1.5's final LR was 1e-5
+lr_head: 1.0e-4
+lr_cycle_dividers: false     # true: L stack lr / (L applications with gradient, 6 for [3,3]), H stack lr / H_cycles (2); false reproduces the runs so far (D30)
+weight_decay: 0.01
+warmup_frac: 0.01
+grad_clip: 1.0
+emd_lambda: 0.5
+L_bp_cycles: null            # keep the checkpoint's [3, 3]; [0, 3] saves memory/compute (a deviation)
+freeze_input_embeddings: true
+gradient_checkpointing: true
+param_dtype: float32         # fp32 master weights + bf16 autocast on CUDA
+eval_every: 1000
+eval_max_examples: 2000
+eval_batch_size: 16
+log_every: 10
+num_workers: 2
+seed: 0

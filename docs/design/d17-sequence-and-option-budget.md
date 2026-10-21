@@ -21,6 +21,8 @@ Mimir's context is 4,096; the slot model needs the whole question and all option
 
 Bias against long-document tasks ([Q08](/questions/q08-long-state-drop-bias.md)); evaluation reports `n_skipped_too_long`.
 
+Update 2026-10-21 ([D31](/design/d31-mixture-v1-size-and-diversity.md)): mixture v1 trains at `max_len: 4096` and admits train states up to 16,000 characters (`train_max_state_chars`); the eval files keep the 12,000-character filter, so they stay identical to v0. The 160-token option limit and the middle cut of longer states stay.
+
 ## Revisit when
 
 Memory allows longer sequences, or an important task is mostly long.

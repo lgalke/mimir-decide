@@ -53,3 +53,23 @@ def test_audit_flags_tasksource_collection_and_aliases():
     flagged = set(rep["sources_seen_by_mimir"])
     assert {"tasksource/boolq", "tasksource/HelpSteer2/coherence", "helpsteer2/coherence"} <= flagged
     assert "massive/da-DK" not in flagged and "localllama/customer_service" not in flagged
+
+
+@pytest.mark.parametrize("lic,ok,why", [
+    ("cc-by-4.0, cc-by-4.0 (original source)", True, "ok"),
+    ("mit, mit (original source)", True, "ok"),
+    ("apache-2.0 (original source)", True, "ok"),
+    ("cc-by-sa-4.0, cc-by-sa-4.0 (original source)", True, "share_alike"),
+    ("mit, mit (publisher); original review terms (original source)", False, "not_on_allowlist"),
+    ("apache-2.0, Custom (DPI)", False, "not_on_allowlist"),
+    ("gpl-3.0", False, "not_on_allowlist"),
+    ("odbl", False, "not_on_allowlist"),
+    ("cc-by-nc-4.0 (original source)", False, "non_commercial"),
+    ("other, cdla-permissive-1.0 (original source)", False, "unknown_license"),
+])
+def test_annotation_stripping_is_opt_in_and_narrow(lic, ok, why):
+    assert licenses.check(lic, None, strip_annotations=True) == (ok, why)
+
+
+def test_default_parser_is_unchanged_for_annotated_licences():
+    assert licenses.check("mit, mit (original source)") == (False, "not_on_allowlist")   # v0 behaviour kept

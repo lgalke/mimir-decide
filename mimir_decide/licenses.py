@@ -18,9 +18,15 @@ NONCOMMERCIAL_RE = re.compile(r"(^|[-_\s])nc([-_\s]|$)|non-?commercial|research[
 UNKNOWN = {"", "other", "unknown", "unspecified", "none", "null", "n/a"}
 
 
-def _canon(part: str) -> str:
+# Provenance annotations that some collections append to a licence name, e.g. "cc-by-4.0 (original source)".
+ANNOTATION_RE = re.compile(r"\s*\((original source|publisher)\)", re.I)
+
+
+def _canon(part: str, strip_annotations: bool = False) -> str:
     s = part.strip().lower()
     s = re.sub(r"\(dpi\)", "", s).strip()
+    if strip_annotations:  # D32: opt-in, so that the v0 mixture and the E12 candidate list stay reproducible
+        s = ANNOTATION_RE.sub("", s).strip()
     s = s.replace("_", "-")
     s = re.sub(r"^creative commons\s+", "cc ", s)
     s = re.sub(r"^cc[ -]?by[ -]?sa[ -]?(\d\.\d)", r"cc-by-sa-\1", s)
@@ -38,9 +44,12 @@ def normalise(lic: str | None) -> str:
     return ",".join(_canon(p) for p in lic.split(",") if p.strip())
 
 
-def check(lic: str | None, license_use: str | None = None) -> tuple[bool, str]:
-    """Return (allowed, reason). Reasons: ok, share_alike, unknown_license, non_commercial, not_on_allowlist."""
-    parts = [_canon(p) for p in (lic or "").split(",") if p.strip()]
+def check(lic: str | None, license_use: str | None = None, strip_annotations: bool = False) -> tuple[bool, str]:
+    """Return (allowed, reason). Reasons: ok, share_alike, unknown_license, non_commercial, not_on_allowlist.
+
+    `strip_annotations=True` ignores the provenance annotations "(original source)" and "(publisher)" after a licence
+    name; any other text next to the licence (for example "original review terms") still fails the allowlist."""
+    parts = [_canon(p, strip_annotations) for p in (lic or "").split(",") if p.strip()]
     if not parts or any(p in UNKNOWN for p in parts):
         return False, "unknown_license"
     if any(NONCOMMERCIAL_RE.search(p) for p in parts) or (

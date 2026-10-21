@@ -44,11 +44,16 @@ def row_to_decision(r: dict, split: str, drops: Counter0):
     return d
 
 
+CONFIGS = ("default", "full", "filtered-full")   # text decision configs; `extraction` and `vision` have other formats
+
+
 def iter_records(split: str, drops: Counter0, limit: Optional[int] = None,
-                 revision: Optional[str] = None, streaming: bool = True) -> Iterator:
+                 revision: Optional[str] = None, streaming: bool = True, config: str = "default") -> Iterator:
     from datasets import load_dataset
 
-    ds = load_dataset(REPO, "default", split=SPLIT_MAP[split], streaming=streaming, revision=revision)
+    if config not in CONFIGS:
+        raise ValueError(f"tasksource config {config!r} is not a text decision config: {CONFIGS}")
+    ds = load_dataset(REPO, config, split=SPLIT_MAP[split], streaming=streaming, revision=revision)
     n = 0
     for r in ds:
         d = row_to_decision(r, split, drops)

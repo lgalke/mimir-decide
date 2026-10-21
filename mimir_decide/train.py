@@ -134,7 +134,7 @@ def main(argv=None):
     run_dir = Path(cfg["run_dir"]).expanduser()
     run_dir.mkdir(parents=True, exist_ok=True)
 
-    train = read_parquet(assert_trainable_path(data_dir / "train.parquet"))
+    train = read_parquet(assert_trainable_path(data_dir / cfg.get("train_file", "train.parquet")))  # v1: nested subsets
     val = read_parquet(assert_trainable_path(data_dir / "validation.parquet"))
     assert all(d.split == "train" for d in train), "train.parquet contains non-train records"
     if cfg.get("max_train_examples"):

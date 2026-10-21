@@ -22,6 +22,8 @@ E11 is done (letter baseline with a trainable output head): it ties with the fro
 
 **Then, in the owner's order:** [E13](docs/experiments/e13-head-only-baselines.md) (head-only probes on the frozen backbone; cheaper than a full run; code is ready), then [E12](docs/experiments/e12-unseen-label-sets.md) (evaluation of all models on extra tasks with unseen label sets; no retraining; task sources decided (option A, evaluation only; [D26](docs/design/d26-evaluate-unseen-label-sets-on-additional-tasks.md)); the tool is ready: `mimir_decide.build_extra_eval` (see the E12 page for the commands; commit the source list before evaluating).
 
+**Mixture v1 (decided 2026-10-21, not built yet):** [D31](docs/design/d31-mixture-v1-size-and-diversity.md), [D32](docs/design/d32-licence-annotation-stripping.md), [E16](docs/experiments/e16-mixture-v1-training.md). Larger and more diverse training set from tasksource `full` and a wider bekko read, evaluation frozen to mixture-v0 (the build checks it), nested sizes (`v1-371k`, `v1-1M`, full), context 4096, training moves to a faster machine. Build with `python -m mimir_decide.build_mixture --config configs/data_v1.yaml`; the code and 20 unit tests exist, a small trial build ran, the real build did not. Also new: flag `lr_cycle_dividers` ([D30](docs/design/d30-galke-poech-lr-dividers.md), off by default).
+
 **Open or not recorded yet:**
 - The pilot built the full mixture, but its manifest numbers (counts, drops, `heldout_patterns_unmatched`) are not in the docs yet ([E01](docs/experiments/e01-full-mixture-build.md) stays `planned` until they are).
 - The decision rule of E03 needs a fixed margin because the owner chose one seed (proposal: NLL gap below 0.01 is a tie). Waiting for the owner.
@@ -115,6 +117,8 @@ mimir_decide/
   typed_decisions.py                      (E14: score a model on the Typed Decisions benchmark test split)
   build_extra_eval.py                     (E12: evaluation-only extra tasks with unseen label sets, option A)
   select_heldout.py derive_mixture.py     (E12 fallback: leave tasks out and retrain; superseded)
+  sampling.py mixture_report.py           (D31: quotas, nested sizes, diversity report for mixture v1; config configs/data_v1.yaml)
+  decision_index_engine.py                (D29: our models as an engine for the Decision Index kit; deferred, E15)
 scripts/run_pilot.sh        build -> audit -> train both -> calibrate -> evaluate (validation + heldout)
 scripts/make_tiny_model.py  random tiny HRM with the real vocabulary (smoke tests without the big model)
 tests/                      80 tests; marker `network` needs internet

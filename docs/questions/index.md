@@ -19,6 +19,7 @@ One page per open question: why it matters, how to resolve it, linked experiment
 * [Q13: Does calibration transfer to held-out sources?](/questions/q13-calibration-transfer-across-domains.md) - [open] Laya's calibration was not shown to transfer across domains.
 * [Q14: How much of the fine-tuned baseline's quality comes from fine-tuning?](/questions/q14-how-much-of-the-baseline-quality-is-fine-tuning.md) - [answered] The letter baseline reaches about 0.835 accuracy after fine-tuning. How much would the untrained Mimir already reach with the same prompt?
 * [Q15: Is NLL-fitted temperature scaling the right calibration?](/questions/q15-is-nll-fitted-temperature-scaling-the-right-calibration.md) - [open] The fitted temperatures lower NLL slightly but raise ECE on noul and held-out data. Another fitting criterion, or no post-hoc step for the fine-tuned models, may be better.
+* [Q16: Do more data, more diverse data or a longer context help most?](/questions/q16-composition-or-size.md) - [open] Mixture v1 changes size, composition and context length. Which of them moves quality on unseen label sets and the Typed Decisions benchmark?
 
 ## Template
 

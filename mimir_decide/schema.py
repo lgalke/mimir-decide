@@ -138,12 +138,14 @@ ARROW_SCHEMA = pa.schema(
 )
 
 
-def write_parquet(records: list[Decision], path) -> None:
+def write_parquet(records: list[Decision], path, chunk: int = 100_000) -> None:
+    """Write in row groups of `chunk` records so that a multi-million row mixture is not copied as dicts at once."""
     import pyarrow.parquet as pq
 
-    rows = [r.to_row() for r in records]
-    table = pa.Table.from_pylist(rows, schema=ARROW_SCHEMA)
-    pq.write_table(table, path, compression="zstd")
+    with pq.ParquetWriter(path, ARROW_SCHEMA, compression="zstd") as w:
+        for i in range(0, max(len(records), 1), chunk):
+            rows = [r.to_row() for r in records[i : i + chunk]]
+            w.write_table(pa.Table.from_pylist(rows, schema=ARROW_SCHEMA))
 
 
 def read_parquet(path) -> list[Decision]:
