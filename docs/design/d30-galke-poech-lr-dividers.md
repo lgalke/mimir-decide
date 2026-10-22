@@ -27,6 +27,8 @@ HRM-Text applies the same L stack `H_cycles x L_cycles` times (2 x 3 = 6) and th
 - Interaction with [E06](/experiments/e06-l-bp-cycles-ablation.md): `L_bp_cycles = [0, 3]` changes `dL` from 6 to 3 when the flag is on.
 - Tested: five unit tests (flag off equals the earlier single group; 6 and 2 for `[3, 3]`; 3 for `[0, 3]`; every trainable parameter in exactly one group; frozen backbone gives no groups) and a 3-step smoke training on a tiny random model with the flag on and off. Not run on the real model.
 
+Update 2026-10-22 ([O28](/observations/o28-mimir-basics-check.md)): the Mimir v1.5 model card states that its final training used exactly this scaling (base rate 1e-5, H 5e-6, L about 1.6667e-6). All runs so far had the flag off, i.e. an L stack learning at 6 times and an H stack at 2 times Mimir's last rate. For runs that should follow Mimir's setup, turn the flag on with `lr_backbone: 1.0e-5`.
+
 ## Revisit when
 
 A run with the flag on shows an effect on validation, or the owner wants different dividers (for example by applications instead of by gradient-carrying applications).
