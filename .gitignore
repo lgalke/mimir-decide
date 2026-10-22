@@ -16,3 +16,6 @@ runs/**
 !runs/*/eval/*.json
 !runs/*/train_log.jsonl
 .env.sh
+
+# Personal notes (not part of the project)
+notes/
