@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader, Dataset
 
 from . import paths
 from .formatting import Collator, Formatter, mode_for
-from .inference import device_auto, predict_logits
+from .inference import cap_gpu_memory, device_auto, predict_logits
 from .metrics import evaluate
 from .model import build_model, decision_loss, save_model
 from .schema import Decision, read_parquet
@@ -128,6 +128,7 @@ def main(argv=None):
     random.seed(seed)
     torch.manual_seed(seed)
     device = cfg.get("device") or device_auto()
+    cap_gpu_memory(device, cfg.get("gpu_memory_fraction"))
     param_dtype = getattr(torch, cfg.get("param_dtype", "float32"))
     use_autocast = cfg.get("autocast", device == "cuda")
     data_dir = Path(cfg["data_dir"]).expanduser()

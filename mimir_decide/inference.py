@@ -10,6 +10,13 @@ from .formatting import Collator, Formatter, make_perm, mode_for
 from .schema import Decision
 
 
+def cap_gpu_memory(device: str, fraction) -> None:
+    """Limit this process to `fraction` of the GPU memory (config key `gpu_memory_fraction`). A process that shares the
+    GPU with another run then raises its own out-of-memory error instead of taking memory the other run still needs."""
+    if fraction and str(device).startswith("cuda"):
+        torch.cuda.set_per_process_memory_fraction(float(fraction), torch.device(device))
+
+
 def device_auto() -> str:
     if torch.cuda.is_available():
         return "cuda"

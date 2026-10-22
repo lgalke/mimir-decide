@@ -28,4 +28,5 @@ eval_batch_size: 4           # evaluation uses all options of a decision as rows
 log_every: 10
 num_workers: 2
 seed: 0
+gpu_memory_fraction: null    # for a run that shares the GPU with another: for example 0.40 (about 38 GB of 95 GB), so that this run fails alone instead of taking the other run's memory
 max_train_options: 6         # scalar head: rows per choice decision in training (all options with target mass + sampled negatives, sampled-softmax correction)

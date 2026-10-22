@@ -23,7 +23,7 @@ import yaml
 
 from . import paths
 from .formatting import Collator, Formatter, mode_for
-from .inference import device_auto
+from .inference import cap_gpu_memory, device_auto
 from .model import build_model, decision_loss
 from .schema import Decision
 from .train import backbone_groups
@@ -105,6 +105,7 @@ def main(argv=None):
         k, v = kv.split("=", 1)
         cfg[k] = yaml.safe_load(v)
     device = cfg.get("device") or device_auto()
+    cap_gpu_memory(device, cfg.get("gpu_memory_fraction"))
     effective = a.effective or cfg["batch_size"] * cfg.get("grad_accum", 1)
     from transformers import AutoTokenizer
 

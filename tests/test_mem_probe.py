@@ -38,3 +38,14 @@ def test_probe_decision_fills_the_context_exactly_and_the_step_runs_on_a_tiny_mo
     step = mem_probe.make_step_fn(model, opt, groups, Collator(f, False), d, "cpu")
     rows = mem_probe.sweep(step, [1, 2], "cpu")
     assert all(r["ok"] for r in rows) and rows[0]["step_s"] > 0
+
+
+def test_gpu_memory_cap_is_applied_only_on_cuda_and_only_when_set(monkeypatch):
+    from mimir_decide import inference
+    calls = []
+    monkeypatch.setattr(inference.torch.cuda, "set_per_process_memory_fraction", lambda f, d=None: calls.append((f, str(d))))
+    inference.cap_gpu_memory("cpu", 0.4)
+    inference.cap_gpu_memory("cuda", None)
+    assert calls == []
+    inference.cap_gpu_memory("cuda", 0.4)
+    assert calls == [(0.4, "cuda")]
