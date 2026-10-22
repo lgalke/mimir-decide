@@ -110,7 +110,7 @@ class MimirDecideEngine(Engine):
         cal = self.run / "calibration.json"
         self.temps = json.loads(cal.read_text())["temperatures"] if _flag(calibrated, True) and cal.exists() else None
         # a formatter without a length limit: lets us measure the full prompt and refuse instead of truncating
-        self.fmt = Formatter(self.tok, self.mode, 10 ** 9, self.meta["marker_id"])
+        self.fmt = Formatter(self.tok, self.mode, 10 ** 9, self.meta["marker_id"], bool(self.meta.get("chat_format", False)))
         self.provenance = {"repo": "mimir-decide", "run_dir": str(self.run), "checkpoint": checkpoint,
                            "model_type": self.meta["model_type"], "max_len": self.max_len,
                            "calibrated": self.temps is not None, "temperatures": self.temps,

@@ -113,7 +113,8 @@ def main(argv=None):
                                         revision=cfg.get("tokenizer_revision", cfg.get("revision")))
     marker_id = tok.convert_tokens_to_ids("<unused0>")
     mode = mode_for(cfg["model_type"])
-    collate = Collator(Formatter(tok, mode, cfg["max_len"], marker_id), augment=False, pad_id=tok.pad_token_id or 0)
+    chat = bool(cfg.get("chat_format", cfg["model_type"] == "scalar"))
+    collate = Collator(Formatter(tok, mode, cfg["max_len"], marker_id, chat), augment=False, pad_id=tok.pad_token_id or 0)
     dec = full_length_decision(a.options)
     results = {}
     for ck in a.checkpointing:

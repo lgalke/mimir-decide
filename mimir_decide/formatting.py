@@ -14,6 +14,15 @@ Letter-baseline format (Gemma chat template, verified identical to tokenizer.app
 
 and the prediction is the logits of the letter tokens at the last position.
 
+Chat variant of the slot and scalar formats (D34, `chat=True`): the same text inside the Gemma user turn, followed by the
+generation prompt, exactly as Mimir saw its training prompts (the prefix of an HRM-Text example is the chat template
+rendered with the generation prompt):
+
+    <bos><|turn>user\nState:..\n\nQuestion (kind):..\n\nOptions:\n[M] ..\n[M] ..<turn|>\n<|turn>model\n      (slot)
+    <bos><|turn>user\nState:..\n\nQuestion (kind):..\n\nOption:\n{option}<turn|>\n<|turn>model\n             (scalar row)
+
+the slot readout stays at the markers, the scalar readout is the final token of the row (the generation prompt).
+
 Scalar format (D33): one sequence PER OPTION, so a decision with K options becomes K rows that share the state:
 
     <bos>State:\n{state}\n\nQuestion ({kind}):\n{question}\n\nOption:\n{option}
@@ -36,6 +45,8 @@ from .schema import Decision
 KIND_ID = {"noul": 0, "choice": 1, "score": 2}
 LETTERS = [chr(ord("A") + i) for i in range(26)]
 MAX_OPTION_TOKENS = 160
+CHAT_HEAD = "<|turn>user\nState:\n"            # after <bos>
+CHAT_END = "<turn|>\n<|turn>model\n"           # closes the user turn and opens the model turn (generation prompt)
 MIDDLE = " […] "
 
 
@@ -54,9 +65,10 @@ class Encoded:
 
 
 class Formatter:
-    def __init__(self, tok, mode: str, max_len: int, marker_id: int):
+    def __init__(self, tok, mode: str, max_len: int, marker_id: int, chat: bool = False):
         assert mode in ("slot", "letter", "scalar")
         self.tok, self.mode, self.max_len, self.marker_id = tok, mode, max_len, marker_id
+        self.chat = chat or mode == "letter"   # the letter baseline is always in chat format
         self.bos = tok.bos_token_id if tok.bos_token_id is not None else 2
         self._cache: dict = {}
 
@@ -77,9 +89,10 @@ class Formatter:
         opts = [d.options[i] for i in perm]
         end: list[int] = []
         if self.mode == "scalar":
-            head = [self.bos] + self._ids("State:\n")
+            head = [self.bos] + self._ids(CHAT_HEAD if self.chat else "State:\n")
             mid = self._ids(f"\n\nQuestion ({d.kind}):\n{d.question.strip()}\n\nOption:\n")
-            tails = [mid + self._ids(o)[:MAX_OPTION_TOKENS] for o in opts]
+            end = self._ids(CHAT_END) if self.chat else []
+            tails = [mid + self._ids(o)[:MAX_OPTION_TOKENS] + end for o in opts]
             budget = self.max_len - len(head) - max(len(t) for t in tails)
             if budget < 16:  # question + longest option leave no room for any state: drop (counted by caller)
                 return None
@@ -87,13 +100,15 @@ class Formatter:
             rows = [head + state_ids + t for t in tails]
             return Encoded(max(rows, key=len), [], perm, k, rows)
         if self.mode == "slot":
-            head = [self.bos] + self._ids("State:\n")
+            head = [self.bos] + self._ids(CHAT_HEAD if self.chat else "State:\n")
             mid = self._ids(f"\n\nQuestion ({d.kind}):\n{d.question.strip()}\n\nOptions:\n")
             opt_ids = []
-            for o in opts:
-                body = self._ids(f" {o}\n")[:MAX_OPTION_TOKENS]
+            for j, o in enumerate(opts):
+                # chat: the template trims the user content, so the last option has no trailing newline
+                body = self._ids(f" {o}" + ("\n" if not self.chat or j < k - 1 else ""))[:MAX_OPTION_TOKENS]
                 opt_ids.append([self.marker_id] + body)
-            tail_len = len(mid) + sum(len(x) for x in opt_ids)
+            end = self._ids(CHAT_END) if self.chat else []
+            tail_len = len(mid) + sum(len(x) for x in opt_ids) + len(end)
         else:
             head = [self.bos] + self._ids("<|turn>user\nState:\n")
             q_text = f"\n\nQuestion:\n{d.question.strip()}\n\nOptions:\n"
@@ -114,8 +129,7 @@ class Formatter:
             if self.mode == "slot":
                 slot_pos.append(len(ids))
             ids += oi
-        if self.mode == "letter":
-            ids += end
+        ids += end   # letter: the answer instruction and generation prompt; slot in chat format: the generation prompt
         return Encoded(ids, slot_pos, perm, k)
 
 

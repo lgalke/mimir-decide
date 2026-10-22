@@ -5,6 +5,7 @@ revision: 521b40b36a79918014544b970d4c2669ff1530eb
 data_dir: "{DATA_ROOT}/mixture-v1"   # DATA_ROOT = $MIMIR_DECIDE_DATA, default ~/mimir-decide-data
 run_dir: runs/scalar-v1-371k   # relative to the repository root; git tracks only the small result files (see .gitignore)
 
+chat_format: true            # D34: the prompt sits in the Gemma user turn followed by the generation prompt, as in Mimir's training
 train_file: train_v1-371k.parquet   # nested subset of mixture-v1; train.parquet is the full set
 max_len: 4096                # v1: the model's limit (v0 used 2048)
 batch_size: 2                # decisions per micro-batch; every decision is K rows (K = options, at most max_train_options for choice), so check with mem_probe --options 6

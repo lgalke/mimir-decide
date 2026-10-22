@@ -21,7 +21,7 @@ Sources: the Mimir v1.5 model card (revision `521b40b3`), the HRM-Text repositor
 | Gradient through cycles | "BP8": gradients through all 8 module executions (H2/L3) | `L_bp_cycles = [3, 3]` kept from the checkpoint | matches |
 | Precision | BF16 compute, FP32 parameters and optimizer state | bf16 autocast, fp32 master weights | matches |
 | **Learning rate** | Final base rate 1e-5 for embeddings/head with **automatic module scaling: H 5e-6 (base/2), L about 1.6667e-6 (base/6)** (model card) | One rate 1e-5 for the whole backbone in all runs so far (`lr_cycle_dividers` off) | **differs**: our L stack learns 6 times and our H stack 2 times faster than Mimir's last training steps |
-| Prompt format of the readouts | Chat format (Gemma-native turns) | Letter baseline: chat format. Slot and scalar: plain `State:/Question:/Option(s):` text without turn tokens | **differs** for slot and scalar |
+| Prompt format of the readouts | Chat format (Gemma-native turns) | Letter baseline: chat format. Slot and scalar: plain `State:/Question:/Option(s):` text without turn tokens | **differs** for slot and scalar; fixed in code for new runs by [D34](/design/d34-chat-format-for-slot-and-scalar.md) (`chat_format`), the plain format stays for slot-v0 and the probes |
 
 ## Interpretation
 

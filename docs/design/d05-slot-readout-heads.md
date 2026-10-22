@@ -30,6 +30,8 @@ Update 2026-10-14 ([O24](/observations/o24-slot-probe-extracts-little-from-a-fro
 
 Update 2026-10-16 ([O26](/observations/o26-unseen-label-sets-slot-and-baseline-tie.md)): on 32 evaluation-only sources with unseen label sets the slot model gains +8.2 points over zero-shot and the frozen-head baseline +8.9; by the pre-set rule a tie, the simpler baseline preferred. The slot design has no measured advantage in quality so far; what remains is the engineering argument (no letter limit of 26 options).
 
+Update 2026-10-22 ([D34](/design/d34-chat-format-for-slot-and-scalar.md)): slot models trained from now on use the Gemma chat format (`chat_format: true`); `slot-v0` and the probes were plain text.
+
 ## Revisit when
 
 [E03](/experiments/e03-slot-vs-letter-pilot.md) shows no advantage over the baseline.

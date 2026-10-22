@@ -41,7 +41,7 @@ def predict_logits(model, tok, meta: dict, decs: list[Decision], batch_size: int
     order (score decisions: identity or reversed) and the logits are mapped back to the original order, which
     measures robustness to option position."""
     mode = mode_for(meta["model_type"])
-    fmt = Formatter(tok, mode, max_len or meta["max_len"], meta["marker_id"])
+    fmt = Formatter(tok, mode, max_len or meta["max_len"], meta["marker_id"], bool(meta.get("chat_format", False)))
     col = Collator(fmt, augment=False, pad_id=tok.pad_token_id or 0)
     order = sorted(range(len(decs)), key=lambda i: len(decs[i].state) + sum(map(len, decs[i].options)))
     out_logits, out_decs = {}, {}
