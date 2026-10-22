@@ -13,6 +13,16 @@ timestamp: 2026-10-22T00:00:00Z
 
 Expectation, not a result: at about 1M training examples the readouts are within noise of each other (slot and letter baseline tie). The scalar head offers no 26-option limit and the standard design, at a cost of about K forward passes per decision.
 
+## Design change (owner, 2026-10-23): train on the v0 mixture first
+
+To change only the head, the first run is `scalar-v0`: the scalar head on `mixture-v0` (371,275 decisions) at `max_len: 2048`, learning-rate scaling off, seed 0, effective batch 32, the same as `baseline-v0` (letter baseline, validation accuracy 0.835). What still differs besides the head: the chat-format row per option and the sampled negatives with `max_train_options: 6` (both part of the scalar readout, [D33](/design/d33-scalar-per-option-head.md), [D34](/design/d34-chat-format-for-slot-and-scalar.md)), the micro-batch (2 x 16 decisions against 8 x 4, so the batches contain different decisions), and the code version. The comparison uses `compare` on the frozen sets and the existing pre-set rules below. The v1-mixture runs (scalar on `v1-371k`, with or without dividers) follow only if this run is interesting.
+
+```bash
+# on the GPU; source .env.sh first
+python -u -m mimir_decide.train --config configs/train_scalar_v1.yaml \
+  --set data_dir=$MIMIR_DECIDE_DATA/mixture-v0 train_file=train.parquet max_len=2048 run_dir=runs/scalar-v0
+```
+
 ## Prerequisites
 
 The letter baseline on mixture v1 is trained or running (E16); the GPU is free for the smoke test; `configs/train_scalar_v1.yaml` ([D33](/design/d33-scalar-per-option-head.md)).
