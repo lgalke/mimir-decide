@@ -30,6 +30,7 @@ Dated, evidence-backed things seen so far; add new ones with the template.
 * [O24: The slot probe extracts little from a frozen backbone and is far worse than the letter probe](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md) - A slot head trained on the frozen Mimir backbone reaches 0.446 validation accuracy, below the untrained letter readout (0.669) and the letter probe (0.703). The slot readout needs a trained backbone.
 * [O25: Full mixture build, counts and drops](/observations/o25-full-mixture-build-counts-and-drops.md) - The pilot mixture has 371,275 train decisions. Licence policy removes about 456k tasksource rows, n-gram guards about 27k. LocalLLaMA lost 2,066 rows, so 3,404 of its about 6,000 train decisions (56.7%) are in the mixture, not 90%. 366 sources, 79% from tasksource.
 * [O26: On tasks with unseen label sets, slot and letter baseline tie (E12)](/observations/o26-unseen-label-sets-slot-and-baseline-tie.md) - On 32 evaluation-only bekko sources (7,323 decisions) the fine-tuned models gain 8 to 9 points over the untrained model. By the rule fixed beforehand the slot model and the baseline tie. All sources are flagged as seen by Mimir.
+* [O27: Mixture v1 (1M) is 2.7 times larger but has the same 366 sources; two composition targets were missed](/observations/o27-mixture-v1-build-results.md) - The 1M build keeps the evaluation identical to v0 and reaches noul 19.6%, but score stays at 11.6% and the binary share rises to 43.2%. The licence fix admitted no rows at the pinned tasksource revision.
 
 ## Template
 

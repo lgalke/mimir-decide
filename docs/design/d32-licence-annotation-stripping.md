@@ -25,6 +25,10 @@ timestamp: 2026-10-21T00:00:00Z
 - Share-alike handling is unchanged: CC-BY-SA rows are listed in the manifest (`share_alike_train_sources`).
 - Admitting more licence families (unknown, custom, GPL) would be a separate owner decision; it is not part of this one.
 
+## Result (2026-10-22)
+
+The v1 build admitted **0 rows** by this change ([O27](/observations/o27-mixture-v1-build-results.md)). The 89,995 rows were counted from the `sources.yaml` of the current dataset head; the build pins the older revision `d2ab1d12`, whose rows carry plain licence names. The option stays in the code (default off, tested) and has no effect at that revision. A newer tasksource revision would use it, but the evaluation files would have to be checked again for identity (`frozen_eval_from`).
+
 ## Revisit when
 
 The owner reviews `license_newly_admitted.csv` and objects to a source, or tasksource changes its annotation style.

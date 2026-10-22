@@ -19,7 +19,7 @@ Prefilled experiment plans: hypothesis, exact commands, metrics, decision rule, 
 * [E13: Head-only baselines (frozen backbone)](/experiments/e13-head-only-baselines.md) - [done] Train only the output head on the frozen Mimir backbone, for the letter readout (head initialised from the LM head) and for the slot readout. Shows how much of the fine-tuning gain a readout alone can reach.
 * [E14: Typed Decisions benchmark (comparison with Anna's approach)](/experiments/e14-typed-decisions-benchmark.md) - [done] Score our models on the full test split of LocalLLaMA/typed-decisions (400 cases, 2,000 decisions) with accuracy, KL from gold, Brier and ECE, to compare with a second approach on the same data.
 * [E15: Decision Index public suite](/experiments/e15-decision-index-public-suite.md) - [planned] Run our models through the public suite of the Decision Index (37 benchmarks, about 140k requests) with the kit's own scorer, after checking for overlap with our training mixture.
-* [E16: Training on mixture v1 (composition, size and 4096 context)](/experiments/e16-mixture-v1-training.md) - [planned] Train the slot model and the letter baseline on the larger, more diverse mixture v1, first at v0's size, then larger, and compare on the frozen evaluation.
+* [E16: Training on mixture v1 (composition, size and 4096 context)](/experiments/e16-mixture-v1-training.md) - [running] Train the slot model and the letter baseline on the larger, more diverse mixture v1, first at v0's size, then larger, and compare on the frozen evaluation.
 
 ## Template
 

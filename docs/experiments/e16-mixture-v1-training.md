@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E16: Training on mixture v1 (composition, size and 4096 context)'
 description: Train the slot model and the letter baseline on the larger, more diverse mixture v1, first at v0's size, then larger, and compare on the frozen evaluation.
-status: planned
+status: running
 answers: [q16, q01]
 depends_on: [e12, e14]
 tags: [mixture, diversity, context-4096, v1]
@@ -71,8 +71,8 @@ One seed per model. Validation is in-distribution for the mixture; all sources a
 
 ## Status and results
 
-Status: **planned**. Code, configs and unit tests exist; the build has not run on the real data.
+Status: **running**. The 1M mixture is built ([O27](/observations/o27-mixture-v1-build-results.md)): 999,906 decisions, the same 366 sources as v0, evaluation identical, noul 19.6%, score 11.6% and binary 43.2% (two targets missed). Training on it has not been reported yet.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-22 | `mixture-v1` (server) | `configs/data_v1.yaml`, `sampling.total=1000000 per_source_cap=12000` | 999,906 train decisions, 366 sources, frozen evaluation identical | [O27](/observations/o27-mixture-v1-build-results.md) |
