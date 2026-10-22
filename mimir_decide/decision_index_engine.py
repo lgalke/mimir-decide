@@ -48,7 +48,7 @@ except ImportError:  # pragma: no cover - replaced by the kit's classes when it 
         def close(self):
             pass
 
-from .formatting import LETTERS, MAX_OPTION_TOKENS, Formatter
+from .formatting import LETTERS, MAX_OPTION_TOKENS, Formatter, mode_for
 from .inference import device_auto, predict_logits
 from .schema import Decision
 
@@ -106,7 +106,7 @@ class MimirDecideEngine(Engine):
         self.model, self.tok, self.meta = load_model(self.run / checkpoint, self.device)
         self.max_len = int(max_len) if max_len else int(self.meta["max_len"])
         self.batch_size = int(batch_size)
-        self.mode = "slot" if self.meta["model_type"] == "slot" else "letter"
+        self.mode = mode_for(self.meta["model_type"])
         cal = self.run / "calibration.json"
         self.temps = json.loads(cal.read_text())["temperatures"] if _flag(calibrated, True) and cal.exists() else None
         # a formatter without a length limit: lets us measure the full prompt and refuse instead of truncating
@@ -121,7 +121,7 @@ class MimirDecideEngine(Engine):
         if self.mode == "letter" and k > len(LETTERS):
             raise Unsupported(f"letter model supports at most {len(LETTERS)} options, got {k}")
         for j, o in enumerate(d.options):
-            text = f" {o}\n" if self.mode == "slot" else f"{LETTERS[j]}. {o}\n"
+            text = f" {o}\n" if self.mode == "slot" else o if self.mode == "scalar" else f"{LETTERS[j]}. {o}\n"
             if len(self.fmt._ids(text)) > MAX_OPTION_TOKENS:
                 raise Unsupported(f"option {j} has more than {MAX_OPTION_TOKENS} tokens (the formatter would cut it)")
         enc = self.fmt.encode(d)

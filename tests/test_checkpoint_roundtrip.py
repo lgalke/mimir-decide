@@ -7,14 +7,14 @@ from conftest import make_decision as mk
 
 
 @pytest.mark.network  # needs the real tokenizer (for save_pretrained); tiny random model, CPU
-@pytest.mark.parametrize("model_type", ["slot", "letter"])
+@pytest.mark.parametrize("model_type", ["slot", "letter", "scalar"])
 def test_save_load_roundtrip_gives_same_logits(tmp_path, model_type):
     from transformers import AutoTokenizer
     from transformers.models.hrm_text.configuration_hrm_text import HrmTextConfig
     from transformers.models.hrm_text.modeling_hrm_text import HrmTextForCausalLM
 
-    from mimir_decide.formatting import Collator, Formatter
-    from mimir_decide.model import LetterBaseline, SlotDecisionModel, load_model, save_model
+    from mimir_decide.formatting import Collator, Formatter, mode_for
+    from mimir_decide.model import LetterBaseline, OptionScorerModel, SlotDecisionModel, load_model, save_model
 
     tok = AutoTokenizer.from_pretrained("danish-foundation-models/DFM-Mimir-v1.5",
                                         revision="521b40b36a79918014544b970d4c2669ff1530eb")
@@ -24,10 +24,12 @@ def test_save_load_roundtrip_gives_same_logits(tmp_path, model_type):
                         L_bp_cycles=[3, 3], max_position_embeddings=512, prefix_lm=True, pad_token_id=0,
                         bos_token_id=2, eos_token_id=106, initializer_range=0.0255)
     lm = HrmTextForCausalLM(cfg)
-    model = SlotDecisionModel(lm) if model_type == "slot" else LetterBaseline(tok, lm)
-    if model_type == "slot":  # make the new parameters non-trivial so the test would catch a lost head/marker
+    model = {"slot": lambda: SlotDecisionModel(lm), "scalar": lambda: OptionScorerModel(lm),
+             "letter": lambda: LetterBaseline(tok, lm)}[model_type]()
+    if model_type in ("slot", "scalar"):  # make the new parameters non-trivial so the test would catch a lost head/marker
         with torch.no_grad():
-            model.marker.add_(0.3)
+            if model_type == "slot":
+                model.marker.add_(0.3)
             model.head[1].weight.normal_(0, 0.5)
             model.log_scale.add_(torch.tensor([0.1, -0.2, 0.3]))
     marker_id = tok.convert_tokens_to_ids("<unused0>")
@@ -36,7 +38,7 @@ def test_save_load_roundtrip_gives_same_logits(tmp_path, model_type):
 
     d = mk(state="Hello world, this is a state.", question="Pick one?", options=["red", "green", "blue"],
            target=[0, 1, 0])
-    f = Formatter(tok, "slot" if model_type == "slot" else "letter", 256, marker_id)
+    f = Formatter(tok, mode_for(model_type), 256, marker_id)
     batch = Collator(f, False).pack([f.encode(d)], [d])
     model.eval()
     with torch.no_grad():

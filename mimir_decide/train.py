@@ -19,7 +19,7 @@ import yaml
 from torch.utils.data import DataLoader, Dataset
 
 from . import paths
-from .formatting import Collator, Formatter
+from .formatting import Collator, Formatter, mode_for
 from .inference import device_auto, predict_logits
 from .metrics import evaluate
 from .model import build_model, decision_loss, save_model
@@ -147,10 +147,10 @@ def main(argv=None):
     tok = AutoTokenizer.from_pretrained(cfg.get("tokenizer") or cfg["base_model"], revision=cfg.get("tokenizer_revision", cfg.get("revision")))
     marker_id = tok.convert_tokens_to_ids("<unused0>")
     model = build_model(cfg, tok, device, param_dtype)
-    mode = "slot" if cfg["model_type"] == "slot" else "letter"
+    mode = mode_for(cfg["model_type"])
     max_len = cfg["max_len"]
     fmt = Formatter(tok, mode, max_len, marker_id)
-    collate = Collator(fmt, augment=True, pad_id=tok.pad_token_id or 0)
+    collate = Collator(fmt, augment=True, pad_id=tok.pad_token_id or 0, max_train_options=cfg.get("max_train_options"))
     meta = {"model_type": cfg["model_type"], "max_len": max_len, "marker_id": marker_id,
             "base_model": cfg["base_model"], "revision": cfg.get("revision")}
 
@@ -207,7 +207,8 @@ def main(argv=None):
             batch = {k: (v.to(device) if torch.is_tensor(v) else v) for k, v in batch.items()}
             with torch.autocast(device_type=device, dtype=torch.bfloat16, enabled=use_autocast):
                 logits = model(batch)
-            loss, ce, emd = decision_loss(logits.float(), batch, cfg.get("emd_lambda", 0.5))
+            logits = logits.float() + batch["logit_offset"] if "logit_offset" in batch else logits.float()  # sampled softmax (D33)
+            loss, ce, emd = decision_loss(logits, batch, cfg.get("emd_lambda", 0.5))
             (loss / accum).backward()
             micro += 1
             if micro % accum:

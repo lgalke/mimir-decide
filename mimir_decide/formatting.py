@@ -13,11 +13,20 @@ Letter-baseline format (Gemma chat template, verified identical to tokenizer.app
     <bos><|turn>user\nState:..\n\nQuestion:..\n\nOptions:\nA. ..\nB. ..\n\nAnswer with the letter of the correct option.<turn|>\n<|turn>model\n
 
 and the prediction is the logits of the letter tokens at the last position.
+
+Scalar format (D33): one sequence PER OPTION, so a decision with K options becomes K rows that share the state:
+
+    <bos>State:\n{state}\n\nQuestion ({kind}):\n{question}\n\nOption:\n{option}
+
+The readout is the final hidden state at the last token of each row (the option is never cut and sits at the end); a
+linear layer turns it into one score per option and the scores of one decision are softmaxed together.
 """
 from __future__ import annotations
 
+import math
 import random
 from dataclasses import dataclass
+from dataclasses import replace
 from typing import Optional
 
 import torch
@@ -30,17 +39,23 @@ MAX_OPTION_TOKENS = 160
 MIDDLE = " […] "
 
 
+def mode_for(model_type: str) -> str:
+    """Formatter mode of a model type (the letter baseline is the default)."""
+    return {"slot": "slot", "scalar": "scalar"}.get(model_type, "letter")
+
+
 @dataclass
 class Encoded:
-    input_ids: list[int]
+    input_ids: list[int]       # the sequence; for the scalar mode the longest row
     slot_pos: list[int]        # marker positions (slot model) in presented order
     perm: list[int]            # presented option j is original option perm[j]
     n_options: int
+    rows: Optional[list[list[int]]] = None   # scalar mode: one sequence per option, in presented order
 
 
 class Formatter:
     def __init__(self, tok, mode: str, max_len: int, marker_id: int):
-        assert mode in ("slot", "letter")
+        assert mode in ("slot", "letter", "scalar")
         self.tok, self.mode, self.max_len, self.marker_id = tok, mode, max_len, marker_id
         self.bos = tok.bos_token_id if tok.bos_token_id is not None else 2
         self._cache: dict = {}
@@ -61,6 +76,16 @@ class Formatter:
         perm = list(range(k)) if perm is None else perm
         opts = [d.options[i] for i in perm]
         end: list[int] = []
+        if self.mode == "scalar":
+            head = [self.bos] + self._ids("State:\n")
+            mid = self._ids(f"\n\nQuestion ({d.kind}):\n{d.question.strip()}\n\nOption:\n")
+            tails = [mid + self._ids(o)[:MAX_OPTION_TOKENS] for o in opts]
+            budget = self.max_len - len(head) - max(len(t) for t in tails)
+            if budget < 16:  # question + longest option leave no room for any state: drop (counted by caller)
+                return None
+            state_ids = self._truncate_state(self._ids(d.state.strip()), budget)
+            rows = [head + state_ids + t for t in tails]
+            return Encoded(max(rows, key=len), [], perm, k, rows)
         if self.mode == "slot":
             head = [self.bos] + self._ids("State:\n")
             mid = self._ids(f"\n\nQuestion ({d.kind}):\n{d.question.strip()}\n\nOptions:\n")
@@ -105,28 +130,86 @@ def make_perm(d: Decision, rng: random.Random, augment: bool) -> list[int]:
     return perm
 
 
-class Collator:
-    """Turns (Decision, seed) pairs into padded tensors. Used as DataLoader collate_fn."""
+def subsample_negatives(d: Decision, perm: list[int], max_options: int, rng: random.Random):
+    """Training only, scalar mode, choice decisions (D33): keep every option with target mass and a random subset of
+    the others (at least one), so that a decision does not become dozens of rows. Returns the reduced decision in
+    presented order, its identity permutation and the sampled-softmax offsets: a kept negative gets
+    log(#negatives / #kept negatives) added to its logit during training, which keeps the normaliser unbiased."""
+    pos = [j for j, i in enumerate(perm) if d.target[i] > 0]
+    neg = [j for j, i in enumerate(perm) if d.target[i] <= 0]
+    m = max(1, max_options - len(pos)) if neg else 0
+    kept_neg = neg if len(neg) <= m else rng.sample(neg, m)
+    keep = sorted(pos + kept_neg)
+    corr = math.log(len(neg) / len(kept_neg)) if kept_neg else 0.0
+    negset = set(kept_neg)
+    offsets = [corr if j in negset else 0.0 for j in keep]
+    d2 = replace(d, options=[d.options[perm[j]] for j in keep], target=[d.target[perm[j]] for j in keep],
+                 option_values=None)
+    return d2, list(range(len(keep))), offsets
 
-    def __init__(self, formatter: Formatter, augment: bool, pad_id: int = 0):
+
+class Collator:
+    """Turns (Decision, seed) pairs into padded tensors. Used as DataLoader collate_fn.
+
+    `max_train_options` (scalar mode, training): cap on the rows per choice decision, see `subsample_negatives`."""
+
+    def __init__(self, formatter: Formatter, augment: bool, pad_id: int = 0, max_train_options: Optional[int] = None):
         self.f, self.augment, self.pad_id = formatter, augment, pad_id
+        self.max_train_options = max_train_options
 
     def __call__(self, items):
-        encs, decs, drop = [], [], 0
+        encs, decs, offs, drop = [], [], [], 0
         for it in items:
             d, seed = it if isinstance(it, tuple) else (it, 0)
             rng = random.Random(seed)
-            e = self.f.encode(d, make_perm(d, rng, self.augment))
+            perm, off = make_perm(d, rng, self.augment), None
+            if (self.f.mode == "scalar" and self.augment and self.max_train_options and d.kind == "choice"
+                    and len(d.options) > self.max_train_options):
+                d, perm, off = subsample_negatives(d, perm, self.max_train_options, rng)
+            e = self.f.encode(d, perm)
             if e is None:
                 drop += 1
                 continue
             encs.append(e)
             decs.append(d)
+            offs.append(off or [0.0] * len(perm))
         if not encs:  # every item in this batch was too long: caller skips it
             return None, [], drop
-        return self.pack(encs, decs), decs, drop
+        return self.pack(encs, decs, offs), decs, drop
 
-    def pack(self, encs: list[Encoded], decs: list[Decision]) -> dict:
+    def pack_rows(self, encs: list[Encoded], decs: list[Decision], offsets=None) -> dict:
+        """Scalar mode: one row per (decision, option). `row_dec` / `row_opt` map rows back to [B, K]."""
+        B = len(encs)
+        K = max(e.n_options for e in encs)
+        rows = [(b, j, r) for b, e in enumerate(encs) for j, r in enumerate(e.rows)]
+        T = max(len(r) for _, _, r in rows)
+        R = len(rows)
+        ids = torch.full((R, T), self.pad_id, dtype=torch.long)
+        att = torch.zeros((R, T), dtype=torch.long)
+        last = torch.zeros(R, dtype=torch.long)
+        row_dec = torch.zeros(R, dtype=torch.long)
+        row_opt = torch.zeros(R, dtype=torch.long)
+        for i, (b, j, r) in enumerate(rows):
+            ids[i, : len(r)] = torch.tensor(r)
+            att[i, : len(r)] = 1
+            last[i], row_dec[i], row_opt[i] = len(r) - 1, b, j
+        valid = torch.zeros((B, K), dtype=torch.bool)
+        target = torch.zeros((B, K), dtype=torch.float32)
+        offset = torch.zeros((B, K), dtype=torch.float32)
+        kind = torch.zeros(B, dtype=torch.long)
+        for b, (e, d) in enumerate(zip(encs, decs)):
+            valid[b, : e.n_options] = True
+            target[b, : e.n_options] = torch.tensor([d.target[i] for i in e.perm], dtype=torch.float32)
+            if offsets is not None:
+                offset[b, : e.n_options] = torch.tensor(offsets[b], dtype=torch.float32)
+            kind[b] = KIND_ID[d.kind]
+        return {"input_ids": ids, "attention_mask": att, "token_type_ids": att.clone(), "last_pos": last,
+                "row_dec": row_dec, "row_opt": row_opt, "valid": valid, "target": target, "kind": kind,
+                "logit_offset": offset, "perm": [e.perm for e in encs]}
+
+    def pack(self, encs: list[Encoded], decs: list[Decision], offsets=None) -> dict:
+        if encs and encs[0].rows is not None:
+            return self.pack_rows(encs, decs, offsets)
         B = len(encs)
         T = max(len(e.input_ids) for e in encs)
         K = max(e.n_options for e in encs)

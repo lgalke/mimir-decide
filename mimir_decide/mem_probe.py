@@ -22,7 +22,7 @@ import torch
 import yaml
 
 from . import paths
-from .formatting import Collator, Formatter
+from .formatting import Collator, Formatter, mode_for
 from .inference import device_auto
 from .model import build_model, decision_loss
 from .schema import Decision
@@ -97,6 +97,7 @@ def main(argv=None):
     ap.add_argument("--set", nargs="*", default=[], help="overrides key=value (YAML-parsed), as in train.py")
     ap.add_argument("--batch_sizes", nargs="*", type=int, default=[1, 2, 4, 6, 8, 12, 16, 24, 32])
     ap.add_argument("--checkpointing", nargs="*", default=["true", "false"], help="gradient checkpointing settings to try")
+    ap.add_argument("--options", type=int, default=4, help="options per probe decision (scalar model: rows per decision)")
     ap.add_argument("--effective", type=int, default=None, help="effective batch for the suggested pairs (default batch_size*grad_accum)")
     a = ap.parse_args(argv)
     cfg = paths.load_config(a.config)
@@ -110,9 +111,9 @@ def main(argv=None):
     tok = AutoTokenizer.from_pretrained(cfg.get("tokenizer") or cfg["base_model"],
                                         revision=cfg.get("tokenizer_revision", cfg.get("revision")))
     marker_id = tok.convert_tokens_to_ids("<unused0>")
-    mode = "slot" if cfg["model_type"] == "slot" else "letter"
+    mode = mode_for(cfg["model_type"])
     collate = Collator(Formatter(tok, mode, cfg["max_len"], marker_id), augment=False, pad_id=tok.pad_token_id or 0)
-    dec = full_length_decision()
+    dec = full_length_decision(a.options)
     results = {}
     for ck in a.checkpointing:
         c = {**cfg, "gradient_checkpointing": ck.lower() in ("1", "true", "yes")}

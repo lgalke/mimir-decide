@@ -36,7 +36,7 @@ From general knowledge, not looked up here: linear probes of decoder-only LMs us
 ## Candidate experiments (not run, not decided)
 
 - LoRA on the backbone plus the letter head, the closest to the published LoRA rows.
-- A per-option sequence-classification head (one sequence per option, last-token pooling, softmax over options): no 26-option limit, K forward passes per question.
+- A per-option sequence-classification head (one sequence per option, last-token pooling, softmax over options): no 26-option limit, K forward passes per question. Implemented as `model_type: scalar` ([D33](/design/d33-scalar-per-option-head.md)), run planned in [E17](/experiments/e17-scalar-head-against-letter-baseline.md).
 
 ## Related
 

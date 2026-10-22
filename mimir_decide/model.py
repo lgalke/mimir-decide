@@ -73,6 +73,52 @@ class SlotDecisionModel(nn.Module):
         self.head.load_state_dict(st["head"])
 
 
+class OptionScorerModel(nn.Module):
+    """Scalar head per option (D33): every option is its own sequence; the final hidden state at its last token goes
+    through LayerNorm -> Linear(D, 1) and the scores of one decision are scattered into [B, K] logits."""
+    kind = "scalar"
+
+    def __init__(self, lm: HrmTextForCausalLM, freeze_input_embeddings: bool = True, freeze_backbone: bool = False):
+        super().__init__()
+        self.lm = lm
+        self.frozen_backbone = freeze_backbone
+        D = lm.config.hidden_size
+        for p in lm.lm_head.parameters():
+            p.requires_grad = False
+        if freeze_input_embeddings:
+            lm.model.embed_tokens.weight.requires_grad = False
+        self.head = nn.Sequential(nn.LayerNorm(D), nn.Linear(D, 1))
+        nn.init.normal_(self.head[1].weight, std=0.02)
+        nn.init.zeros_(self.head[1].bias)
+        self.log_scale = nn.Parameter(torch.zeros(3))  # per kind (noul, choice, score)
+        if freeze_backbone:
+            for p in lm.parameters():
+                p.requires_grad = False
+
+    def new_parameters(self):
+        return [p for p in (*self.head.parameters(), self.log_scale) if p.requires_grad]
+
+    def forward(self, batch: dict) -> torch.Tensor:
+        with torch.set_grad_enabled(torch.is_grad_enabled() and not self.frozen_backbone):
+            out = self.lm.model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                                token_type_ids=batch["token_type_ids"])
+        h = out.last_hidden_state
+        h = h[torch.arange(h.size(0), device=h.device), batch["last_pos"]]          # [R, D]
+        s = self.head(h.float()).squeeze(-1)                                         # [R]
+        B, K = batch["valid"].shape
+        logits = s.new_zeros(B, K).index_put((batch["row_dec"], batch["row_opt"]), s)
+        logits = logits * torch.exp(self.log_scale)[batch["kind"]].unsqueeze(-1)
+        return logits.masked_fill(~batch["valid"], NEG)
+
+    def extra_state(self) -> dict:
+        return {"head": self.head.state_dict(), "log_scale": self.log_scale.detach().cpu()}
+
+    def load_extra(self, st: dict) -> None:
+        with torch.no_grad():
+            self.log_scale.copy_(st["log_scale"])
+        self.head.load_state_dict(st["head"])
+
+
 class LetterBaseline(nn.Module):
     kind = "letter"
 
@@ -155,6 +201,8 @@ def build_model(cfg: dict, tok, device: str, dtype: torch.dtype = torch.float32)
     fe = cfg.get("freeze_input_embeddings", True)
     if cfg["model_type"] == "slot":
         m = SlotDecisionModel(lm, fe, cfg.get("freeze_backbone", False))
+    elif cfg["model_type"] == "scalar":
+        m = OptionScorerModel(lm, fe, cfg.get("freeze_backbone", False))
     elif cfg["model_type"] == "letter":
         m = LetterBaseline(tok, lm, fe, cfg.get("train_lm_head", False), cfg.get("train_letter_head", False),
                            cfg.get("freeze_backbone", False))
@@ -191,6 +239,8 @@ def load_model(path, device: str, dtype: torch.dtype = torch.bfloat16):
                                                 attn_implementation="sdpa", dtype=dtype)
     if meta["model_type"] == "slot":
         m = SlotDecisionModel(lm)
+    elif meta["model_type"] == "scalar":
+        m = OptionScorerModel(lm)
     else:
         m = LetterBaseline(tok, lm)
     st = torch.load(path / "extra.pt", map_location="cpu")

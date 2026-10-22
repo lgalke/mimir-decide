@@ -20,6 +20,7 @@ Prefilled experiment plans: hypothesis, exact commands, metrics, decision rule, 
 * [E14: Typed Decisions benchmark (comparison with Anna's approach)](/experiments/e14-typed-decisions-benchmark.md) - [done] Score our models on the full test split of LocalLLaMA/typed-decisions (400 cases, 2,000 decisions) with accuracy, KL from gold, Brier and ECE, to compare with a second approach on the same data.
 * [E15: Decision Index public suite](/experiments/e15-decision-index-public-suite.md) - [planned] Run our models through the public suite of the Decision Index (37 benchmarks, about 140k requests) with the kit's own scorer, after checking for overlap with our training mixture.
 * [E16: Training on mixture v1 (composition, size and 4096 context)](/experiments/e16-mixture-v1-training.md) - [running] Train the slot model and the letter baseline on the larger, more diverse mixture v1, first at v0's size, then larger, and compare on the frozen evaluation.
+* [E17: Scalar per-option head against the letter baseline](/experiments/e17-scalar-head-against-letter-baseline.md) - [planned] Train the scalar head (D33) on mixture v1 and compare it with the letter baseline on the frozen evaluation, with the cost per example next to the quality.
 
 ## Template
 

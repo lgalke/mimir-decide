@@ -6,7 +6,7 @@ import random
 import numpy as np
 import torch
 
-from .formatting import Collator, Formatter, make_perm
+from .formatting import Collator, Formatter, make_perm, mode_for
 from .schema import Decision
 
 
@@ -33,7 +33,7 @@ def predict_logits(model, tok, meta: dict, decs: list[Decision], batch_size: int
     skipped (reported by the caller via len difference). With `perm_seed`, options are presented in a seeded random
     order (score decisions: identity or reversed) and the logits are mapped back to the original order, which
     measures robustness to option position."""
-    mode = "slot" if meta["model_type"] == "slot" else "letter"
+    mode = mode_for(meta["model_type"])
     fmt = Formatter(tok, mode, max_len or meta["max_len"], meta["marker_id"])
     col = Collator(fmt, augment=False, pad_id=tok.pad_token_id or 0)
     order = sorted(range(len(decs)), key=lambda i: len(decs[i].state) + sum(map(len, decs[i].options)))
