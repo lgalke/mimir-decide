@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-10-23
+* **Create**: `mimir_decide.plot_curves` (validation NLL, accuracy and ECE curves of runs or text logs; optional `matplotlib`) and the first figure `docs/figures/e17-scalar-v0-vs-baseline-v0.png`. Scalar-v0 at step 4,000 of 11,603: NLL 0.539 / accuracy 0.790 against 0.536 / 0.792 for `baseline-v0` at the same step (starts behind at step 1,000: 0.626 / 0.744), within the noise of the 2,000-decision sample; ETA about 33-35 more hours at the 2.0 decisions/s seen at step 4,690 (about 54 h in total). Not a result of E17.
 * **Decision**: E17 starts with `scalar-v0`: the scalar head on the v0 mixture at `max_len` 2048, dividers off, so that against `baseline-v0` only the head differs ([E17](/experiments/e17-scalar-head-against-letter-baseline.md)). Smoke test of the scalar model on the v1 subset at 4096 (new GPU, dividers on): 2.0 decisions/s, 45 GB peak at 2 decisions per micro-batch, so about 50 h for 371k decisions; worst-case probe: 1 decision (6 rows) 36.5 GB, 2 decisions 57.4 GB, 4 do not fit. The v1 comparison (scalar against the letter baseline on `v1-371k`, with or without dividers) is postponed.
 
 ## 2026-10-22

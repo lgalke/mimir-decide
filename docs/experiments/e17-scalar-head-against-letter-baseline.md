@@ -23,6 +23,17 @@ python -u -m mimir_decide.train --config configs/train_scalar_v1.yaml \
   --set data_dir=$MIMIR_DECIDE_DATA/mixture-v0 train_file=train.parquet max_len=2048 run_dir=runs/scalar-v0
 ```
 
+**Curve so far (2026-10-23, scalar-v0 at step 4,000 of 11,603; first 2,000 validation decisions; one standard error of the accuracy is about 0.9 points):**
+
+| Step | `baseline-v0` NLL / acc | `scalar-v0` NLL / acc |
+|---|---|---|
+| 1,000 | 0.597 / 0.770 | 0.626 / 0.744 |
+| 2,000 | 0.584 / 0.764 | 0.604 / 0.771 |
+| 3,000 | 0.550 / 0.784 | 0.569 / 0.775 |
+| 4,000 | 0.536 / 0.792 | 0.539 / 0.790 |
+
+The scalar head starts behind (random linear layer, as expected) and has caught up in NLL at step 4,000; all accuracy differences are within noise. Plot: `docs/figures/e17-scalar-v0-vs-baseline-v0.png`, made with `python -m mimir_decide.plot_curves RUN_OR_LOG ... --out FILE` (needs `matplotlib`). Intermediate values are not results; the comparison follows the rule below on the full evaluation sets.
+
 ## Prerequisites
 
 The letter baseline on mixture v1 is trained or running (E16); the GPU is free for the smoke test; `configs/train_scalar_v1.yaml` ([D33](/design/d33-scalar-per-option-head.md)).
