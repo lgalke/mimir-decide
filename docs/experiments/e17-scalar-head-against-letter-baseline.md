@@ -66,7 +66,7 @@ Validation, heldout, E12 pooled gain over zero-shot (both lists), Typed Decision
 
 ## Decision rule
 
-Written before running. Compare with the letter baseline trained on the same subset (`train_v1-371k.parquet`), or with the 1M run if the scalar head is trained on the same data. Scalar supported: pooled E12 gain at least 2.0 points above the letter baseline on at least 60% of sources, and the Typed Decisions KL not worse. Otherwise a tie; the simpler and cheaper letter baseline is preferred unless more than 26 options are needed.
+Written before running. Compare with the letter baseline trained on the same subset (`train_v1-371k.parquet`), or with the 1M run if the scalar head is trained on the same data. Scalar supported: pooled E12 gain at least 2.0 points above the letter baseline on at least 60% of sources, and validation accuracy not lower by more than 1.0 point. (Corrected 2026-10-24, before any result: an earlier draft added a condition on the Typed Decisions KL; the benchmark test split must not decide between model designs, D11. It is reported, once per model with `--final`, and does not enter the rule.) Otherwise a tie; the simpler and cheaper letter baseline is preferred unless more than 26 options are needed.
 
 ## Limits
 

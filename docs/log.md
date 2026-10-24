@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-10-24
+* **Fix**: The E17 decision rule had a condition on the Typed Decisions KL (the benchmark's test split), which would use the test split to choose between model designs (against D11). Removed before any E17 result exists; the rule now uses the E12 gain and validation accuracy only; the benchmark is reported descriptively.
 * **Finding**: The 1M letter baseline on mixture v1 is trained (39.3 h, 31,248 steps) and evaluated ([O29](/observations/o29-mixture-v1-1m-letter-baseline-results.md)). Against `baseline-v0`: validation accuracy 0.845 against 0.835 (NLL 0.426 against 0.456, Brier 0.187 against 0.201), held-out nb-NO 0.955 against 0.952, Typed Decisions accuracy 0.789 against 0.788 with KL 0.081 against 0.087 and Brier 0.045 against 0.048, **but the 32 unseen-label-set sources 0.795 against 0.812** (gain over zero-shot +7.3 against +8.9; task-novel pool 0.769 against 0.791). By the pre-set E16 rule: partly better (in-distribution), not better on unseen label sets. One seed; size, composition, context 4096 and steps changed together. **Omission**: the Mimir overlap audit was not run on `mixture-v1`, so the new run's eval files lack `sources_seen_by_mimir` (the seen/not-flagged split of `compare` is wrong for it; the metrics are unaffected); fix: run `audit_mimir_overlap` on `mixture-v1` and re-evaluate validation and held-out.
 
 ## 2026-10-23
