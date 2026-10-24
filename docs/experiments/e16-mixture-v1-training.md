@@ -71,8 +71,9 @@ One seed per model. Validation is in-distribution for the mixture; all sources a
 
 ## Status and results
 
-Status: **running**. The 1M mixture is built ([O27](/observations/o27-mixture-v1-build-results.md)): 999,906 decisions, the same 366 sources as v0, evaluation identical, noul 19.6%, score 11.6% and binary 43.2% (two targets missed). Training on it has not been reported yet.
+Status: **partly done**. The letter baseline on the 1M mixture is trained and evaluated ([O29](/observations/o29-mixture-v1-1m-letter-baseline-results.md)): validation accuracy 0.845 against 0.835 (+0.98), but the E12 gain over zero-shot fell from +8.9 to +7.3 points, so by the rule only partly better; Typed Decisions KL 0.081 against 0.087. The 371k run, the slot model and a flag-on run are not done. The 1M mixture was built ([O27](/observations/o27-mixture-v1-build-results.md)): 999,906 decisions, the same 366 sources as v0, evaluation identical, noul 19.6%, score 11.6% and binary 43.2% (two targets missed). Training on it has not been reported yet.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
+| 2026-10-24 | `runs/baseline-v1-1M` | `train_baseline_v1.yaml`, `train_file=train.parquet`, checkpointing on, 8 x 4, dividers off | validation 0.845 / NLL 0.426 (v0: 0.835 / 0.456); E12 extra 0.795 (v0: 0.812); Typed Decisions 0.789 / KL 0.081 (v0: 0.788 / 0.087); 39.3 h | [O29](/observations/o29-mixture-v1-1m-letter-baseline-results.md) |
 | 2026-10-22 | `mixture-v1` (server) | `configs/data_v1.yaml`, `sampling.total=1000000 per_source_cap=12000` | 999,906 train decisions, 366 sources, frozen evaluation identical | [O27](/observations/o27-mixture-v1-build-results.md) |
