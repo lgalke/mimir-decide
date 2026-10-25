@@ -23,6 +23,8 @@ The baseline of the pilot had a frozen output head, while the slot model trained
 
 **Update 2026-10-16:** every comparison so far is a tie: validation ([O14](/observations/o14-first-pilot-results-slot-and-baseline-tie.md), [O20](/observations/o20-trainable-output-head-ties-with-the-frozen-head-baseline.md)), option order ([O19](/observations/o19-option-order-does-not-matter-for-either-model.md)), the Typed Decisions benchmark ([O22](/observations/o22-typed-decisions-benchmark-results.md)) and tasks with unseen label sets (E12, [O26](/observations/o26-unseen-label-sets-slot-and-baseline-tie.md): -0.7 points on 32 sources). On frozen features the slot readout is far worse ([O24](/observations/o24-slot-probe-extracts-little-from-a-frozen-backbone.md)). One seed everywhere. The only hint for the slot model is score questions in E12 (better calibration), not pre-registered. Still open: more than 26 options and a second seed.
 
+**Update 2026-10-25:** a scalar per-option head ([O30](/observations/o30-scalar-head-ties-with-the-letter-baseline.md)) also ties with the letter baseline (E12 gain +8.4 against +8.9; 3.2 times the training time). Four readouts now tie.
+
 ## How to resolve
 
 [E03](/experiments/e03-slot-vs-letter-pilot.md) with at least 2 seeds, reported with `compare.py`.

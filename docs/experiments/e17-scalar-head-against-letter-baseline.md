@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E17: Scalar per-option head against the letter baseline'
 description: Train the scalar head (D33) on mixture v1 and compare it with the letter baseline on the frozen evaluation, with the cost per example next to the quality.
-status: planned
+status: done
 answers: [q04, q16]
 depends_on: [e16]
 tags: [heads, scalar, v1]
@@ -74,8 +74,8 @@ One seed; sampled negatives change the training objective (corrected, not proven
 
 ## Status and results
 
-Status: **planned**. Code and offline tests exist; nothing ran on the GPU.
+Status: **done** for the first run (`scalar-v0` against `baseline-v0`): by the pre-set rule a **tie** ([O30](/observations/o30-scalar-head-ties-with-the-letter-baseline.md)): E12 gain +8.4 against +8.9 points, 10 of 32 sources better, validation accuracy 0.832 against 0.835; 51.1 h against 15.8 h. Descriptive: Typed Decisions KL 0.078 (lowest so far). The runs on mixture v1 (`v1-371k`, with dividers) are not done.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-25 | `runs/scalar-v0` | `train_scalar_v1.yaml`, `data_dir=mixture-v0`, `max_len=2048`, 2 x 16, dividers off | validation 0.832 / NLL 0.462; E12 0.807 (gain +8.4, v0 baseline +8.9); held-out 0.965; Typed Decisions 0.784 / KL 0.078; 51.1 h, 48.7 GB; rule: tie | [O30](/observations/o30-scalar-head-ties-with-the-letter-baseline.md) |

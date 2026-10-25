@@ -28,6 +28,8 @@ The owner finds the scalar per-option head conceptually most appealing: it is th
 - **No option limit** from letters; the length limit of the context still applies.
 - Tested offline: formatting, row packing, negative sampling, order and padding invariance, a training step, a checkpoint round trip (network test) and train, calibrate and evaluate on a tiny random model. **Not run on the real model or the GPU.**
 
+Update 2026-10-25 ([O30](/observations/o30-scalar-head-ties-with-the-letter-baseline.md)): `scalar-v0` ties with `baseline-v0` on validation, held-out and unseen label sets (E12 gain +8.4 against +8.9) at 3.2 times the training time; the letter baseline stays preferred unless more than 26 options are needed.
+
 ## Revisit when
 
 The GPU smoke test shows an unacceptable cost per example, or E17 shows a quality difference to the letter baseline.
