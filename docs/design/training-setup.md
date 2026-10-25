@@ -64,6 +64,7 @@ Overrides: `train --set key=value ...` (values are YAML; `1e-3` is also accepted
 | `gradient_checkpointing` | true | |
 | `param_dtype` | float32 | fp32 master weights with bf16 autocast on CUDA; bf16 weights are possible for smoke runs |
 | `lr_backbone`, `lr_head` | 1e-5, 1e-4 | v1.5 finished pretraining at 1e-5 |
+| `ema_decay` | null | for example 0.999: weight average of the trainable parameters, evaluated as `eval_ema`, checkpoints `best_ema/` and `final_ema/` ([D36](/design/d36-optional-weight-average-ema.md)) |
 | `lr_cycle_dividers` | false | true divides the L stack lr by 6 and the H stack lr by 2 (full backprop); off in all runs so far ([D30](/design/d30-galke-poech-lr-dividers.md)) |
 
 Rough memory with the defaults: fp32 weights (~7 GB) + gradients and AdamW state for about 1B trainable parameters (~12 GB) + activations. A 40 GB GPU should be enough with gradient checkpointing; this has not been measured on a GPU.

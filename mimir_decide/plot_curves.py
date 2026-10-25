@@ -15,8 +15,9 @@ import re
 from pathlib import Path
 
 
-def read_evals(path) -> list[dict]:
-    """Evaluation records {step, val_nll, val_acc, val_ece} of a run directory, a train_log.jsonl or a text log."""
+def read_evals(path, key: str = "eval") -> list[dict]:
+    """Evaluation records {step, val_nll, val_acc, val_ece} of a run directory, a train_log.jsonl or a text log.
+    `key` selects `eval` (training weights) or `eval_ema` (averaged weights, runs with ema_decay)."""
     p = Path(path)
     if p.is_dir():
         p = p / "train_log.jsonl"
@@ -34,7 +35,7 @@ def read_evals(path) -> list[dict]:
                 rec = ast.literal_eval(m.group(0))
             except (ValueError, SyntaxError):
                 continue
-        rec = rec.get("eval", rec)
+        rec = rec.get(key, rec if key == "eval" else {})
         if "val_nll" in rec:
             out.append(rec)
     return sorted({r["step"]: r for r in out}.values(), key=lambda r: r["step"])
@@ -45,6 +46,7 @@ def main(argv=None):
     ap.add_argument("runs", nargs="+", help="run directories, train_log.jsonl files or text logs")
     ap.add_argument("--labels", nargs="*", default=None)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--ema", action="store_true", help="also plot the averaged-weights curve (dashed) of runs that have one")
     ap.add_argument("--title", default="Validation curves (first 2,000 validation decisions)")
     a = ap.parse_args(argv)
     import matplotlib
@@ -57,7 +59,12 @@ def main(argv=None):
         ev = read_evals(run)
         x = [r["step"] for r in ev]
         for axis, key in zip(ax, ("val_nll", "val_acc", "val_ece")):
-            axis.plot(x, [r[key] for r in ev], marker="o", ms=4, label=f"{label} (n={len(ev)})")
+            line, = axis.plot(x, [r[key] for r in ev], marker="o", ms=4, label=f"{label} (n={len(ev)})")
+            if a.ema:
+                ev_e = read_evals(run, "eval_ema")
+                if ev_e:
+                    axis.plot([r["step"] for r in ev_e], [r[key] for r in ev_e], marker="s", ms=3, ls="--",
+                              color=line.get_color(), label=f"{label}, averaged weights")
     for axis, title in zip(ax, ("Validation NLL (lower is better)", "Validation accuracy", "Validation ECE (lower is better)")):
         axis.set_title(title)
         axis.set_xlabel("optimizer step")

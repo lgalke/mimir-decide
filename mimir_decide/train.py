@@ -6,6 +6,7 @@ task files are never opened here, and `assert_trainable_path` refuses them even 
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import json
 import math
@@ -74,6 +75,37 @@ def lr_factor(step: int, total: int, warmup: int, floor: float = 0.1) -> float:
         return (step + 1) / max(1, warmup)
     prog = (step - warmup) / max(1, total - warmup)
     return floor + (1 - floor) * 0.5 * (1 + math.cos(math.pi * min(1.0, prog)))
+
+
+def ema_decay_at(step: int, decay: float) -> float:
+    """Decay of the weight average at an optimizer step: it warms up from about 0.1 towards `decay`, so that the first
+    steps are not dominated by the starting point (the usual warm-up of EMA implementations)."""
+    return min(decay, (1 + step) / (10 + step))
+
+
+def ema_update(ema: list, params: list, decay: float) -> None:
+    """ema <- decay * ema + (1 - decay) * params, in place, for lists of tensors of the same dtype."""
+    torch._foreach_mul_(ema, decay)
+    torch._foreach_add_(ema, [p.detach().to(e.dtype) for p, e in zip(params, ema)], alpha=1.0 - decay)
+
+
+def swap_with_ema(params: list, ema: list) -> None:
+    """Exchange the weights of the parameters with the averaged weights (no copy; calling it twice restores them).
+    The optimizer keeps its state, because it refers to the Parameter objects."""
+    for i, p in enumerate(params):
+        tmp = p.data
+        p.data = ema[i]
+        ema[i] = tmp
+
+
+@contextlib.contextmanager
+def ema_scope(params: list, ema: list):
+    """Inside the block the model holds the averaged weights; the training weights are restored on exit."""
+    swap_with_ema(params, ema)
+    try:
+        yield
+    finally:
+        swap_with_ema(params, ema)
 
 
 def cycle_dividers(lm) -> dict:
@@ -171,6 +203,15 @@ def main(argv=None):
     n_train = sum(p.numel() for g in groups for p in g["params"])
     print(f"trainable params: {n_train/1e6:.1f}M (backbone {sum(p.numel() for p in backbone)/1e6:.1f}M)")
 
+    ema_decay = cfg.get("ema_decay")      # weight average of the trainable parameters (D36); None: off
+    ema_params = ema = None
+    if ema_decay:
+        assert param_dtype == torch.float32, "ema_decay needs fp32 parameters (param_dtype: float32)"
+        ema_params = [p for g in groups for p in g["params"]]
+        ema = [p.detach().clone() for p in ema_params]
+        print(f"ema_decay: {ema_decay} (warm-up {ema_decay_at(0, ema_decay):.2f} -> {ema_decay}); extra memory "
+              f"{sum(e.numel() for e in ema) * 4 / 2**30:.1f} GB; checkpoints best_ema/ and final_ema/ are written next to best/ and final/")
+
     bs, accum = cfg["batch_size"], cfg.get("grad_accum", 1)
     steps_per_epoch = math.ceil(math.ceil(len(train) / bs) / accum)
     total_steps = cfg.get("max_steps") or steps_per_epoch * cfg.get("epochs", 1)
@@ -183,19 +224,37 @@ def main(argv=None):
         meta["mixture_manifest_sha256"] = hashlib.sha256(mm.read_bytes()).hexdigest()
     log = open(run_dir / "train_log.jsonl", "a")
 
-    def do_eval(step):
+    def do_eval(step, key="eval"):
         model.eval()
         lg, kept = predict_logits(model, tok, meta, val, cfg.get("eval_batch_size", 16), device, use_autocast)
         model.train()
         r = evaluate(lg, kept)["all"]
         rec = {"step": step, "val_nll": r["nll"], "val_acc": r["acc"], "val_ece": r["ece"], "val_n": r["n"]}
         print(rec)
-        log.write(json.dumps({"eval": rec}) + "\n")
+        log.write(json.dumps({key: rec}) + "\n")
         log.flush()
         return r["nll"]
 
     model.train()
     step, micro, best, t0, skipped, seen = 0, 0, float("inf"), time.time(), 0, 0
+    best_ema = float("inf")
+
+    def eval_and_save(step):
+        """Validation of the training weights (and of the averaged weights when ema_decay is set); best checkpoints."""
+        nonlocal best, best_ema
+        nll = do_eval(step)
+        if nll < best:
+            best = nll
+            save_model(model, tok, run_dir / "best", {**meta, "step": step, "val_nll": nll})
+        nll_e = None
+        if ema_decay:
+            with ema_scope(ema_params, ema):
+                nll_e = do_eval(step, "eval_ema")
+                if nll_e < best_ema:
+                    best_ema = nll_e
+                    save_model(model, tok, run_dir / "best_ema", {**meta, "step": step, "val_nll": nll_e, "ema_decay": ema_decay})
+        return nll, nll_e
+
     ep = 0
     done = False
     while not done:
@@ -223,6 +282,8 @@ def main(argv=None):
             opt.step()
             opt.zero_grad(set_to_none=True)
             step += 1
+            if ema_decay:
+                ema_update(ema, ema_params, ema_decay_at(step, ema_decay))
             if step % cfg.get("log_every", 10) == 0 or step == 1:
                 rec = {"step": step, "loss": loss.item(), "ce": ce.mean().item(), "grad_norm": float(gn),
                        "lr": opt.param_groups[0]["lr"], **({"lr_groups": [g["lr"] for g in opt.param_groups]} if dividers else {}),
@@ -233,20 +294,18 @@ def main(argv=None):
                 log.write(json.dumps(rec) + "\n")
                 log.flush()
             if step % cfg.get("eval_every", 1000) == 0:
-                nll = do_eval(step)
-                if nll < best:
-                    best = nll
-                    save_model(model, tok, run_dir / "best", {**meta, "step": step, "val_nll": nll})
+                eval_and_save(step)
             if step >= total_steps:
                 done = True
                 break
         ep += 1
-    nll = do_eval(step)
-    if nll < best:
-        best = nll
-        save_model(model, tok, run_dir / "best", {**meta, "step": step, "val_nll": nll})
+    nll, nll_e = eval_and_save(step)
     save_model(model, tok, run_dir / "final", {**meta, "step": step, "val_nll": nll})
-    print(f"done: steps={step} best_val_nll={best:.4f} skipped_too_long={skipped}")
+    if ema_decay:
+        with ema_scope(ema_params, ema):
+            save_model(model, tok, run_dir / "final_ema", {**meta, "step": step, "val_nll": nll_e, "ema_decay": ema_decay})
+    print(f"done: steps={step} best_val_nll={best:.4f} skipped_too_long={skipped}"
+          + (f" best_val_nll_ema={best_ema:.4f}" if ema_decay else ""))
 
 
 if __name__ == "__main__":

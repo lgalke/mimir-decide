@@ -29,3 +29,4 @@ log_every: 10
 num_workers: 2
 seed: 0
 train_lm_head: false         # baseline only: also train the (frozen by default) output head
+ema_decay: null              # D36: for example 0.999 keeps a weight average and also evaluates it (eval_ema in the log, best_ema/ and final_ema/ checkpoints); needs param_dtype float32

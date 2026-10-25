@@ -30,3 +30,4 @@ num_workers: 2
 seed: 0
 chat_format: true            # D34: Gemma user turn plus generation prompt
 per_kind_heads: true         # D35: one head per kind (noul, choice, score); false: one shared head with a learned scale per kind
+ema_decay: null              # D36: for example 0.999 keeps a weight average and also evaluates it (eval_ema in the log, best_ema/ and final_ema/ checkpoints); needs param_dtype float32
