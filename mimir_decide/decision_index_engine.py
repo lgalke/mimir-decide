@@ -121,7 +121,7 @@ class MimirDecideEngine(Engine):
         if self.mode == "letter" and k > len(LETTERS):
             raise Unsupported(f"letter model supports at most {len(LETTERS)} options, got {k}")
         for j, o in enumerate(d.options):
-            text = f" {o}\n" if self.mode == "slot" else o if self.mode == "scalar" else f"{LETTERS[j]}. {o}\n"
+            text = f" {o}\n" if self.mode == "slot" else o if self.mode in ("scalar", "span") else f"{LETTERS[j]}. {o}\n"
             if len(self.fmt._ids(text)) > MAX_OPTION_TOKENS:
                 raise Unsupported(f"option {j} has more than {MAX_OPTION_TOKENS} tokens (the formatter would cut it)")
         enc = self.fmt.encode(d)

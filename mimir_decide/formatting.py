@@ -23,6 +23,11 @@ rendered with the generation prompt):
 
 the slot readout stays at the markers, the scalar readout is the final token of the row (the generation prompt).
 
+Span format (D35): the slot prompt without markers. All options are listed in one sequence (one forward pass); the
+readout of an option is the MEAN of the final hidden states over the tokens of its own text (`Encoded.spans`).
+
+    <bos>[<|turn>user\n]State:..\n\nQuestion (kind):..\n\nOptions:\n{opt1}\n{opt2}...[<turn|>\n<|turn>model\n]
+
 Scalar format (D33): one sequence PER OPTION, so a decision with K options becomes K rows that share the state:
 
     <bos>State:\n{state}\n\nQuestion ({kind}):\n{question}\n\nOption:\n{option}
@@ -52,7 +57,7 @@ MIDDLE = " […] "
 
 def mode_for(model_type: str) -> str:
     """Formatter mode of a model type (the letter baseline is the default)."""
-    return {"slot": "slot", "scalar": "scalar"}.get(model_type, "letter")
+    return {"slot": "slot", "scalar": "scalar", "span": "span"}.get(model_type, "letter")
 
 
 @dataclass
@@ -62,11 +67,12 @@ class Encoded:
     perm: list[int]            # presented option j is original option perm[j]
     n_options: int
     rows: Optional[list[list[int]]] = None   # scalar mode: one sequence per option, in presented order
+    spans: Optional[list[tuple[int, int]]] = None   # span mode: [start, end) token range of each option's text
 
 
 class Formatter:
     def __init__(self, tok, mode: str, max_len: int, marker_id: int, chat: bool = False):
-        assert mode in ("slot", "letter", "scalar")
+        assert mode in ("slot", "letter", "scalar", "span")
         self.tok, self.mode, self.max_len, self.marker_id = tok, mode, max_len, marker_id
         self.chat = chat or mode == "letter"   # the letter baseline is always in chat format
         self.bos = tok.bos_token_id if tok.bos_token_id is not None else 2
@@ -99,14 +105,21 @@ class Formatter:
             state_ids = self._truncate_state(self._ids(d.state.strip()), budget)
             rows = [head + state_ids + t for t in tails]
             return Encoded(max(rows, key=len), [], perm, k, rows)
-        if self.mode == "slot":
+        body_lens: list[int] = []
+        if self.mode in ("slot", "span"):
             head = [self.bos] + self._ids(CHAT_HEAD if self.chat else "State:\n")
             mid = self._ids(f"\n\nQuestion ({d.kind}):\n{d.question.strip()}\n\nOptions:\n")
             opt_ids = []
             for j, o in enumerate(opts):
                 # chat: the template trims the user content, so the last option has no trailing newline
-                body = self._ids(f" {o}" + ("\n" if not self.chat or j < k - 1 else ""))[:MAX_OPTION_TOKENS]
-                opt_ids.append([self.marker_id] + body)
+                newline = not self.chat or j < k - 1
+                if self.mode == "span":   # the option text and its separator are tokenized apart: the span is the text
+                    text = self._ids(o)[:MAX_OPTION_TOKENS]
+                    body_lens.append(len(text))
+                    opt_ids.append(text + (self._ids("\n") if newline else []))
+                else:
+                    body = self._ids(f" {o}" + ("\n" if newline else ""))[:MAX_OPTION_TOKENS]
+                    opt_ids.append([self.marker_id] + body)
             end = self._ids(CHAT_END) if self.chat else []
             tail_len = len(mid) + sum(len(x) for x in opt_ids) + len(end)
         else:
@@ -124,13 +137,15 @@ class Formatter:
             return None
         state_ids = self._truncate_state(self._ids(d.state.strip()), budget)
         ids = head + state_ids + mid
-        slot_pos = []
-        for oi in opt_ids:
+        slot_pos, spans = [], []
+        for j, oi in enumerate(opt_ids):
             if self.mode == "slot":
                 slot_pos.append(len(ids))
+            if self.mode == "span":
+                spans.append((len(ids), len(ids) + body_lens[j]))
             ids += oi
-        ids += end   # letter: the answer instruction and generation prompt; slot in chat format: the generation prompt
-        return Encoded(ids, slot_pos, perm, k)
+        ids += end   # letter: the answer instruction and generation prompt; slot/span in chat format: the generation prompt
+        return Encoded(ids, slot_pos, perm, k, None, spans or None)
 
 
 def make_perm(d: Decision, rng: random.Random, augment: bool) -> list[int]:
@@ -244,8 +259,15 @@ class Collator:
             if e.slot_pos:
                 slot_pos[b, : e.n_options] = torch.tensor(e.slot_pos)
             kind[b] = KIND_ID[d.kind]
-        return {
+        batch = {
             "input_ids": ids, "attention_mask": att, "token_type_ids": att.clone(), "slot_pos": slot_pos,
             "valid": valid, "target": target, "last_pos": last, "kind": kind,
             "perm": [e.perm for e in encs],
         }
+        if encs and encs[0].spans is not None:   # span mode: token range of every option's text
+            batch["span_start"] = torch.zeros((B, K), dtype=torch.long)
+            batch["span_end"] = torch.zeros((B, K), dtype=torch.long)
+            for b, e in enumerate(encs):
+                for j, (s, t) in enumerate(e.spans):
+                    batch["span_start"][b, j], batch["span_end"][b, j] = s, t
+        return batch

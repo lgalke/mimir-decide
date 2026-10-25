@@ -73,6 +73,62 @@ class SlotDecisionModel(nn.Module):
         self.head.load_state_dict(st["head"])
 
 
+class SpanPoolModel(nn.Module):
+    """Span readout (D35): all options in one sequence; the representation of an option is the mean of the final hidden
+    states over the tokens of its own text; one head per kind (noul, choice, score) turns it into a score."""
+    kind = "span"
+
+    def __init__(self, lm: HrmTextForCausalLM, freeze_input_embeddings: bool = True, freeze_backbone: bool = False,
+                 per_kind_heads: bool = True):
+        super().__init__()
+        self.lm = lm
+        self.frozen_backbone = freeze_backbone
+        self.per_kind_heads = per_kind_heads
+        D = lm.config.hidden_size
+        for p in lm.lm_head.parameters():
+            p.requires_grad = False
+        if freeze_input_embeddings:
+            lm.model.embed_tokens.weight.requires_grad = False
+        self.heads = nn.ModuleList([nn.Sequential(nn.LayerNorm(D), nn.Linear(D, 1)) for _ in range(3 if per_kind_heads else 1)])
+        for h in self.heads:
+            nn.init.normal_(h[1].weight, std=0.02)
+            nn.init.zeros_(h[1].bias)
+        self.log_scale = nn.Parameter(torch.zeros(3))  # only used with one shared head
+        if freeze_backbone:
+            for p in lm.parameters():
+                p.requires_grad = False
+
+    def new_parameters(self):
+        ps = list(self.heads.parameters())
+        return ps if self.per_kind_heads else ps + [self.log_scale]
+
+    def forward(self, batch: dict) -> torch.Tensor:
+        with torch.set_grad_enabled(torch.is_grad_enabled() and not self.frozen_backbone):
+            out = self.lm.model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                                token_type_ids=batch["token_type_ids"])
+        h = out.last_hidden_state.float()                                            # [B, T, D]
+        pos = torch.arange(h.size(1), device=h.device)[None, None, :]
+        m = ((pos >= batch["span_start"][..., None]) & (pos < batch["span_end"][..., None])).float()   # [B, K, T]
+        pooled = torch.bmm(m, h) / m.sum(-1, keepdim=True).clamp(min=1.0)           # [B, K, D] mean over the option text
+        scores = torch.stack([hd(pooled).squeeze(-1) for hd in self.heads], dim=-1)   # [B, K, n_heads]
+        if self.per_kind_heads:
+            idx = batch["kind"][:, None, None].expand(-1, scores.size(1), 1)
+            logits = scores.gather(-1, idx).squeeze(-1)
+        else:
+            logits = scores[..., 0] * torch.exp(self.log_scale)[batch["kind"]].unsqueeze(-1)
+        return logits.masked_fill(~batch["valid"], NEG)
+
+    def extra_state(self) -> dict:
+        return {"heads": self.heads.state_dict(), "log_scale": self.log_scale.detach().cpu(),
+                "per_kind_heads": self.per_kind_heads}
+
+    def load_extra(self, st: dict) -> None:
+        assert st.get("per_kind_heads", True) == self.per_kind_heads, "checkpoint and model differ in per_kind_heads"
+        with torch.no_grad():
+            self.log_scale.copy_(st["log_scale"])
+        self.heads.load_state_dict(st["heads"])
+
+
 class OptionScorerModel(nn.Module):
     """Scalar head per option (D33): every option is its own sequence; the final hidden state at its last token goes
     through LayerNorm -> Linear(D, 1) and the scores of one decision are scattered into [B, K] logits."""
@@ -203,6 +259,8 @@ def build_model(cfg: dict, tok, device: str, dtype: torch.dtype = torch.float32)
         m = SlotDecisionModel(lm, fe, cfg.get("freeze_backbone", False))
     elif cfg["model_type"] == "scalar":
         m = OptionScorerModel(lm, fe, cfg.get("freeze_backbone", False))
+    elif cfg["model_type"] == "span":
+        m = SpanPoolModel(lm, fe, cfg.get("freeze_backbone", False), cfg.get("per_kind_heads", True))
     elif cfg["model_type"] == "letter":
         m = LetterBaseline(tok, lm, fe, cfg.get("train_lm_head", False), cfg.get("train_letter_head", False),
                            cfg.get("freeze_backbone", False))
@@ -241,6 +299,8 @@ def load_model(path, device: str, dtype: torch.dtype = torch.bfloat16):
         m = SlotDecisionModel(lm)
     elif meta["model_type"] == "scalar":
         m = OptionScorerModel(lm)
+    elif meta["model_type"] == "span":
+        m = SpanPoolModel(lm, per_kind_heads=meta.get("per_kind_heads", True))
     else:
         m = LetterBaseline(tok, lm)
     st = torch.load(path / "extra.pt", map_location="cpu")
