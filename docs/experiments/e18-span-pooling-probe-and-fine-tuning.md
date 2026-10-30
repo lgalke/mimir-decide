@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E18: Span-pooling readout with per-kind heads, frozen and fully fine-tuned'
 description: A head-only probe and a full fine-tuning run of the span-pooling readout (D35) on the v0 mixture, compared with the E13 probes and with baseline-v0.
-status: planned
+status: running
 answers: [q04, q14]
 depends_on: [e13, e17]
 tags: [heads, span, probe, per-kind]
@@ -59,8 +59,8 @@ One seed per model; the student's method is not known in detail, so this is our 
 
 ## Status and results
 
-Status: **planned**. Code and offline tests exist; nothing ran on the real model.
+Status: **partly done**. Both probes finished and are evaluated ([O31](/observations/o31-span-probe-matches-the-letter-probe-in-distribution-but-fails-on-unseen-label-sets.md)): by the probe rule the span readout ties with the letter readout on validation (0.700 against 0.701), is far worse on the E12 sources (0.631) and far better on Typed Decisions (0.696, descriptive). The two full runs (`span-v1-1M-lrdiv`, `baseline-v1-1M-lrdiv`) were cut off by the server stop of 2026-10-27 at 84% and 67% of their steps and have no final checkpoint.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-31 | `runs/span-probe-v1`, `runs/letter-probe-v1` | `freeze_backbone=true lr_head=1.0e-3`, v1-371k, 4096 | validation 0.700 / 0.701; E12 0.631 / 0.732; Typed Decisions 0.696 / 0.593 | [O31](/observations/o31-span-probe-matches-the-letter-probe-in-distribution-but-fails-on-unseen-label-sets.md) |
