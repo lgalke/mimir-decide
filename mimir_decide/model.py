@@ -8,6 +8,7 @@ Both return logits [B, K] with invalid option slots masked, so loss/metrics/cali
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Optional
 
@@ -70,6 +71,131 @@ class SlotDecisionModel(nn.Module):
         with torch.no_grad():
             self.marker.copy_(st["marker"])
             self.log_scale.copy_(st["log_scale"])
+        self.head.load_state_dict(st["head"])
+
+
+CLEF_DEFAULTS = {"width": 512, "routing_layers": 2, "layers": 2, "heads": 8, "feedforward": 2048, "dropout": 0.0}
+
+
+class EvidenceRoutingLayer(nn.Module):
+    """Cross-attention of the option queries to the whole sequence (the evidence), then a feed-forward block."""
+
+    def __init__(self, width: int, heads: int, feedforward: int, dropout: float = 0.0):
+        super().__init__()
+        self.query_norm, self.memory_norm, self.feedforward_norm = nn.LayerNorm(width), nn.LayerNorm(width), nn.LayerNorm(width)
+        self.attention = nn.MultiheadAttention(width, heads, dropout=dropout, batch_first=True)
+        self.feedforward = nn.Sequential(nn.Linear(width, feedforward), nn.GELU(), nn.Dropout(dropout),
+                                         nn.Linear(feedforward, width), nn.Dropout(dropout))
+
+    def forward(self, queries: torch.Tensor, memory: torch.Tensor, pad: torch.Tensor) -> torch.Tensor:
+        mem = self.memory_norm(memory)
+        routed, _ = self.attention(self.query_norm(queries), mem, mem, key_padding_mask=pad, need_weights=False)
+        queries = queries + routed
+        return queries + self.feedforward(self.feedforward_norm(queries))
+
+
+class ClefHead(nn.Module):
+    """Scoring head in the design of Cloudflare's Clef (joint_schema_model.py), for one question per sequence (D38).
+
+    An option is described by (a) the mean of the final hidden states over its text, (b) a lexical vector, the mean of
+    the output-embedding rows of its tokens, and (c) the mean state of the question text. Two cross-attention layers
+    route evidence from the whole sequence to the options; a small decoder builds a field vector for the question; the
+    score of an option is `prior + sigmoid(gate) * joint` with a lexical prior (cosine between the option's output
+    embedding and the question-plus-last-token state) and a joint term (cosine plus a small MLP of field and option)."""
+
+    def __init__(self, hidden_size: int, width: int, routing_layers: int, layers: int, heads: int, feedforward: int,
+                 dropout: float = 0.0):
+        super().__init__()
+        self.width = width
+        self.hidden_norm = nn.LayerNorm(hidden_size)
+        proj = lambda: nn.Linear(hidden_size, width, bias=False)
+        self.memory_projection, self.question_projection, self.option_question_projection = proj(), proj(), proj()
+        self.global_projection, self.option_context_projection, self.option_lexical_projection = proj(), proj(), proj()
+        self.type_embedding = nn.Embedding(3, width)
+        self.evidence_layers = nn.ModuleList([EvidenceRoutingLayer(width, heads, feedforward, dropout)
+                                              for _ in range(routing_layers)])
+        self.option_summary_norm = nn.LayerNorm(width)
+        self.layers = nn.ModuleList([nn.TransformerDecoderLayer(width, heads, feedforward, dropout, activation="gelu",
+                                                                batch_first=True, norm_first=True) for _ in range(layers)])
+        self.field_norm, self.option_norm = nn.LayerNorm(width), nn.LayerNorm(width)
+        self.residual_scorer = nn.Sequential(nn.Linear(width * 4, width), nn.GELU(), nn.Dropout(dropout), nn.Linear(width, 1))
+        self.prior_logit_scale = nn.Parameter(torch.zeros(()))
+        self.joint_logit_scale = nn.Parameter(torch.zeros(()))
+        self.residual_gate = nn.Parameter(torch.zeros(()))
+
+    def forward(self, h, attention_mask, last_pos, q_start, q_end, span_start, span_end, kind, valid, lexical_tokens):
+        B, T, _ = h.shape
+        hn = self.hidden_norm(h)
+        pad = attention_mask == 0                                                     # keys to ignore
+        memory = self.memory_projection(hn)                                           # [B, T, W]
+        glob = hn[torch.arange(B, device=h.device), last_pos]                         # [B, D] last token
+        pos = torch.arange(T, device=h.device)[None, None, :]
+        mq = ((pos >= q_start[:, None, None]) & (pos < q_end[:, None, None])).float()                 # [B, 1, T]
+        qvec = torch.bmm(mq, hn).squeeze(1) / mq.sum(-1).clamp(min=1.0)                                 # [B, D]
+        mo = ((pos >= span_start[..., None]) & (pos < span_end[..., None])).float()                     # [B, K, T]
+        count = mo.sum(-1, keepdim=True).clamp(min=1.0)
+        ctx = torch.bmm(mo, hn) / count                                               # [B, K, D] contextual option vector
+        lex = torch.bmm(mo, lexical_tokens) / count                                   # [B, K, D] lexical option vector
+        routed = (self.option_context_projection(ctx) + self.option_lexical_projection(lex)
+                  + self.option_question_projection(qvec)[:, None, :])                # [B, K, W]
+        for layer in self.evidence_layers:
+            routed = layer(routed, memory, pad)
+        base = self.question_projection(qvec)                                         # [B, W]
+        route_scores = (routed * base[:, None, :]).sum(-1) / math.sqrt(self.width)
+        weights = torch.softmax(route_scores.masked_fill(~valid, float("-inf")), dim=1)
+        summary = (weights[..., None] * routed).sum(1)
+        field = (base + self.option_summary_norm(summary) + self.global_projection(glob) + self.type_embedding(kind))[:, None, :]
+        for layer in self.layers:
+            field = layer(field, memory, memory_key_padding_mask=pad)
+        field = self.field_norm(field[:, 0])                                          # [B, W]
+        anchor = F.normalize(qvec + glob, dim=-1)
+        prior = self.prior_logit_scale.clamp(max=math.log(100.0)).exp() * torch.einsum("bkd,bd->bk", F.normalize(lex, dim=-1), anchor)
+        options = self.option_norm(routed)
+        rep = field[:, None, :].expand_as(options)
+        cosine = F.cosine_similarity(rep, options, dim=-1)
+        residual = self.residual_scorer(torch.cat([rep, options, rep * options, (rep - options).abs()], dim=-1)).squeeze(-1)
+        joint = self.joint_logit_scale.clamp(max=math.log(100.0)).exp() * cosine + residual
+        return prior + torch.sigmoid(self.residual_gate) * joint
+
+
+class ClefHeadModel(nn.Module):
+    """Backbone plus the Clef-style head (D38); the backbone is trained or frozen as for the other models."""
+    kind = "clef"
+
+    def __init__(self, lm: HrmTextForCausalLM, freeze_input_embeddings: bool = True, freeze_backbone: bool = False,
+                 clef: dict | None = None):
+        super().__init__()
+        self.lm = lm
+        self.frozen_backbone = freeze_backbone
+        self.clef_cfg = {**CLEF_DEFAULTS, **(clef or {})}
+        for p in lm.lm_head.parameters():      # frozen: its rows are the lexical vectors of the options
+            p.requires_grad = False
+        if freeze_input_embeddings:
+            lm.model.embed_tokens.weight.requires_grad = False
+        self.head = ClefHead(lm.config.hidden_size, **self.clef_cfg)
+        if freeze_backbone:
+            for p in lm.parameters():
+                p.requires_grad = False
+
+    def new_parameters(self):
+        return list(self.head.parameters())
+
+    def forward(self, batch: dict) -> torch.Tensor:
+        with torch.set_grad_enabled(torch.is_grad_enabled() and not self.frozen_backbone):
+            out = self.lm.model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                                token_type_ids=batch["token_type_ids"])
+        with torch.no_grad():
+            lexical = self.lm.lm_head.weight[batch["input_ids"]].float()               # [B, T, D] output embeddings
+        with torch.autocast(device_type=out.last_hidden_state.device.type, enabled=False):
+            logits = self.head(out.last_hidden_state.float(), batch["attention_mask"], batch["last_pos"],
+                               batch["q_start"], batch["q_end"], batch["span_start"], batch["span_end"],
+                               batch["kind"], batch["valid"], lexical)
+        return logits.masked_fill(~batch["valid"], NEG)
+
+    def extra_state(self) -> dict:
+        return {"head": self.head.state_dict(), "cfg": self.clef_cfg}
+
+    def load_extra(self, st: dict) -> None:
         self.head.load_state_dict(st["head"])
 
 
@@ -259,6 +385,8 @@ def build_model(cfg: dict, tok, device: str, dtype: torch.dtype = torch.float32)
         m = SlotDecisionModel(lm, fe, cfg.get("freeze_backbone", False))
     elif cfg["model_type"] == "scalar":
         m = OptionScorerModel(lm, fe, cfg.get("freeze_backbone", False))
+    elif cfg["model_type"] == "clef":
+        m = ClefHeadModel(lm, fe, cfg.get("freeze_backbone", False), cfg.get("clef_head"))
     elif cfg["model_type"] == "span":
         m = SpanPoolModel(lm, fe, cfg.get("freeze_backbone", False), cfg.get("per_kind_heads", True))
     elif cfg["model_type"] == "letter":
@@ -299,6 +427,8 @@ def load_model(path, device: str, dtype: torch.dtype = torch.bfloat16):
         m = SlotDecisionModel(lm)
     elif meta["model_type"] == "scalar":
         m = OptionScorerModel(lm)
+    elif meta["model_type"] == "clef":
+        m = ClefHeadModel(lm, clef=meta.get("clef_head"))
     elif meta["model_type"] == "span":
         m = SpanPoolModel(lm, per_kind_heads=meta.get("per_kind_heads", True))
     else:

@@ -184,11 +184,12 @@ def main(argv=None):
     model = build_model(cfg, tok, device, param_dtype)
     mode = mode_for(cfg["model_type"])
     max_len = cfg["max_len"]
-    chat = bool(cfg.get("chat_format", cfg["model_type"] in ("scalar", "span")))   # D34; slot-v0 and the probes were plain text
+    chat = bool(cfg.get("chat_format", cfg["model_type"] in ("scalar", "span", "clef")))   # D34; slot-v0 and the probes were plain text
     fmt = Formatter(tok, mode, max_len, marker_id, chat)
     collate = Collator(fmt, augment=True, pad_id=tok.pad_token_id or 0, max_train_options=cfg.get("max_train_options"))
     meta = {"model_type": cfg["model_type"], "max_len": max_len, "marker_id": marker_id, "chat_format": chat,
             "per_kind_heads": bool(cfg.get("per_kind_heads", True)),
+            **({"clef_head": model.clef_cfg} if hasattr(model, "clef_cfg") else {}),
             "base_model": cfg["base_model"], "revision": cfg.get("revision")}
 
     groups, dividers = backbone_groups(model.lm, cfg)  # empty for head-only probes (freeze_backbone)
