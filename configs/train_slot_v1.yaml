@@ -30,3 +30,5 @@ log_every: 10
 num_workers: 2
 seed: 0
 ema_decay: null              # D36: for example 0.999 keeps a weight average and also evaluates it (eval_ema in the log, best_ema/ and final_ema/ checkpoints); needs param_dtype float32
+snapshot_every: null         # D37: for example 1000 writes resume/state.pt (about 12 GB, replaced each time); resume=true continues from it after a crash
+resume: false

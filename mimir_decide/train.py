@@ -10,6 +10,7 @@ import contextlib
 import hashlib
 import json
 import math
+import os
 import random
 import shutil
 import time
@@ -51,7 +52,7 @@ class _Pairs(Dataset):
 class LengthBucketBatches:
     """Shuffled batches; within mega-chunks of 50 batches, sort by text length to reduce padding."""
 
-    def __init__(self, items: list[Decision], batch_size: int, seed: int, epoch: int, mega: int = 50):
+    def __init__(self, items: list[Decision], batch_size: int, seed: int, epoch: int, mega: int = 50, skip: int = 0):
         rng = random.Random(seed * 1000003 + epoch)
         idx = list(range(len(items)))
         rng.shuffle(idx)
@@ -62,6 +63,7 @@ class LengthBucketBatches:
             batches += [chunk[j : j + batch_size] for j in range(0, len(chunk), batch_size)]
         rng.shuffle(batches)
         self.batches = [[(i, rng.randrange(2**31)) for i in b] for b in batches]
+        self.batches = self.batches[skip:]   # resume: the order is fixed by (seed, epoch), so skipping reproduces the run
 
     def __iter__(self):
         return iter(self.batches)
@@ -238,6 +240,43 @@ def main(argv=None):
     model.train()
     step, micro, best, t0, skipped, seen = 0, 0, float("inf"), time.time(), 0, 0
     best_ema = float("inf")
+    ep, skip_next = 0, 0
+    train_params = [p for g in groups for p in g["params"]]
+    snapshot_every, stop_after = cfg.get("snapshot_every"), cfg.get("stop_after_step")
+    snap_path = run_dir / "resume" / "state.pt"
+
+    def save_snapshot():
+        """Crash-safe state (D37): trainable parameters, optimizer, averaged weights, counters and the data position.
+        Written to a temporary file and renamed, so a kill during the write leaves the previous snapshot intact."""
+        snap_path.parent.mkdir(parents=True, exist_ok=True)
+        st = {"version": 1, "step": step, "micro": micro, "epoch": ep, "batches_seen": batches_seen, "seen": seen,
+              "skipped": skipped, "elapsed": time.time() - t0, "best": best, "best_ema": best_ema,
+              "total_steps": total_steps, "params": [p.detach().cpu() for p in train_params], "opt": opt.state_dict(),
+              "ema": [e.cpu() for e in ema] if ema_decay else None}
+        tmp = snap_path.with_suffix(".tmp")
+        torch.save(st, tmp)
+        os.replace(tmp, snap_path)
+        print(f"snapshot written at step {step}: {snap_path} ({snap_path.stat().st_size / 2**30:.1f} GB)")
+
+    batches_seen = 0
+    if cfg.get("resume"):
+        if snap_path.exists():
+            st = torch.load(snap_path, map_location="cpu", weights_only=False)
+            assert st["total_steps"] == total_steps and len(st["params"]) == len(train_params), \
+                "the snapshot does not belong to this configuration (total steps or parameter list differ)"
+            for p, t in zip(train_params, st["params"]):
+                p.data.copy_(t.to(p.dtype))
+            opt.load_state_dict(st["opt"])
+            if ema_decay and st["ema"] is not None:
+                for e, t in zip(ema, st["ema"]):
+                    e.copy_(t)
+            step, micro, seen, skipped = st["step"], st["micro"], st["seen"], st["skipped"]
+            best, best_ema, ep, skip_next = st["best"], st["best_ema"], st["epoch"], st["batches_seen"]
+            t0 = time.time() - st["elapsed"]
+            print(f"resumed from {snap_path}: step {step} of {total_steps}, epoch {ep}, {skip_next} batches skipped")
+            del st
+        else:
+            print(f"resume requested but {snap_path} does not exist: starting from the beginning")
 
     def eval_and_save(step):
         """Validation of the training weights (and of the averaged weights when ema_decay is set); best checkpoints."""
@@ -255,13 +294,14 @@ def main(argv=None):
                     save_model(model, tok, run_dir / "best_ema", {**meta, "step": step, "val_nll": nll_e, "ema_decay": ema_decay})
         return nll, nll_e
 
-    ep = 0
     done = False
     while not done:
-        loader = DataLoader(_Pairs(train), batch_sampler=LengthBucketBatches(train, bs, seed, ep),
+        loader = DataLoader(_Pairs(train), batch_sampler=LengthBucketBatches(train, bs, seed, ep, skip=skip_next),
                             collate_fn=collate, num_workers=cfg.get("num_workers", 2),
                             persistent_workers=False)
+        batches_seen, skip_next = skip_next, 0
         for batch, decs, dropped in loader:
+            batches_seen += 1
             skipped += dropped
             if not decs:
                 continue
@@ -295,6 +335,12 @@ def main(argv=None):
                 log.flush()
             if step % cfg.get("eval_every", 1000) == 0:
                 eval_and_save(step)
+            if snapshot_every and step % snapshot_every == 0 and step < total_steps:
+                save_snapshot()
+            if stop_after and step >= stop_after and step < total_steps:   # test and maintenance: stop cleanly after a snapshot
+                save_snapshot()
+                print(f"stop_after_step reached at step {step}; continue with resume=true")
+                return
             if step >= total_steps:
                 done = True
                 break
