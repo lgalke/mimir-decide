@@ -1,0 +1,735 @@
+{
+ "split": "extra",
+ "order_seed": null,
+ "limit": null,
+ "checkpoint": "best",
+ "calibrated": true,
+ "temperatures": {
+  "noul": 1.4428006619821798,
+  "choice": 1.0050660060185264,
+  "score": 0.9225120436860521
+ },
+ "n_records": 7323,
+ "n_evaluated": 7323,
+ "n_skipped_too_long": 0,
+ "results": {
+  "all": {
+   "n": 7323,
+   "acc": 0.6896080841185307,
+   "nll": 0.7476713083051434,
+   "brier": 0.41499105866727976,
+   "ece": 0.03801513277986215,
+   "mean_conf": 0.7204329893532206,
+   "score_mae": 0.7890621285782419,
+   "score_spearman": 0.630996117361787,
+   "risk@0.1": 0.10245901639344263,
+   "risk@0.25": 0.1529219006007646,
+   "risk@0.5": 0.19743309666848716,
+   "risk@0.75": 0.24180626365622723,
+   "risk@1.0": 0.31039191588146936,
+   "reliability": [
+    {
+     "lo": 0.2,
+     "hi": 0.2667,
+     "n": 7,
+     "conf": 0.2595,
+     "acc": 0.2857
+    },
+    {
+     "lo": 0.2667,
+     "hi": 0.3333,
+     "n": 125,
+     "conf": 0.3075,
+     "acc": 0.304
+    },
+    {
+     "lo": 0.3333,
+     "hi": 0.4,
+     "n": 199,
+     "conf": 0.3681,
+     "acc": 0.3819
+    },
+    {
+     "lo": 0.4,
+     "hi": 0.4667,
+     "n": 263,
+     "conf": 0.4359,
+     "acc": 0.4487
+    },
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 591,
+     "conf": 0.5064,
+     "acc": 0.4941
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 755,
+     "conf": 0.5676,
+     "acc": 0.551
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 823,
+     "conf": 0.6341,
+     "acc": 0.6367
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 858,
+     "conf": 0.6995,
+     "acc": 0.7203
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 951,
+     "conf": 0.7677,
+     "acc": 0.7518
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 974,
+     "conf": 0.8324,
+     "acc": 0.7618
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 905,
+     "conf": 0.9003,
+     "acc": 0.8044
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 872,
+     "conf": 0.9657,
+     "acc": 0.8956
+    }
+   ]
+  },
+  "kind:noul": {
+   "n": 4444,
+   "acc": 0.7477497749774977,
+   "nll": 0.5550169806348719,
+   "brier": 0.3404900848309863,
+   "ece": 0.045401410408432034,
+   "mean_conf": 0.7577352035592849,
+   "risk@0.1": 0.07657657657657657,
+   "risk@0.25": 0.14311431143114312,
+   "risk@0.5": 0.18271827182718273,
+   "risk@0.75": 0.21242124212421243,
+   "risk@1.0": 0.2522502250225023,
+   "reliability": [
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 228,
+     "conf": 0.5177,
+     "acc": 0.5965
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 423,
+     "conf": 0.5675,
+     "acc": 0.5934
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 540,
+     "conf": 0.6345,
+     "acc": 0.6741
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 648,
+     "conf": 0.7,
+     "acc": 0.7438
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 776,
+     "conf": 0.7678,
+     "acc": 0.7539
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 786,
+     "conf": 0.8319,
+     "acc": 0.7735
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 638,
+     "conf": 0.8987,
+     "acc": 0.8166
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 405,
+     "conf": 0.9629,
+     "acc": 0.9284
+    }
+   ]
+  },
+  "source:bekko/aegis2": {
+   "n": 301,
+   "acc": 0.717607973421927,
+   "nll": 0.5647503483013259,
+   "brier": 0.38334970264920387,
+   "ece": 0.04393508327363733,
+   "mean_conf": 0.7392494034925569
+  },
+  "lang:en": {
+   "n": 4047,
+   "acc": 0.647887323943662,
+   "nll": 0.776715237291453,
+   "brier": 0.4338213357927964,
+   "ece": 0.04134634018592373,
+   "mean_conf": 0.6892336641295856,
+   "score_mae": 0.8783122459829231,
+   "score_spearman": 0.6427975596008203
+  },
+  "kind:choice": {
+   "n": 1554,
+   "acc": 0.6615186615186616,
+   "nll": 0.9275683067357926,
+   "brier": 0.4586845016111085,
+   "ece": 0.09829189137410631,
+   "mean_conf": 0.7519016518728613,
+   "risk@0.1": 0.1032258064516129,
+   "risk@0.25": 0.09278350515463918,
+   "risk@0.5": 0.1788931788931789,
+   "risk@0.75": 0.24957118353344768,
+   "risk@1.0": 0.3384813384813385,
+   "reliability": [
+    {
+     "lo": 0.2,
+     "hi": 0.2667,
+     "n": 5,
+     "conf": 0.259,
+     "acc": 0.4
+    },
+    {
+     "lo": 0.2667,
+     "hi": 0.3333,
+     "n": 38,
+     "conf": 0.3042,
+     "acc": 0.4474
+    },
+    {
+     "lo": 0.3333,
+     "hi": 0.4,
+     "n": 40,
+     "conf": 0.3646,
+     "acc": 0.35
+    },
+    {
+     "lo": 0.4,
+     "hi": 0.4667,
+     "n": 60,
+     "conf": 0.441,
+     "acc": 0.3833
+    },
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 137,
+     "conf": 0.5001,
+     "acc": 0.3577
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 148,
+     "conf": 0.5652,
+     "acc": 0.4527
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 122,
+     "conf": 0.6333,
+     "acc": 0.5164
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 111,
+     "conf": 0.7004,
+     "acc": 0.6306
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 112,
+     "conf": 0.7667,
+     "acc": 0.7411
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 154,
+     "conf": 0.8348,
+     "acc": 0.7078
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 229,
+     "conf": 0.9024,
+     "acc": 0.7511
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 398,
+     "conf": 0.9707,
+     "acc": 0.902
+    }
+   ]
+  },
+  "source:bekko/contract_nli": {
+   "n": 204,
+   "acc": 0.7401960784313726,
+   "nll": 0.6408625279676498,
+   "brier": 0.3525263787559555,
+   "ece": 0.07612740306877626,
+   "mean_conf": 0.7866951573420974
+  },
+  "source:bekko/corr2cause": {
+   "n": 180,
+   "acc": 0.4166666666666667,
+   "nll": 1.2673664676646392,
+   "brier": 0.7159556504941662,
+   "ece": 0.18122125483221482,
+   "mean_conf": 0.594664190378454
+  },
+  "source:bekko/ethics": {
+   "n": 198,
+   "acc": 0.6262626262626263,
+   "nll": 0.6917978248740029,
+   "brier": 0.4771985460891419,
+   "ece": 0.12894079450405005,
+   "mean_conf": 0.7441338978030465
+  },
+  "source:bekko/followir_core17": {
+   "n": 174,
+   "acc": 0.7586206896551724,
+   "nll": 0.5293124623746536,
+   "brier": 0.3535201836229734,
+   "ece": 0.05351357829981838,
+   "mean_conf": 0.7779342066282513
+  },
+  "source:bekko/lexcomp": {
+   "n": 200,
+   "acc": 0.71,
+   "nll": 0.5702970485389233,
+   "brier": 0.3863111486815384,
+   "ece": 0.07961473882198333,
+   "mean_conf": 0.7048172837495804
+  },
+  "source:bekko/logical_entailment": {
+   "n": 200,
+   "acc": 0.5,
+   "nll": 0.8752926874905824,
+   "brier": 0.6382221923849387,
+   "ece": 0.2628419187664986,
+   "mean_conf": 0.7613769617676734
+  },
+  "source:bekko/nlsat": {
+   "n": 186,
+   "acc": 0.489247311827957,
+   "nll": 0.9757568401194388,
+   "brier": 0.7143980128049026,
+   "ece": 0.3173882762591044,
+   "mean_conf": 0.8024655631793443
+  },
+  "source:bekko/open_jev__amount-extraction-control-v1": {
+   "n": 200,
+   "acc": 0.765,
+   "nll": 0.8549554398772307,
+   "brier": 0.39009696261659016,
+   "ece": 0.136993163228035,
+   "mean_conf": 0.8773394775390625
+  },
+  "lang:und": {
+   "n": 3163,
+   "acc": 0.7334808725893139,
+   "nll": 0.7253323899963479,
+   "brier": 0.39920200167481934,
+   "ece": 0.0743068905663272,
+   "mean_conf": 0.7595290147095514,
+   "score_mae": 0.5076025106813473,
+   "score_spearman": 0.7463487756550541
+  },
+  "source:bekko/open_jev__citation-control-v1": {
+   "n": 200,
+   "acc": 0.78,
+   "nll": 0.6133457880397327,
+   "brier": 0.3265714440875789,
+   "ece": 0.10755737081170083,
+   "mean_conf": 0.8482624204456806
+  },
+  "source:bekko/open_jev__context-retention-control-v1": {
+   "n": 200,
+   "acc": 0.66,
+   "nll": 0.6115907998755574,
+   "brier": 0.4295571233837031,
+   "ece": 0.11421403646469117,
+   "mean_conf": 0.7038942390680313
+  },
+  "source:bekko/open_jev__drone-control-v1": {
+   "n": 200,
+   "acc": 0.525,
+   "nll": 1.2278749202843755,
+   "brier": 0.6708225886398718,
+   "ece": 0.24754426695406434,
+   "mean_conf": 0.7296898681670427,
+   "score_mae": 0.3239462806514519,
+   "score_spearman": 0.04748635339924418
+  },
+  "kind:score": {
+   "n": 1325,
+   "acc": 0.5275471698113208,
+   "nll": 1.1828380227243562,
+   "brier": 0.6136195246248478,
+   "ece": 0.04659786237860624,
+   "mean_conf": 0.5584153731364124,
+   "score_mae": 0.7890621285782419,
+   "score_spearman": 0.630996117361787,
+   "risk@0.1": 0.25,
+   "risk@0.25": 0.27794561933534745,
+   "risk@0.5": 0.36555891238670696,
+   "risk@0.75": 0.4154929577464789,
+   "risk@1.0": 0.47245283018867923,
+   "reliability": [
+    {
+     "lo": 0.2,
+     "hi": 0.2667,
+     "n": 2,
+     "conf": 0.2608,
+     "acc": 0.0
+    },
+    {
+     "lo": 0.2667,
+     "hi": 0.3333,
+     "n": 87,
+     "conf": 0.3089,
+     "acc": 0.2414
+    },
+    {
+     "lo": 0.3333,
+     "hi": 0.4,
+     "n": 159,
+     "conf": 0.3689,
+     "acc": 0.3899
+    },
+    {
+     "lo": 0.4,
+     "hi": 0.4667,
+     "n": 203,
+     "conf": 0.4343,
+     "acc": 0.468
+    },
+    {
+     "lo": 0.4667,
+     "hi": 0.5333,
+     "n": 226,
+     "conf": 0.4989,
+     "acc": 0.4735
+    },
+    {
+     "lo": 0.5333,
+     "hi": 0.6,
+     "n": 184,
+     "conf": 0.57,
+     "acc": 0.5326
+    },
+    {
+     "lo": 0.6,
+     "hi": 0.6667,
+     "n": 161,
+     "conf": 0.6331,
+     "acc": 0.6025
+    },
+    {
+     "lo": 0.6667,
+     "hi": 0.7333,
+     "n": 99,
+     "conf": 0.6951,
+     "acc": 0.6667
+    },
+    {
+     "lo": 0.7333,
+     "hi": 0.8,
+     "n": 63,
+     "conf": 0.7681,
+     "acc": 0.746
+    },
+    {
+     "lo": 0.8,
+     "hi": 0.8667,
+     "n": 34,
+     "conf": 0.8337,
+     "acc": 0.7353
+    },
+    {
+     "lo": 0.8667,
+     "hi": 0.9333,
+     "n": 38,
+     "conf": 0.9144,
+     "acc": 0.9211
+    },
+    {
+     "lo": 0.9333,
+     "hi": 1.0,
+     "n": 69,
+     "conf": 0.9541,
+     "acc": 0.6667
+    }
+   ]
+  },
+  "source:bekko/open_jev__email-selection-control-v1": {
+   "n": 199,
+   "acc": 0.6331658291457286,
+   "nll": 0.8788718093004096,
+   "brier": 0.5378532645954427,
+   "ece": 0.19738289249602273,
+   "mean_conf": 0.8184322747752895
+  },
+  "source:bekko/open_jev__entity-alignment-control-v1": {
+   "n": 200,
+   "acc": 0.765,
+   "nll": 0.7069747979193926,
+   "brier": 0.43422801202153594,
+   "ece": 0.20365655913949016,
+   "mean_conf": 0.6147008390724659,
+   "score_mae": 0.6636188496276736,
+   "score_spearman": 0.46468187274909956
+  },
+  "source:bekko/open_jev__mailroom-control-v1": {
+   "n": 200,
+   "acc": 0.96,
+   "nll": 0.27925807446154066,
+   "brier": 0.1465733540807572,
+   "ece": 0.17099460363388058,
+   "mean_conf": 0.7890053963661194
+  },
+  "lang:zh": {
+   "n": 58,
+   "acc": 1.0,
+   "nll": 0.2635316603399556,
+   "brier": 0.12566764976577388,
+   "ece": 0.2223699606698135,
+   "mean_conf": 0.7776300393301865
+  },
+  "lang:tr": {
+   "n": 55,
+   "acc": 0.9090909090909091,
+   "nll": 0.40580435530705883,
+   "brier": 0.24254403060315713,
+   "ece": 0.20164860920472574,
+   "mean_conf": 0.7074422998861833
+  },
+  "source:bekko/open_jev__painting-geometry-v1": {
+   "n": 200,
+   "acc": 0.655,
+   "nll": 0.9418011919781566,
+   "brier": 0.5770290278756268,
+   "ece": 0.3070435759425163,
+   "mean_conf": 0.6819174382090568,
+   "score_mae": 0.2766876767203212,
+   "score_spearman": 0.6999759903961584
+  },
+  "source:bekko/open_jev__phone-extraction-control-v1": {
+   "n": 198,
+   "acc": 0.8080808080808081,
+   "nll": 1.2667004579696992,
+   "brier": 0.3597046319853462,
+   "ece": 0.08666491583742275,
+   "mean_conf": 0.8177755184546865
+  },
+  "source:bekko/open_jev__reasoning-control-v1": {
+   "n": 200,
+   "acc": 0.64,
+   "nll": 0.8725024634203874,
+   "brier": 0.474408498130433,
+   "ece": 0.08072770088911056,
+   "mean_conf": 0.7145390054583549,
+   "score_mae": 0.680467744930705,
+   "score_spearman": 0.7927625300606939
+  },
+  "source:bekko/open_jev__silent-failure-control-v1": {
+   "n": 200,
+   "acc": 0.81,
+   "nll": 0.4309178712591529,
+   "brier": 0.2681066935625657,
+   "ece": 0.10708128958940506,
+   "mean_conf": 0.7259750029444695
+  },
+  "source:bekko/open_jev__sponsor-segment-control-v1": {
+   "n": 200,
+   "acc": 0.515,
+   "nll": 0.9726515114016365,
+   "brier": 0.5751645339948197,
+   "ece": 0.22704989776015283,
+   "mean_conf": 0.7240299998223781
+  },
+  "source:bekko/open_jev__vizdoom-basic-v1": {
+   "n": 166,
+   "acc": 0.9457831325301205,
+   "nll": 0.5329789004052978,
+   "brier": 0.27139811386080326,
+   "ece": 0.33105305447635885,
+   "mean_conf": 0.6147300780537617,
+   "score_mae": 0.561562901811607,
+   "score_spearman": 0.8968347256622309
+  },
+  "source:bekko/open_jev__workflow-controls-v1__agent_trace_observability": {
+   "n": 200,
+   "acc": 0.805,
+   "nll": 0.4497117346804589,
+   "brier": 0.29141887328214383,
+   "ece": 0.09599067777395251,
+   "mean_conf": 0.8199800923466682
+  },
+  "source:bekko/open_jev__workflow-controls-v1__customer_service": {
+   "n": 200,
+   "acc": 0.865,
+   "nll": 0.40405929685104636,
+   "brier": 0.24182931929536278,
+   "ece": 0.08626899272203441,
+   "mean_conf": 0.8600334653258324
+  },
+  "source:bekko/open_jev__workflow-controls-v1__invoice_processing": {
+   "n": 200,
+   "acc": 0.795,
+   "nll": 0.42091978128999474,
+   "brier": 0.2708791388664745,
+   "ece": 0.05735005140304568,
+   "mean_conf": 0.8072718727588654
+  },
+  "source:bekko/open_jev__workflow-controls-v1__security_incidents": {
+   "n": 200,
+   "acc": 0.805,
+   "nll": 0.39294275993481276,
+   "brier": 0.24673542228813727,
+   "ece": 0.08361956655979151,
+   "mean_conf": 0.7701538050174713
+  },
+  "source:bekko/ruletaker": {
+   "n": 180,
+   "acc": 0.6555555555555556,
+   "nll": 0.6068256766328382,
+   "brier": 0.4266462347523328,
+   "ece": 0.12047074370914036,
+   "mean_conf": 0.7674165394571092
+  },
+  "source:bekko/snli": {
+   "n": 200,
+   "acc": 0.765,
+   "nll": 0.5815618518122938,
+   "brier": 0.33047928968325424,
+   "ece": 0.10942125692963597,
+   "mean_conf": 0.874421256929636
+  },
+  "source:bekko/synthetic_relevance__nanobeir__NanoArguAna": {
+   "n": 387,
+   "acc": 0.5736434108527132,
+   "nll": 0.9778577461588444,
+   "brier": 0.47496413777721974,
+   "ece": 0.11541180632219145,
+   "mean_conf": 0.5947716314663258,
+   "score_mae": 0.9057567953421739,
+   "score_spearman": 0.5787107629212893
+  },
+  "source:bekko/synthetic_relevance__nanobeir__NanoHotpotQA": {
+   "n": 399,
+   "acc": 0.7017543859649122,
+   "nll": 0.7465598527108667,
+   "brier": 0.3580671908002779,
+   "ece": 0.07150183450010485,
+   "mean_conf": 0.640941227886611,
+   "score_mae": 0.8728320412358085,
+   "score_spearman": 0.5617136371320245
+  },
+  "source:bekko/synthetic_relevance__nanobeir__NanoNQ": {
+   "n": 399,
+   "acc": 0.6917293233082706,
+   "nll": 0.8412212067360717,
+   "brier": 0.3903013580725186,
+   "ece": 0.10048142277208484,
+   "mean_conf": 0.6265456492739513,
+   "score_mae": 0.9774206968482057,
+   "score_spearman": 0.5209528204452063
+  },
+  "source:bekko/synthetic_relevance__nanobeir__NanoSCIDOCS": {
+   "n": 385,
+   "acc": 0.612987012987013,
+   "nll": 0.873581305366832,
+   "brier": 0.43477221109721786,
+   "ece": 0.0747784634689232,
+   "mean_conf": 0.6085103559803653,
+   "score_mae": 0.941029247138378,
+   "score_spearman": 0.5783463229313592
+  },
+  "source:bekko/synthetic_relevance__nanobeir__NanoTouche2020": {
+   "n": 367,
+   "acc": 0.6049046321525886,
+   "nll": 0.8794463463005806,
+   "brier": 0.3932999596695503,
+   "ece": 0.04909416805820828,
+   "mean_conf": 0.5915637137292191,
+   "score_mae": 0.6715986490335482,
+   "score_spearman": 0.7481869729876759
+  }
+ },
+ "sources_seen_by_mimir": [
+  "bekko/aegis2",
+  "bekko/contract_nli",
+  "bekko/corr2cause",
+  "bekko/ethics",
+  "bekko/followir_core17",
+  "bekko/lexcomp",
+  "bekko/logical_entailment",
+  "bekko/nlsat",
+  "bekko/open_jev__amount-extraction-control-v1",
+  "bekko/open_jev__citation-control-v1",
+  "bekko/open_jev__context-retention-control-v1",
+  "bekko/open_jev__drone-control-v1",
+  "bekko/open_jev__email-selection-control-v1",
+  "bekko/open_jev__entity-alignment-control-v1",
+  "bekko/open_jev__mailroom-control-v1",
+  "bekko/open_jev__painting-geometry-v1",
+  "bekko/open_jev__phone-extraction-control-v1",
+  "bekko/open_jev__reasoning-control-v1",
+  "bekko/open_jev__silent-failure-control-v1",
+  "bekko/open_jev__sponsor-segment-control-v1",
+  "bekko/open_jev__vizdoom-basic-v1",
+  "bekko/open_jev__workflow-controls-v1__agent_trace_observability",
+  "bekko/open_jev__workflow-controls-v1__customer_service",
+  "bekko/open_jev__workflow-controls-v1__invoice_processing",
+  "bekko/open_jev__workflow-controls-v1__security_incidents",
+  "bekko/ruletaker",
+  "bekko/snli",
+  "bekko/synthetic_relevance__nanobeir__NanoArguAna",
+  "bekko/synthetic_relevance__nanobeir__NanoHotpotQA",
+  "bekko/synthetic_relevance__nanobeir__NanoNQ",
+  "bekko/synthetic_relevance__nanobeir__NanoSCIDOCS",
+  "bekko/synthetic_relevance__nanobeir__NanoTouche2020"
+ ]
+}
