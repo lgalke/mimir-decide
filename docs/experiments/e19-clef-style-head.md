@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E19: Clef-style head, frozen and fully fine-tuned'
 description: 'Test the Clef-style scoring head (D38): a head-only probe on mixture v1, compared with the span and letter probes, and a full fine-tuning run.'
-status: planned
+status: running
 answers: [q04, q14]
 depends_on: [e18]
 tags: [heads, clef, probe, lexical-prior]
@@ -50,8 +50,8 @@ One seed per model; the head's size and learning rate are not tuned; joint decod
 
 ## Status and results
 
-Status: **planned**. Code and offline tests exist; nothing ran on the real model.
+Status: **partly done**. The probe and the full run on v1-371k are done and evaluated ([O32](/observations/o32-clef-probe-best-frozen-head-but-still-loses-on-unseen-label-sets.md)): the probe is the best frozen head (validation 0.717, Typed Decisions KL 0.163) but its E12 accuracy (0.690) is 4.2 points below the letter probe, so by the pre-set rule the lexical-prior hypothesis is not supported (it recovers about 58% of the span probe's loss); the full model ties with the other readouts. The full-model rule needs the matched letter and span runs on v1-371k with the dividers, which were not run.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|
-| | | | | |
+| 2026-11-02 | `runs/clef-probe-v1`, `runs/clef-v1-371k-lrdiv` | probe: `freeze_backbone=true lr_head=3.0e-4`; full: dividers, EMA 0.999 | probe validation 0.717 / E12 0.690 / Typed Decisions 0.703; full validation 0.827 / E12 0.805 / Typed Decisions 0.786 | [O32](/observations/o32-clef-probe-best-frozen-head-but-still-loses-on-unseen-label-sets.md) |
