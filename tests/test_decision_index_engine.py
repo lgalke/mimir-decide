@@ -14,12 +14,13 @@ class FakeModel(torch.nn.Module):
         return torch.arange(v.size(1), dtype=torch.float32).expand(v.size(0), -1).masked_fill(~v, -1e9)
 
 
-def engine(tok, mode="slot", max_len=2048, temps=None):
+def engine(tok, mode="slot", max_len=2048, temps=None, model=None, max_option_tokens=160):
     e = object.__new__(MimirDecideEngine)
-    e.model, e.tok, e.device, e.batch_size, e.mode, e.max_len, e.temps = FakeModel(), tok, "cpu", 4, mode, max_len, temps
+    e.model, e.tok, e.device, e.batch_size, e.mode, e.max_len, e.temps = model or FakeModel(), tok, "cpu", 4, mode, max_len, temps
+    e.max_option_tokens = max_option_tokens
     e.meta = {"model_type": mode, "max_len": max_len, "marker_id": 5}
     e.run = type("R", (), {"name": "fake"})()
-    e.fmt = Formatter(tok, mode, 10 ** 9, 5)
+    e.fmt = Formatter(tok, mode, 10 ** 9, 5, max_option_tokens=max_option_tokens)
     return e
 
 
@@ -70,3 +71,33 @@ def test_overlong_option_is_refused_not_cut(tok):
     q = {"q": {"type": "choice", "instructions": "?", "criteria": {"a": "x " * 200, "b": "y"}}}
     with pytest.raises(Unsupported):
         engine(tok)("s", q)
+
+
+class OomAboveTwo(FakeModel):
+    """Runs out of memory whenever a batch holds more than two questions."""
+    def forward(self, batch):
+        if batch["valid"].size(0) > 2:
+            raise torch.OutOfMemoryError("fake")
+        return super().forward(batch)
+
+
+def test_out_of_memory_halves_the_batch_and_the_request_still_gets_its_answer(tok):
+    qs = {f"q{i}": {"type": "choice", "instructions": "?", "criteria": {"a": "x", "b": "y"}} for i in range(7)}
+    resp, raw = engine(tok, model=OomAboveTwo())("some state", qs)
+    assert len(resp["answers"]) == 7 and raw["questions"] == 7 and raw["max_tokens"] > 0
+
+
+def test_a_question_that_does_not_fit_even_alone_is_refused_not_crashed(tok):
+    class AlwaysOom(FakeModel):
+        def forward(self, batch):
+            raise torch.OutOfMemoryError("fake")
+    with pytest.raises(Unsupported, match="out of memory"):
+        engine(tok, model=AlwaysOom())("s", QS)
+
+
+def test_long_options_are_not_refused_when_the_option_cap_is_raised_and_the_prompt_fits(tok):
+    q = {"q": {"type": "choice", "instructions": "?", "criteria": {"a": "x " * 200, "b": "y"}}}
+    with pytest.raises(Unsupported):
+        engine(tok, max_option_tokens=160)("s", q)                  # the training cap refuses it
+    resp, _ = engine(tok, max_len=4096, max_option_tokens=1024)("s", q)
+    assert resp["answers"]["q"]["choice"] in ("a", "b")

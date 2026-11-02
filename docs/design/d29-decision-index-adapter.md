@@ -28,6 +28,8 @@ The owner asked to add the Decision Index ([research note](/research/decision-in
 - Tested offline with fake models and against the kit's `validate` (the kit installed in a scratch folder: its `Engine` and `Unsupported` classes are used when present). Not run on the real suite.
 - Publishing a submission needs the owner's permission and public weights (we have published nothing).
 
+Update 2026-11-02 (E15 resumed): the adapter now (a) takes the option cap as `max_option_tokens` (default 1,024; training used 160), so long options are not refused; (b) falls back on out-of-memory errors by halving the batch of questions down to one, and refuses a request only if a single question does not fit (the kit would stop the whole run on an out-of-memory error); (c) returns `{"max_tokens", "questions"}` as raw output, so the results can be split by prompt length; (d) works for every model type (letter, slot, scalar, span, clef) and reads the chat format from the checkpoint. The context ceiling `max_len` is an option; the HRM-Text implementation runs on sequences longer than the 4,096 positions of the model (default rotary embedding, tested on a tiny model), but quality beyond 4,096 is untested, so results should be read separately for requests above and below 4,096 tokens. Tools: `mimir_decide.di_overlap` (overlap of the suite with our training mixture), `mimir_decide.di_table` (index, area and benchmark tables, status and length statistics), `scripts/run_decision_index.sh`.
+
 ## Revisit when
 
 The kit changes its engine interface, or the owner wants a native batch path to meet the 1,000 ms latency rule.

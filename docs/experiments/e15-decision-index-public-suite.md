@@ -2,7 +2,7 @@
 type: Experiment
 title: 'E15: Decision Index public suite'
 description: Run our models through the public suite of the Decision Index (37 benchmarks, about 140k requests) with the kit's own scorer, after checking for overlap with our training mixture.
-status: planned
+status: running
 answers: [q01]
 depends_on: [e14]
 tags: [benchmark, decision-index, external]
@@ -60,7 +60,7 @@ One seed per model. The public suite is 20% of the Full score; the private 80% c
 
 ## Status and results
 
-Status: **planned, deferred** by the owner on 2026-10-15 ("not sure if it's worth it"; the focus stays on Typed Decisions, [E14](/experiments/e14-typed-decisions-benchmark.md)). Do not start it without the owner's word. The adapter is written and tested offline; nothing is run on the real suite.
+Status: **resumed** on 2026-11-02 by the owner's request (evaluate all models on the public data, long examples not excluded, `max_len` 4096 or larger); earlier **deferred** by the owner on 2026-10-15 ("not sure if it's worth it"; the focus stays on Typed Decisions, [E14](/experiments/e14-typed-decisions-benchmark.md)). Do not start it without the owner's word. The adapter is written and tested offline; nothing is run on the real suite.
 
 | Date | Run id / path | Config (overrides) | Result | Observation page |
 |---|---|---|---|---|

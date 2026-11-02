@@ -75,10 +75,12 @@ class Encoded:
 
 
 class Formatter:
-    def __init__(self, tok, mode: str, max_len: int, marker_id: int, chat: bool = False):
+    def __init__(self, tok, mode: str, max_len: int, marker_id: int, chat: bool = False,
+                 max_option_tokens: int = MAX_OPTION_TOKENS):
         assert mode in ("slot", "letter", "scalar", "span", "clef")
         self.tok, self.mode, self.max_len, self.marker_id = tok, mode, max_len, marker_id
         self.chat = chat or mode == "letter"   # the letter baseline is always in chat format
+        self.max_opt = max_option_tokens       # training and our evaluations: 160; the Decision Index adapter raises it
         self.bos = tok.bos_token_id if tok.bos_token_id is not None else 2
         self._cache: dict = {}
 
@@ -102,7 +104,7 @@ class Formatter:
             head = [self.bos] + self._ids(CHAT_HEAD if self.chat else "State:\n")
             mid = self._ids(f"\n\nQuestion ({d.kind}):\n{d.question.strip()}\n\nOption:\n")
             end = self._ids(CHAT_END) if self.chat else []
-            tails = [mid + self._ids(o)[:MAX_OPTION_TOKENS] + end for o in opts]
+            tails = [mid + self._ids(o)[:self.max_opt] + end for o in opts]
             budget = self.max_len - len(head) - max(len(t) for t in tails)
             if budget < 16:  # question + longest option leave no room for any state: drop (counted by caller)
                 return None
@@ -124,11 +126,11 @@ class Formatter:
                 # chat: the template trims the user content, so the last option has no trailing newline
                 newline = not self.chat or j < k - 1
                 if self.mode in ("span", "clef"):   # the option text and its separator are tokenized apart: the span is the text
-                    text = self._ids(o)[:MAX_OPTION_TOKENS]
+                    text = self._ids(o)[:self.max_opt]
                     body_lens.append(len(text))
                     opt_ids.append(text + (self._ids("\n") if newline else []))
                 else:
-                    body = self._ids(f" {o}" + ("\n" if newline else ""))[:MAX_OPTION_TOKENS]
+                    body = self._ids(f" {o}" + ("\n" if newline else ""))[:self.max_opt]
                     opt_ids.append([self.marker_id] + body)
             end = self._ids(CHAT_END) if self.chat else []
             tail_len = len(mid) + sum(len(x) for x in opt_ids) + len(end)
@@ -138,7 +140,7 @@ class Formatter:
             mid = self._ids(q_text)
             # Segment boundaries are chosen so that the concatenation equals the tokenizer's encoding of the full
             # text (e.g. "\n\n" is ONE token): the last option carries no trailing newline, `end` starts with "\n\n".
-            opt_ids = [self._ids(f"{LETTERS[j]}. {o}" + ("\n" if j < k - 1 else ""))[:MAX_OPTION_TOKENS]
+            opt_ids = [self._ids(f"{LETTERS[j]}. {o}" + ("\n" if j < k - 1 else ""))[:self.max_opt]
                        for j, o in enumerate(opts)]
             end = self._ids("\n\nAnswer with the letter of the correct option.<turn|>\n<|turn>model\n")
             tail_len = len(mid) + sum(len(x) for x in opt_ids) + len(end)

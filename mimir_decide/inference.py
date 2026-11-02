@@ -35,13 +35,15 @@ def unpermute(row: np.ndarray, perm: list[int]) -> np.ndarray:
 
 @torch.no_grad()
 def predict_logits(model, tok, meta: dict, decs: list[Decision], batch_size: int = 16, device: str = "cpu",
-                   autocast: bool = False, max_len: int | None = None, perm_seed: int | None = None):
+                   autocast: bool = False, max_len: int | None = None, perm_seed: int | None = None,
+                   max_option_tokens: int | None = None):
     """Returns (logits list aligned with kept decs, kept decs). Records whose question+options do not fit are
     skipped (reported by the caller via len difference). With `perm_seed`, options are presented in a seeded random
     order (score decisions: identity or reversed) and the logits are mapped back to the original order, which
     measures robustness to option position."""
     mode = mode_for(meta["model_type"])
-    fmt = Formatter(tok, mode, max_len or meta["max_len"], meta["marker_id"], bool(meta.get("chat_format", False)))
+    fmt = Formatter(tok, mode, max_len or meta["max_len"], meta["marker_id"], bool(meta.get("chat_format", False)),
+                    **({"max_option_tokens": max_option_tokens} if max_option_tokens else {}))
     col = Collator(fmt, augment=False, pad_id=tok.pad_token_id or 0)
     order = sorted(range(len(decs)), key=lambda i: len(decs[i].state) + sum(map(len, decs[i].options)))
     out_logits, out_decs = {}, {}

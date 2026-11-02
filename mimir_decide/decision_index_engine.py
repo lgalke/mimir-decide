@@ -16,11 +16,13 @@ truncation (a request that does not fit raises `Unsupported`), no option pruning
 """
 from __future__ import annotations
 
+import gc
 import json
 import math
 from pathlib import Path
 
 import numpy as np
+import torch
 
 try:  # the kit is optional: tests and the rest of the package work without it
     from decision_index.engines import Engine, Unsupported
@@ -48,7 +50,7 @@ except ImportError:  # pragma: no cover - replaced by the kit's classes when it 
         def close(self):
             pass
 
-from .formatting import LETTERS, MAX_OPTION_TOKENS, Formatter, mode_for
+from .formatting import LETTERS, Formatter, mode_for
 from .inference import device_auto, predict_logits
 from .schema import Decision
 
@@ -95,7 +97,7 @@ class MimirDecideEngine(Engine):
     latency = "In-process request wall time including prompt construction; excludes model loading. Questions of one request run as one batch."
 
     def __init__(self, run_dir=None, checkpoint="best", max_len=None, calibrated=None, batch_size=16, device=None,
-                 **options):
+                 max_option_tokens=1024, **options):
         super().__init__(**options)
         from .model import load_model
 
@@ -106,13 +108,15 @@ class MimirDecideEngine(Engine):
         self.model, self.tok, self.meta = load_model(self.run / checkpoint, self.device)
         self.max_len = int(max_len) if max_len else int(self.meta["max_len"])
         self.batch_size = int(batch_size)
+        self.max_option_tokens = int(max_option_tokens)   # training used 160; the suite has long options, so raise it
         self.mode = mode_for(self.meta["model_type"])
         cal = self.run / "calibration.json"
         self.temps = json.loads(cal.read_text())["temperatures"] if _flag(calibrated, True) and cal.exists() else None
         # a formatter without a length limit: lets us measure the full prompt and refuse instead of truncating
-        self.fmt = Formatter(self.tok, self.mode, 10 ** 9, self.meta["marker_id"], bool(self.meta.get("chat_format", False)))
+        self.fmt = Formatter(self.tok, self.mode, 10 ** 9, self.meta["marker_id"], bool(self.meta.get("chat_format", False)),
+                             max_option_tokens=self.max_option_tokens)
         self.provenance = {"repo": "mimir-decide", "run_dir": str(self.run), "checkpoint": checkpoint,
-                           "model_type": self.meta["model_type"], "max_len": self.max_len,
+                           "model_type": self.meta["model_type"], "max_len": self.max_len, "max_option_tokens": self.max_option_tokens,
                            "calibrated": self.temps is not None, "temperatures": self.temps,
                            "base_model": self.meta.get("base_model"), "revision": self.meta.get("revision")}
 
@@ -122,18 +126,35 @@ class MimirDecideEngine(Engine):
             raise Unsupported(f"letter model supports at most {len(LETTERS)} options, got {k}")
         for j, o in enumerate(d.options):
             text = f" {o}\n" if self.mode == "slot" else o if self.mode in ("scalar", "span", "clef") else f"{LETTERS[j]}. {o}\n"
-            if len(self.fmt._ids(text)) > MAX_OPTION_TOKENS:
-                raise Unsupported(f"option {j} has more than {MAX_OPTION_TOKENS} tokens (the formatter would cut it)")
+            if len(self.fmt._ids(text)) > self.max_option_tokens:
+                raise Unsupported(f"option {j} has more than {self.max_option_tokens} tokens (the formatter would cut it)")
         enc = self.fmt.encode(d)
         if enc is None or len(enc.input_ids) > self.max_len:
             raise Unsupported(f"prompt of {len(enc.input_ids) if enc else '>'} tokens exceeds max_len {self.max_len}")
+
+    def _predict(self, decs):
+        """predict_logits with a fallback for out-of-memory errors: the batch is halved down to one question; if one
+        question alone does not fit, the request is refused as unsupported (the kit would otherwise stop the run)."""
+        bs = self.batch_size
+        while True:
+            try:
+                return predict_logits(self.model, self.tok, self.meta, decs, bs, self.device,
+                                      autocast=self.device.startswith("cuda"), max_len=self.max_len,
+                                      max_option_tokens=self.max_option_tokens)
+            except torch.OutOfMemoryError:
+                gc.collect()
+                if self.device.startswith("cuda"):
+                    torch.cuda.empty_cache()
+                if bs == 1:
+                    raise Unsupported("out of memory with one question per batch (declared capacity limit)")
+                bs = max(1, bs // 2)
 
     def __call__(self, state, questions):
         keys, decs, opt_keys = to_decisions(state, questions)
         for d in decs:
             self._check_fits(d)
-        logits, kept = predict_logits(self.model, self.tok, self.meta, decs, self.batch_size, self.device,
-                                      autocast=self.device.startswith("cuda"), max_len=self.max_len)
+        tokens = max(len(self.fmt.encode(d).input_ids) for d in decs)     # longest question of the request, for the analysis by length
+        logits, kept = self._predict(decs)
         if len(kept) != len(decs):
             raise Unsupported("a question did not fit into the context window")
         answers = {}
@@ -146,4 +167,4 @@ class MimirDecideEngine(Engine):
             else:
                 probs = {o: float(x) for o, x in zip(ok, p)}
                 answers[key] = {"type": "choice", "choice": max(probs, key=lambda o: probs[o]), "probabilities": probs}
-        return {"model": f"mimir-decide:{self.run.name}", "answers": answers}, None
+        return {"model": f"mimir-decide:{self.run.name}", "answers": answers}, {"max_tokens": tokens, "questions": len(decs)}
