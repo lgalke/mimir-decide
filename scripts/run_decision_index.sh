@@ -9,10 +9,10 @@
 #   MAX_LEN     maximum prompt length in tokens; requests that do not fit are refused, nothing is truncated (D29)
 #   run:checkpoint   for example baseline-v0:best  letter-zeroshot:zero-shot
 # Environment: REPO (default /work/dfm/lukasgp/mimir-decide), BATCH (questions per forward pass, default 8), TAG (suffix of
-# the copied score files, for example sample2000).
+# the copied score files, for example sample2000), EDITION (suite edition of the kit, default 0.3; 0.2 for the rebuilt suite).
 set -u
 ROWS=$1; OUT=$2; MAXLEN=$3; shift 3
-REPO=${REPO:-/work/dfm/lukasgp/mimir-decide}; BATCH=${BATCH:-8}; TAG=${TAG:-run}
+REPO=${REPO:-/work/dfm/lukasgp/mimir-decide}; BATCH=${BATCH:-8}; TAG=${TAG:-run}; EDITION=${EDITION:-0.3}
 mkdir -p "$OUT" "$REPO/results/decision-index"
 for m in "$@"; do
   run=${m%%:*}; ck=${m##*:}
@@ -21,7 +21,7 @@ for m in "$@"; do
   rows_args=(); [ "$ROWS" != "-" ] && rows_args=(--rows "$ROWS")
   python -u -m decision_index run --engine mimir_decide.decision_index_engine:MimirDecideEngine \
     --option "run_dir=$REPO/runs/$run" --option "checkpoint=$ck" --option "max_len=$MAXLEN" --option "batch_size=$BATCH" \
-    "${rows_args[@]}" --out "$dir" 2>&1 | tail -n 3
-  python -m decision_index score --results "$dir/results.jsonl.gz" --out "$dir" 2>&1 | tail -n 3
+    --edition "$EDITION" "${rows_args[@]}" --out "$dir" 2>&1 | tail -n 3
+  python -m decision_index score --edition "$EDITION" --results "$dir/results.jsonl.gz" --out "$dir" 2>&1 | tail -n 3
   [ -f "$dir/scores.json" ] && cp -f "$dir/scores.json" "$REPO/results/decision-index/$run.$TAG.scores.json"
 done
