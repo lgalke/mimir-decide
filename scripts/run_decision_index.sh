@@ -22,6 +22,7 @@ for m in "$@"; do
   python -u -m decision_index run --engine mimir_decide.decision_index_engine:MimirDecideEngine \
     --option "run_dir=$REPO/runs/$run" --option "checkpoint=$ck" --option "max_len=$MAXLEN" --option "batch_size=$BATCH" \
     --edition "$EDITION" "${rows_args[@]}" --out "$dir" 2>&1 | tail -n 3
-  python -m decision_index score --edition "$EDITION" --results "$dir/results.jsonl.gz" --out "$dir" 2>&1 | tail -n 3
+  res="$dir/results.jsonl"; [ -f "$res" ] || res="$dir/results.jsonl.gz"
+  python -m decision_index score --edition "$EDITION" --results "$res" --out "$dir" 2>&1 | tail -n 3
   [ -f "$dir/scores.json" ] && cp -f "$dir/scores.json" "$REPO/results/decision-index/$run.$TAG.scores.json"
 done
