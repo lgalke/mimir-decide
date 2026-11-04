@@ -34,6 +34,9 @@ def test_tables_read_scores_tolerantly_and_length_stats_count_statuses(tmp_path)
         (d / "scores.json").write_text(json.dumps({"index": idx, "raw_index": idx + 20,
             "areas": {"tools": {"skill": idx / 2, "coverage": 0.9}, "language": {"skill": idx, "coverage": 1.0}},
             "benchmarks": {"1": {"skill": 10.0, "coverage": 1.0}, "24": {"skill": 30.0, "coverage": 0.5}}}))
+        (d / "benchmark-summary.json").write_text(json.dumps({"benchmarks": [
+            {"dataset": "BFCL", "metric": "case exact accuracy", "score": idx / 100, "scored_requests": 39, "unsupported": 0},
+            {"dataset": "MMLU", "metric": "accuracy", "score": 0.5, "scored_requests": 10, "unsupported": 2}]}))
         rows = [{"dataset": "MMLU", "status": "ok", "raw_output": {"max_tokens": 5000}},
                 {"dataset": "MMLU", "status": "unsupported", "raw_output": None},
                 {"dataset": "BFCL", "status": "ok", "raw_output": {"max_tokens": 300}}]
@@ -41,7 +44,8 @@ def test_tables_read_scores_tolerantly_and_length_stats_count_statuses(tmp_path)
             f.write("\n".join(json.dumps(r) for r in rows))
     t = summary_table([tmp_path / "a", tmp_path / "b"], ["A", "B"])
     assert "| A | 40.0 | 60.0 |" in t and "55.5" in t and "language skill" in t
-    assert "| 24 | 30.0 (50.0%) | 30.0 (50.0%) |" in benchmark_table([tmp_path / "a", tmp_path / "b"], ["A", "B"])
+    bt = benchmark_table([tmp_path / "a", tmp_path / "b"], ["A", "B"])
+    assert "| MMLU (accuracy) | 0.500 (n=10, refused 2) | 0.500 (n=10, refused 2) |" in bt and "macro mean over 2 shared" in bt
     st = length_stats(tmp_path / "a")
     assert st["status"] == {"ok": 2, "unsupported": 1} and st["longer_than"]["4096"] == 1 and st["longer_than"]["8192"] == 0
     assert st["unsupported_by_benchmark"] == {"MMLU": 1}

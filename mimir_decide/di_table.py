@@ -67,16 +67,33 @@ def summary_table(runs: list[Path], labels: list[str]) -> str:
     return "\n".join(lines)
 
 
-def benchmark_table(runs: list[Path], labels: list[str]) -> str:
-    scores = [load_scores(r) for r in runs]
-    names = sorted({str(k) for s in scores for k in (s.get("benchmarks") or {})}, key=lambda x: (not x.isdigit(), int(x) if x.isdigit() else 0, x))
-    lines = ["| benchmark | " + " | ".join(labels) + " |", "|---|" + "---|" * len(labels)]
+def load_benchmarks(run: Path) -> dict:
+    """benchmark-summary.json: one entry per benchmark with the native metric on the complete case groups that were run."""
+    d = json.loads((run / "benchmark-summary.json").read_text())
+    return {b["dataset"]: b for b in d.get("benchmarks", []) if isinstance(b, dict) and "dataset" in b}
+
+
+def benchmark_table(runs: list[Path], labels: list[str], min_scored: int = 1) -> str:
+    """Native score per benchmark and model, with the number of scored requests; a macro mean over the benchmarks that
+    every model has scored (equal weights, native metrics differ between benchmarks: a rough summary only)."""
+    bs = [load_benchmarks(r) for r in runs]
+    names = sorted({n for b in bs for n, v in b.items() if (v.get("scored_requests") or 0) >= min_scored})
+    lines = ["| benchmark (metric) | " + " | ".join(labels) + " |", "|---|" + "---|" * len(labels)]
+    shared = []
     for n in names:
-        cells = []
-        for s in scores:
-            b = (s.get("benchmarks") or {}).get(n) or {}
-            cells.append(f"{fmt(b.get('skill'))} ({pct(b.get('coverage'))}%)" if b else "-")
-        lines.append(f"| {n} | " + " | ".join(cells) + " |")
+        cells, vals = [], []
+        for b in bs:
+            v = b.get(n) or {}
+            sc = v.get("score")
+            cells.append("-" if sc is None else f"{sc:.3f} (n={v.get('scored_requests')}, refused {v.get('unsupported')})")
+            vals.append(sc)
+        metric = next((b[n].get("metric") for b in bs if n in b), "")
+        lines.append(f"| {n} ({metric}) | " + " | ".join(cells) + " |")
+        if all(v is not None for v in vals):
+            shared.append(vals)
+    if shared:
+        means = [sum(v[i] for v in shared) / len(shared) for i in range(len(runs))]
+        lines.append(f"| **macro mean over {len(shared)} shared benchmarks** | " + " | ".join(f"**{m:.3f}**" for m in means) + " |")
     return "\n".join(lines)
 
 
